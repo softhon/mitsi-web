@@ -3,6 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -39,6 +42,179 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom typography tokens */
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Desktop typography sizes */
+  --font-size-h1-desktop: 3rem;
+  /* 48px */
+  --line-height-h1-desktop: 3.5rem;
+  /* 56px */
+  --font-weight-h1-desktop: 600;
+
+  --font-size-h2-desktop: 2.25rem;
+  /* 36px */
+  --line-height-h2-desktop: 2.75rem;
+  /* 44px */
+  --font-weight-h2-desktop: 600;
+
+  --font-size-h3-desktop: 1.875rem;
+  /* 30px */
+  --line-height-h3-desktop: 2.25rem;
+  /* 36px */
+  --font-weight-h3-desktop: 600;
+
+  --font-size-h4-desktop: 1.5rem;
+  /* 24px */
+  --line-height-h4-desktop: 2rem;
+  /* 32px */
+  --font-weight-h4-desktop: 600;
+
+  --font-size-h5-desktop: 1.25rem;
+  /* 20px */
+  --line-height-h5-desktop: 1.75rem;
+  /* 28px */
+  --font-weight-h5-desktop: 600;
+
+  --font-size-h6-desktop: 1.125rem;
+  /* 18px */
+  --line-height-h6-desktop: 1.5rem;
+  /* 24px */
+  --font-weight-h6-desktop: 600;
+
+  --font-size-subtitle1-desktop: 1rem;
+  /* 16px */
+  --line-height-subtitle1-desktop: 1.5rem;
+  /* 24px */
+  --font-weight-subtitle1-desktop: 500;
+
+  --font-size-subtitle2-desktop: 0.875rem;
+  /* 14px */
+  --line-height-subtitle2-desktop: 1.25rem;
+  /* 20px */
+  --font-weight-subtitle2-desktop: 500;
+
+  --font-size-body1-desktop: 1rem;
+  /* 16px */
+  --line-height-body1-desktop: 1.5rem;
+  /* 24px */
+  --font-weight-body1-desktop: 400;
+
+  --font-size-body2-desktop: 0.875rem;
+  /* 14px */
+  --line-height-body2-desktop: 1.25rem;
+  /* 20px */
+  --font-weight-body2-desktop: 400;
+
+  --font-size-button-desktop: 0.875rem;
+  /* 14px */
+  --line-height-button-desktop: 1.25rem;
+  /* 20px */
+  --font-weight-button-desktop: 500;
+
+  --font-size-caption-desktop: 0.75rem;
+  /* 12px */
+  --line-height-caption-desktop: 1rem;
+  /* 16px */
+  --font-weight-caption-desktop: 400;
+
+  --font-size-overline-desktop: 0.75rem;
+  /* 12px */
+  --line-height-overline-desktop: 1rem;
+  /* 16px */
+  --font-weight-overline-desktop: 500;
+
+  --font-size-paragraph-desktop: 1rem;
+  /* 16px */
+  --line-height-paragraph-desktop: 1.5rem;
+  /* 24px */
+  --font-weight-paragraph-desktop: 400;
+
+  /* Mobile typography sizes */
+  --font-size-h1-mobile: 2rem;
+  /* 32px */
+  --line-height-h1-mobile: 2.5rem;
+  /* 40px */
+  --font-weight-h1-mobile: 600;
+
+  --font-size-h2-mobile: 1.75rem;
+  /* 28px */
+  --line-height-h2-mobile: 2.25rem;
+  /* 36px */
+  --font-weight-h2-mobile: 600;
+
+  --font-size-h3-mobile: 1.5rem;
+  /* 24px */
+  --line-height-h3-mobile: 2rem;
+  /* 32px */
+  --font-weight-h3-mobile: 600;
+
+  --font-size-h4-mobile: 1.25rem;
+  /* 20px */
+  --line-height-h4-mobile: 1.75rem;
+  /* 28px */
+  --font-weight-h4-mobile: 600;
+
+  --font-size-h5-mobile: 1.125rem;
+  /* 18px */
+  --line-height-h5-mobile: 1.5rem;
+  /* 24px */
+  --font-weight-h5-mobile: 600;
+
+  --font-size-h6-mobile: 1rem;
+  /* 16px */
+  --line-height-h6-mobile: 1.25rem;
+  /* 20px */
+  --font-weight-h6-mobile: 600;
+
+  --font-size-subtitle1-mobile: 0.875rem;
+  /* 14px */
+  --line-height-subtitle1-mobile: 1.25rem;
+  /* 20px */
+  --font-weight-subtitle1-mobile: 500;
+
+  --font-size-subtitle2-mobile: 0.8125rem;
+  /* 13px */
+  --line-height-subtitle2-mobile: 1.125rem;
+  /* 18px */
+  --font-weight-subtitle2-mobile: 500;
+
+  --font-size-body1-mobile: 0.875rem;
+  /* 14px */
+  --line-height-body1-mobile: 1.25rem;
+  /* 20px */
+  --font-weight-body1-mobile: 400;
+
+  --font-size-body2-mobile: 0.8125rem;
+  /* 13px */
+  --line-height-body2-mobile: 1.125rem;
+  /* 18px */
+  --font-weight-body2-mobile: 400;
+
+  --font-size-button-mobile: 0.8125rem;
+  /* 13px */
+  --line-height-button-mobile: 1.125rem;
+  /* 18px */
+  --font-weight-button-mobile: 500;
+
+  --font-size-caption-mobile: 0.6875rem;
+  /* 11px */
+  --line-height-caption-mobile: 0.875rem;
+  /* 14px */
+  --font-weight-caption-mobile: 400;
+
+  --font-size-overline-mobile: 0.6875rem;
+  /* 11px */
+  --line-height-overline-mobile: 0.875rem;
+  /* 14px */
+  --font-weight-overline-mobile: 500;
+
+  --font-size-paragraph-mobile: 0.875rem;
+  /* 14px */
+  --line-height-paragraph-mobile: 1.25rem;
+  /* 20px */
+  --font-weight-paragraph-mobile: 400;
 }
 
 :root {
@@ -114,7 +290,194 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-inter);
+  }
+
+  /* Typography utilities */
+  .typography-h1 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h1-desktop);
+    line-height: var(--line-height-h1-desktop);
+    font-weight: var(--font-weight-h1-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h1-mobile);
+      line-height: var(--line-height-h1-mobile);
+      font-weight: var(--font-weight-h1-mobile);
+    }
+  }
+
+  .typography-h2 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h2-desktop);
+    line-height: var(--line-height-h2-desktop);
+    font-weight: var(--font-weight-h2-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h2-mobile);
+      line-height: var(--line-height-h2-mobile);
+      font-weight: var(--font-weight-h2-mobile);
+    }
+  }
+
+  .typography-h3 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h3-desktop);
+    line-height: var(--line-height-h3-desktop);
+    font-weight: var(--font-weight-h3-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h3-mobile);
+      line-height: var(--line-height-h3-mobile);
+      font-weight: var(--font-weight-h3-mobile);
+    }
+  }
+
+  .typography-h4 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h4-desktop);
+    line-height: var(--line-height-h4-desktop);
+    font-weight: var(--font-weight-h4-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h4-mobile);
+      line-height: var(--line-height-h4-mobile);
+      font-weight: var(--font-weight-h4-mobile);
+    }
+  }
+
+  .typography-h5 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h5-desktop);
+    line-height: var(--line-height-h5-desktop);
+    font-weight: var(--font-weight-h5-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h5-mobile);
+      line-height: var(--line-height-h5-mobile);
+      font-weight: var(--font-weight-h5-mobile);
+    }
+  }
+
+  .typography-h6 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-h6-desktop);
+    line-height: var(--line-height-h6-desktop);
+    font-weight: var(--font-weight-h6-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-h6-mobile);
+      line-height: var(--line-height-h6-mobile);
+      font-weight: var(--font-weight-h6-mobile);
+    }
+  }
+
+  .typography-subtitle-1 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-subtitle1-desktop);
+    line-height: var(--line-height-subtitle1-desktop);
+    font-weight: var(--font-weight-subtitle1-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-subtitle1-mobile);
+      line-height: var(--line-height-subtitle1-mobile);
+      font-weight: var(--font-weight-subtitle1-mobile);
+    }
+  }
+
+  .typography-subtitle-2 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-subtitle2-desktop);
+    line-height: var(--line-height-subtitle2-desktop);
+    font-weight: var(--font-weight-subtitle2-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-subtitle2-mobile);
+      line-height: var(--line-height-subtitle2-mobile);
+      font-weight: var(--font-weight-subtitle2-mobile);
+    }
+  }
+
+  .typography-body-1 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-body1-desktop);
+    line-height: var(--line-height-body1-desktop);
+    font-weight: var(--font-weight-body1-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-body1-mobile);
+      line-height: var(--line-height-body1-mobile);
+      font-weight: var(--font-weight-body1-mobile);
+    }
+  }
+
+  .typography-body-2 {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-body2-desktop);
+    line-height: var(--line-height-body2-desktop);
+    font-weight: var(--font-weight-body2-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-body2-mobile);
+      line-height: var(--line-height-body2-mobile);
+      font-weight: var(--font-weight-body2-mobile);
+    }
+  }
+
+  .typography-button {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-button-desktop);
+    line-height: var(--line-height-button-desktop);
+    font-weight: var(--font-weight-button-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-button-mobile);
+      line-height: var(--line-height-button-mobile);
+      font-weight: var(--font-weight-button-mobile);
+    }
+  }
+
+  .typography-caption {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-caption-desktop);
+    line-height: var(--line-height-caption-desktop);
+    font-weight: var(--font-weight-caption-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-caption-mobile);
+      line-height: var(--line-height-caption-mobile);
+      font-weight: var(--font-weight-caption-mobile);
+    }
+  }
+
+  .typography-overline {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-overline-desktop);
+    line-height: var(--line-height-overline-desktop);
+    font-weight: var(--font-weight-overline-desktop);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-overline-mobile);
+      line-height: var(--line-height-overline-mobile);
+      font-weight: var(--font-weight-overline-mobile);
+    }
+  }
+
+  .typography-paragraph {
+    font-family: var(--font-inter);
+    font-size: var(--font-size-paragraph-desktop);
+    line-height: var(--line-height-paragraph-desktop);
+    font-weight: var(--font-weight-paragraph-desktop);
+
+    @media (max-width: 767px) {
+      font-size: var(--font-size-paragraph-mobile);
+      line-height: var(--line-height-paragraph-mobile);
+      font-weight: var(--font-weight-paragraph-mobile);
+    }
   }
 }
