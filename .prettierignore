@@ -1,0 +1,19 @@
+# Build outputs
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Config files
+.env
+.env.local
+.env.production
+
+# Other
+*.log
