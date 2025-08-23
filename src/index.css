@@ -296,6 +296,11 @@
     font-family: var(--font-inter);
   }
 
+  /* Custom gradient utilities */
+  .bg-gradient-radial {
+    background: radial-gradient(circle at center, var(--tw-gradient-stops));
+  }
+
   /* Typography utilities */
   .typography-h1 {
     font-family: var(--font-inter);
