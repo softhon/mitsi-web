@@ -3,11 +3,12 @@ import { Button } from './components/ui/button';
 import { ToastProvider, ToastContainer } from '@/packages/toast';
 import TypographyShowcase from '@/showcases/typography-showcase';
 import ToastShowcase from '@/showcases/toast-showcase';
-import JoinMeetingPage from '@/components/join';
+import JoinMeetingPage from '@/pages/join';
+import VideoConferencingPage from './pages/conference';
 
 function App() {
   const [currentView, setCurrentView] = useState<
-    'typography' | 'badges' | 'toasts' | 'join-meeting'
+    'typography' | 'badges' | 'toasts' | 'join-meeting' | 'video-conference'
   >('typography');
 
   return (
@@ -42,6 +43,15 @@ function App() {
               >
                 Join Meeting
               </Button>
+
+              <Button
+                variant={
+                  currentView === 'video-conference' ? 'default' : 'outline'
+                }
+                onClick={() => setCurrentView('video-conference')}
+              >
+                Video Conference
+              </Button>
             </div>
 
             {/* Content for showcases */}
@@ -65,6 +75,21 @@ function App() {
               </Button>
             </div>
             <JoinMeetingPage />
+          </div>
+        )}
+
+        {currentView === 'video-conference' && (
+          <div className="relative">
+            <div className="absolute top-20 left-4 z-20">
+              <Button
+                variant="ghost"
+                onClick={() => setCurrentView('typography')}
+                className="text-white/70 hover:text-white hover:bg-white/10 bg-gray-800/50 backdrop-blur-sm"
+              >
+                ← Back to Components
+              </Button>
+            </div>
+            <VideoConferencingPage />
           </div>
         )}
       </div>
