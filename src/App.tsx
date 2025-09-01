@@ -4,7 +4,7 @@ import { ToastProvider, ToastContainer } from '@/packages/toast';
 import TypographyShowcase from '@/showcases/typography-showcase';
 import ToastShowcase from '@/showcases/toast-showcase';
 import JoinMeetingPage from '@/pages/join';
-import VideoConferencingPage from './pages/conference';
+import { VideoConferencingDemo } from './pages/conference';
 
 function App() {
   const [currentView, setCurrentView] = useState<
@@ -89,7 +89,7 @@ function App() {
                 ← Back to Components
               </Button>
             </div>
-            <VideoConferencingPage />
+            <VideoConferencingDemo />
           </div>
         )}
       </div>

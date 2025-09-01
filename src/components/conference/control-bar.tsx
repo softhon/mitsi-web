@@ -10,7 +10,7 @@ import Menu from './menu';
 
 const ControlBar = () => {
   return (
-    <div className="p-4 bg-gray-900/95 backdrop-blur-sm border-t border-gray-700">
+    <div className="p-2 bg-gray-900/95 backdrop-blur-sm  ">
       <div className="flex items-center justify-between max-w-4xl mx-auto">
         {/* Left Controls */}
         <div className="flex items-center gap-2">

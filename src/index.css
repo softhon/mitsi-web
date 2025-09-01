@@ -296,6 +296,11 @@
     font-family: var(--font-inter);
   }
 
+  /* custom transition */
+  .participant-item {
+    transition: all 0.3s ease;
+  }
+
   /* Custom gradient utilities */
   .bg-gradient-radial {
     background: radial-gradient(circle at center, var(--tw-gradient-stops));
