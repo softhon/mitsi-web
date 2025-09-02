@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Participant Tile with Sound Wave Effect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes wave {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(3.5);
+          opacity: 0;
+        }
+      }
+
+      @keyframes waveIntense {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      @keyframes waveMild {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+
+      .wave {
+        animation: wave 2s ease-out infinite;
+      }
+
+      .wave-intense {
+        animation: waveIntense 1.8s ease-out infinite;
+      }
+
+      .wave-mild {
+        animation: waveMild 2.2s ease-out infinite;
+      }
+
+      .wave:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .wave:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+      .wave:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      .wave:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+      .wave:nth-child(5) {
+        animation-delay: 1.2s;
+      }
+
+      .wave-intense:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .wave-intense:nth-child(2) {
+        animation-delay: 0.25s;
+      }
+      .wave-intense:nth-child(3) {
+        animation-delay: 0.5s;
+      }
+      .wave-intense:nth-child(4) {
+        animation-delay: 0.75s;
+      }
+      .wave-intense:nth-child(5) {
+        animation-delay: 1s;
+      }
+
+      .wave-mild:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .wave-mild:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      .wave-mild:nth-child(3) {
+        animation-delay: 0.8s;
+      }
+      .wave-mild:nth-child(4) {
+        animation-delay: 1.2s;
+      }
+      .wave-mild:nth-child(5) {
+        animation-delay: 1.6s;
+      }
+
+      .fade-out {
+        animation-duration: 0.8s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
+
+      .speaking-glow {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Video Conference Participant
+      </h2>
+
+      <!-- Participant Tile -->
+      <div
+        class="bg-gray-900 rounded-lg p-6 mb-6 relative overflow-hidden"
+        style="height: 280px"
+      >
+        <!-- Participant Name -->
+        <div
+          class="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm"
+        >
+          John Doe
+        </div>
+
+        <!-- Mute Status -->
+        <div
+          id="muteStatus"
+          class="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+
+        <!-- Sound Wave Container -->
+        <div
+          id="waveContainer"
+          class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300"
+        >
+          <!-- Wave rings will be inserted here -->
+        </div>
+
+        <!-- Avatar Container -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div
+            id="avatar"
+            class="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold transition-all duration-300"
+          >
+            JD
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex justify-center space-x-4">
+        <button
+          id="toggleSpeaking"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+        >
+          Start Speaking
+        </button>
+        <button
+          id="changeIntensity"
+          class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+        >
+          Normal
+        </button>
+      </div>
+
+      <!-- Status -->
+      <div class="text-center mt-4">
+        <span id="status" class="text-gray-600">Not speaking</span>
+      </div>
+    </div>
+
+    <script>
+      class ParticipantTile {
+        constructor() {
+          this.isSpeaking = false;
+          this.intensity = 'normal'; // normal, mild, intense
+          this.fadeOutTimer = null;
+
+          this.elements = {
+            toggleBtn: document.getElementById('toggleSpeaking'),
+            intensityBtn: document.getElementById('changeIntensity'),
+            waveContainer: document.getElementById('waveContainer'),
+            avatar: document.getElementById('avatar'),
+            status: document.getElementById('status'),
+            muteStatus: document.getElementById('muteStatus'),
+          };
+
+          this.initEventListeners();
+        }
+
+        initEventListeners() {
+          this.elements.toggleBtn.addEventListener('click', () =>
+            this.toggleSpeaking()
+          );
+          this.elements.intensityBtn.addEventListener('click', () =>
+            this.changeIntensity()
+          );
+        }
+
+        toggleSpeaking() {
+          this.isSpeaking = !this.isSpeaking;
+
+          if (this.isSpeaking) {
+            this.startSpeaking();
+          } else {
+            this.stopSpeaking();
+          }
+        }
+
+        startSpeaking() {
+          // Clear any existing fade out timer
+          if (this.fadeOutTimer) {
+            clearTimeout(this.fadeOutTimer);
+            this.fadeOutTimer = null;
+          }
+
+          // Update UI
+          this.elements.toggleBtn.textContent = 'Stop Speaking';
+          this.elements.status.textContent = 'Speaking...';
+          this.elements.muteStatus.classList.add('hidden');
+          this.elements.avatar.classList.add('speaking-glow');
+
+          // Show wave container
+          this.elements.waveContainer.classList.remove('opacity-0');
+          this.elements.waveContainer.classList.add('opacity-100');
+
+          // Create waves
+          this.createWaves();
+        }
+
+        stopSpeaking() {
+          // Update UI
+          this.elements.toggleBtn.textContent = 'Start Speaking';
+          this.elements.status.textContent = 'Not speaking';
+          this.elements.muteStatus.classList.remove('hidden');
+          this.elements.avatar.classList.remove('speaking-glow');
+
+          // Fade out waves
+          const waves = this.elements.waveContainer.querySelectorAll(
+            '.wave, .wave-intense, .wave-mild'
+          );
+          waves.forEach(wave => wave.classList.add('fade-out'));
+
+          // Hide wave container after fade out
+          this.fadeOutTimer = setTimeout(() => {
+            this.elements.waveContainer.classList.remove('opacity-100');
+            this.elements.waveContainer.classList.add('opacity-0');
+            this.elements.waveContainer.innerHTML = '';
+          }, 800);
+        }
+
+        changeIntensity() {
+          const intensities = ['normal', 'mild', 'intense'];
+          const currentIndex = intensities.indexOf(this.intensity);
+          this.intensity = intensities[(currentIndex + 1) % intensities.length];
+
+          this.elements.intensityBtn.textContent =
+            this.intensity.charAt(0).toUpperCase() + this.intensity.slice(1);
+
+          if (this.isSpeaking) {
+            this.createWaves();
+          }
+        }
+
+        createWaves() {
+          // Clear existing waves
+          this.elements.waveContainer.innerHTML = '';
+
+          // Create 5 wave rings
+          for (let i = 0; i < 5; i++) {
+            const wave = document.createElement('div');
+            wave.className = `absolute w-20 h-20 border-2 rounded-full ${this.getWaveClass()}`;
+            wave.style.borderColor = this.getWaveColor();
+            this.elements.waveContainer.appendChild(wave);
+          }
+        }
+
+        getWaveClass() {
+          switch (this.intensity) {
+            case 'mild':
+              return 'wave-mild';
+            case 'intense':
+              return 'wave-intense';
+            default:
+              return 'wave';
+          }
+        }
+
+        getWaveColor() {
+          switch (this.intensity) {
+            case 'mild':
+              return 'rgba(34, 197, 94, 0.4)'; // Green
+            case 'intense':
+              return 'rgba(239, 68, 68, 0.4)'; // Red
+            default:
+              return 'rgba(59, 130, 246, 0.4)'; // Blue
+          }
+        }
+      }
+
+      // Initialize the participant tile
+      document.addEventListener('DOMContentLoaded', () => {
+        new ParticipantTile();
+      });
+    </script>
+  </body>
+</html>

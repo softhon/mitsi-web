@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 
 import ControlBar from '@/components/conference/control-bar';
 import Header from '@/components/conference/header';
-import { VideoConferencingGrid } from '@/components/grid/video-conferencing-grid';
+import { VideoConferencingGrid } from '@/components/conference/grid/video-conferencing-grid';
 import type { Participant } from '@/types';
 import {
   createParticipant,
