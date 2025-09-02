@@ -26,6 +26,11 @@ export const getInitials = (name: string): string => {
     .join('')
     .toUpperCase();
 };
+export const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+};
 
 export const createParticipant = (name: string): Participant => {
   return {
