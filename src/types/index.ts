@@ -30,6 +30,7 @@ export interface VideoConferencingGridProps {
   onAddParticipant?: () => void;
   onRemoveParticipant?: () => void;
   showControls?: boolean;
+  showChat?: boolean;
   className?: string;
   containerClassName?: string;
   headerClassName?: string;

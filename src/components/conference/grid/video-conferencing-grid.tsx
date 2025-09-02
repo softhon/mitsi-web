@@ -5,16 +5,16 @@ import { useDimensions } from '@/hooks/use-dimensions';
 import type { VideoConferencingGridProps } from '@/types';
 import { DEFAULT_GRID_CONFIG } from '@/lib/utils';
 import { useGridCalculator } from '@/hooks/use-grid-calculator';
+import ChatContainer from '../chat/chat-container';
 
 export const VideoConferencingGrid: React.FC<VideoConferencingGridProps> = ({
   participants,
-
+  showChat = false,
   showControls = true,
-  containerClassName = '',
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
 
-  const dimensions = useDimensions(showControls);
+  const dimensions = useDimensions(showControls, showChat);
   const { calculateOptimalLayout } = useGridCalculator(DEFAULT_GRID_CONFIG);
 
   // Calculate layout and pagination
@@ -90,25 +90,20 @@ export const VideoConferencingGrid: React.FC<VideoConferencingGridProps> = ({
 
   return (
     <div
-      className={`${showControls ? 'fixed inset-0 pt-10 pb-14' : 'relative w-full h-full'}`}
+      className={`${showControls ? 'fixed inset-0 pt-10 pb-14 flex flex-row w-full justify-between overflow-hidden ' : 'relative w-full h-full'}`}
     >
-      <div className="relative w-full h-full">
-        {/* Pagination Controls */}
-        <PaginationControls
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPrevious={handlePrevious}
-          onNext={handleNext}
-          show={totalPages > 1}
-        />
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        show={totalPages > 1}
+      />
 
-        {/* Grid Container */}
-        <GridContainer
-          participants={currentPageParticipants}
-          layout={layout}
-          containerClassName={containerClassName}
-        />
-      </div>
+      {/* Grid Container */}
+      <GridContainer participants={currentPageParticipants} layout={layout} />
+
+      <ChatContainer showChat={showChat} />
     </div>
   );
 };

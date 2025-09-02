@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { MessageSquare } from 'lucide-react';
 
-const Chat = () => {
-  const [showChat, setShowChat] = useState(false);
+const Chat = ({ onToggleChat }: { onToggleChat: () => void }) => {
+  // const [showChat, setShowChat] = useState(false);
 
   return (
     <Button
-      onClick={() => setShowChat(!showChat)}
+      onClick={onToggleChat}
       variant="ghost"
       size="icon"
       className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"

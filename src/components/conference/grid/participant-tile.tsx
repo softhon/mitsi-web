@@ -9,7 +9,7 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
 }) => {
   return (
     <div
-      className="participant-item bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}

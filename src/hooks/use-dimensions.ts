@@ -5,7 +5,10 @@ interface Dimensions {
   height: number;
 }
 
-export const useDimensions = (showControls: boolean = true): Dimensions => {
+export const useDimensions = (
+  showControls: boolean = true,
+  showChat: boolean
+): Dimensions => {
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: 0,
     height: 0,
@@ -15,8 +18,9 @@ export const useDimensions = (showControls: boolean = true): Dimensions => {
     const updateDimensions = () => {
       const headerHeight = showControls ? 64 : 0;
       const footerHeight = showControls ? 48 : 0;
+      const chatWidth = showChat ? 500 : 0;
       setDimensions({
-        width: window.innerWidth - 32, // Account for padding
+        width: window.innerWidth - chatWidth - 32, // Account for padding
         height: window.innerHeight - headerHeight - footerHeight - 32,
       });
     };
@@ -24,7 +28,7 @@ export const useDimensions = (showControls: boolean = true): Dimensions => {
     updateDimensions();
     window.addEventListener('resize', updateDimensions);
     return () => window.removeEventListener('resize', updateDimensions);
-  }, [showControls]);
+  }, [showControls, showChat]);
 
   return dimensions;
 };

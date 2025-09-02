@@ -15,6 +15,8 @@ export const VideoConferencingDemo: React.FC = () => {
     generateSampleParticipants(1)
   );
 
+  const [chatOn, setChatOn] = useState(false);
+
   const handleAddParticipant = useCallback(() => {
     const newParticipant =
       participants.length - 1 > participantsName.length
@@ -28,6 +30,10 @@ export const VideoConferencingDemo: React.FC = () => {
       setParticipants(prev => prev.slice(0, -1));
     }
   }, [participants.length]);
+
+  const toggleChat = useCallback(() => {
+    setChatOn(prev => !prev);
+  }, [chatOn]);
 
   return (
     <div className=" relative h-screen bg-gray-900 flex flex-col overflow-hidden justify-between">
@@ -43,10 +49,11 @@ export const VideoConferencingDemo: React.FC = () => {
         onAddParticipant={handleAddParticipant}
         onRemoveParticipant={handleRemoveParticipant}
         showControls={true}
+        showChat={chatOn}
       />
 
       {/* Bottom Controls */}
-      <ControlBar />
+      <ControlBar onToggleChat={toggleChat} />
     </div>
   );
 };

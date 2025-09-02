@@ -5,18 +5,16 @@ import { ParticipantTile } from './participant-tile';
 interface GridContainerProps {
   participants: Participant[];
   layout: Layout | null;
-  containerClassName?: string;
 }
 
 export const GridContainer: React.FC<GridContainerProps> = ({
   participants,
   layout,
-  containerClassName = '',
 }) => {
   if (participants.length === 0) {
     return (
       <div
-        className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center gap-3 p-4 overflow-hidden ${containerClassName}`}
+        className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center gap-3 p-4 overflow-hidden `}
       >
         <div className="text-gray-400 text-center">
           <div className="text-6xl mb-4">👥</div>
@@ -29,7 +27,7 @@ export const GridContainer: React.FC<GridContainerProps> = ({
   if (!layout) {
     return (
       <div
-        className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center gap-3 p-4 overflow-hidden ${containerClassName}`}
+        className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center gap-3 p-4 overflow-hidden `}
       >
         <div className="text-gray-400 text-center">
           <div className="text-4xl mb-4">⚠️</div>
@@ -44,7 +42,7 @@ export const GridContainer: React.FC<GridContainerProps> = ({
 
   return (
     <div
-      className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center content-center gap-3 p-4 overflow-hidden ${containerClassName}`}
+      className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center content-center gap-3 p-4 overflow-hidden `}
     >
       {participants.map(participant => (
         <ParticipantTile

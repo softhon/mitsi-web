@@ -8,7 +8,7 @@ import Chat from './chat';
 import Users from './users';
 import Menu from './menu';
 
-const ControlBar = () => {
+const ControlBar = ({ onToggleChat }: { onToggleChat: () => void }) => {
   return (
     <div className="p-2 bg-gray-900/95 backdrop-blur-sm  ">
       <div className="flex items-center justify-between max-w-4xl mx-auto">
@@ -34,7 +34,7 @@ const ControlBar = () => {
 
         {/* Right Controls */}
         <div className="flex items-center gap-2">
-          <Chat />
+          <Chat onToggleChat={onToggleChat} />
           <Users />
           <Menu />
         </div>
