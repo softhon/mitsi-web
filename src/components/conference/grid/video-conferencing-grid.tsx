@@ -90,9 +90,9 @@ export const VideoConferencingGrid: React.FC<VideoConferencingGridProps> = ({
 
   return (
     <div
-      className={`${showControls ? 'fixed inset-0 mt-10 mb-14 bg-red-400' : 'relative w-full h-full'}`}
+      className={`${showControls ? 'fixed inset-0 pt-10 pb-14' : 'relative w-full h-full'}`}
     >
-      <div className="relative w-full h-full flex ">
+      <div className="relative w-full h-full">
         {/* Pagination Controls */}
         <PaginationControls
           currentPage={currentPage}
