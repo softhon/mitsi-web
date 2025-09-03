@@ -10,7 +10,7 @@ export interface CameraSlice {
   setDevices: (devices: MediaDeviceInfo[]) => void;
 }
 
-export const createMicSlice: StateCreator<
+export const createCameraSlice: StateCreator<
   ConfStoreState,
   [],
   [['zustand/immer', CameraSlice]],
@@ -21,17 +21,17 @@ export const createMicSlice: StateCreator<
   devices: [],
   toggle: () =>
     set(state => {
-      state.mic.on = !state.mic.on;
+      state.camera.on = !state.camera.on;
       return state;
     }),
   setDeviceId: deviceId =>
     set(state => {
-      state.mic.deviceId = deviceId;
+      state.camera.deviceId = deviceId;
       return state;
     }),
   setDevices: devices =>
     set(state => {
-      state.mic.devices = devices;
+      state.camera.devices = devices;
       return state;
     }),
 });
