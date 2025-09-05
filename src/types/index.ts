@@ -95,8 +95,8 @@ export interface PeerMedia {
 
 export interface PeerCondition {
   id: string;
-  isSpeaking: boolean;
-  isReconnectiing: boolean;
+  isSpeaking?: boolean;
+  isReconnectiing?: boolean;
 }
 
 export interface Participant {
