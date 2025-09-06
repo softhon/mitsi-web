@@ -22,6 +22,12 @@ export enum Access {
   Visiting = 'VISITING', // have click join button
 }
 
+export type AckCallbackData<T = { [key: string]: unknown }> = {
+  status: 'success' | 'error';
+  error?: Error | unknown | null;
+  response?: T;
+};
+
 export enum ActionType {
   StartRecording = 'START_RECORDING',
   StopRecording = 'STOP_RECORDING',
@@ -101,7 +107,12 @@ export interface PeerCondition {
   isReconnectiing?: boolean;
 }
 
-export interface ConsumerOptions {
+export interface MessageData {
+  action: string;
+  args?: { [key: string]: unknown };
+}
+
+export interface ConsumerData {
   producerPeerId: string;
   producerId: string;
   transportId: string;

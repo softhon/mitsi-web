@@ -4,7 +4,7 @@
 
 import { Device, types as mediasoupTypes } from 'mediasoup-client';
 import SignalingService from './signaling-service';
-import type { ConsumerOptions, ProducerSource } from '@/types';
+import type { ConsumerData, ProducerSource } from '@/types';
 import { Actions } from '@/types/actions';
 
 import { getSimulcastEncoding } from '@/lib/utils';
@@ -44,10 +44,12 @@ class MediaService {
 
   async reloadDevice() {
     const device = new Device();
-    const { rtpCapabilities } = await this.signalingService.emit(
-      Actions.GetRouterRtpCapabilities
-    );
-    await device.load({ routerRtpCapabilities: rtpCapabilities });
+    const { routerRtpCapabilities } = await this.signalingService.message<{
+      routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
+    }>({
+      action: Actions.GetRouterRtpCapabilities,
+    });
+    await device.load({ routerRtpCapabilities });
     this.device = device;
     // console.log("Reload device- > rtpCapabilities", rtpCapabilities)
   }
@@ -167,9 +169,12 @@ class MediaService {
     if (!producer) return;
 
     producer.pause();
-    await this.signalingService.emit(Actions.PauseProducer, {
-      producerId: producer.id,
-      source,
+    await this.signalingService.message({
+      action: Actions.PauseProducer,
+      args: {
+        producerId: producer.id,
+        source,
+      },
     });
   }
 
@@ -178,9 +183,12 @@ class MediaService {
     if (!producer) return;
 
     producer.resume();
-    await this.signalingService.emit(Actions.ResumeProducer, {
-      producerId: producer.id,
-      source,
+    await this.signalingService.message({
+      action: Actions.ResumeProducer,
+      args: {
+        producerId: producer.id,
+        source,
+      },
     });
   }
 
@@ -191,9 +199,12 @@ class MediaService {
     if (!producer) return;
     producer.close();
     this.producers.delete(source);
-    await this.signalingService.emit(Actions.CloseProducer, {
-      producerId: producer.id,
-      source,
+    await this.signalingService.message({
+      action: Actions.CloseProducer,
+      args: {
+        producerId: producer.id,
+        source,
+      },
     });
   }
 
@@ -260,7 +271,7 @@ class MediaService {
   }
 
   async createConsumer(
-    consumerOptions: ConsumerOptions
+    consumerOptions: ConsumerData
   ): Promise<mediasoupTypes.Consumer | null> {
     const {
       id,
@@ -363,9 +374,12 @@ class MediaService {
   }
 
   async createWebRtcTransports() {
-    const transportsParams = await this.signalingService.emit(
-      Actions.CreateWebrtcTransports
-    );
+    const transportsParams = await this.signalingService.message<{
+      sendTransportParams: mediasoupTypes.TransportOptions;
+      recvTransportParams: mediasoupTypes.TransportOptions;
+    }>({
+      action: Actions.CreateWebrtcTransports,
+    });
     // console.log({ transportsParams })
     this.createWebRtcSendTransport(transportsParams.sendTransportParams);
     this.createWebRtcRecvTransport(transportsParams.recvTransportParams);
@@ -403,9 +417,12 @@ class MediaService {
       'connect',
       async ({ dtlsParameters }, callback, errback) => {
         try {
-          await this.signalingService.emit(Actions.ConnectWebrtcTransports, {
-            transportId: sendTransport.id,
-            dtlsParameters,
+          await this.signalingService.message({
+            action: Actions.ConnectWebrtcTransports,
+            args: {
+              transportId: sendTransport.id,
+              dtlsParameters,
+            },
           });
           callback();
         } catch (error) {
@@ -418,17 +435,18 @@ class MediaService {
       'produce',
       async ({ kind, rtpParameters, appData }, callback, errback) => {
         try {
-          const { producerId } = await this.signalingService.emit(
-            Actions.CreateProducer,
-            {
+          const { producerId } = await this.signalingService.message<{
+            producerId: string;
+          }>({
+            action: Actions.CreateProducer,
+            args: {
               transportId: sendTransport.id,
               kind,
               rtpParameters,
               appData,
-            }
-          );
+            },
+          });
           callback({ id: producerId });
-          // console.log("On transport produce", kind)
         } catch (error) {
           errback(error as Error);
         }
@@ -456,9 +474,12 @@ class MediaService {
       'connect',
       async ({ dtlsParameters }, callback, errback) => {
         try {
-          await this.signalingService.emit(Actions.ConnectWebrtcTransports, {
-            transportId: recvTransport.id,
-            dtlsParameters,
+          await this.signalingService.message({
+            action: Actions.ConnectWebrtcTransports,
+            args: {
+              transportId: recvTransport.id,
+              dtlsParameters,
+            },
           });
           callback();
         } catch (error) {
@@ -480,12 +501,14 @@ class MediaService {
   }
 
   async restartICE(transport: mediasoupTypes.Transport) {
-    const { iceParameters } = await this.signalingService.emit(
-      Actions.RestartIce,
-      {
+    const { iceParameters } = await this.signalingService.message<{
+      iceParameters: mediasoupTypes.IceParameters;
+    }>({
+      action: Actions.RestartIce,
+      args: {
         transportId: transport.id,
-      }
-    );
+      },
+    });
     await transport.restartIce({ iceParameters });
   }
 
