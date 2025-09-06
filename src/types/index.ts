@@ -1,3 +1,5 @@
+import { types as mediasoupTypes } from 'mediasoup-client';
+
 export type ProducerAudioSource = 'mic' | 'screenAudio';
 export type ProducerVideoSource = 'camera' | 'screen';
 export type ProducerSource = ProducerAudioSource | ProducerVideoSource;
@@ -97,6 +99,19 @@ export interface PeerCondition {
   id: string;
   isSpeaking?: boolean;
   isReconnectiing?: boolean;
+}
+
+export interface ConsumerOptions {
+  producerPeerId: string;
+  producerId: string;
+  transportId: string;
+  producerSource: ProducerSource;
+  id: string;
+  kind: mediasoupTypes.MediaKind;
+  rtpParameters: mediasoupTypes.RtpParameters;
+  type: string; //mediasoup consumer type 'simple' | 'simulcast' | 'svc' | 'pipe';
+  appData: any;
+  producerPaused: boolean;
 }
 
 export interface Participant {
