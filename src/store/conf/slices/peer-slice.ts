@@ -7,13 +7,17 @@ export interface PeerSlice {
   others: Record<string, PeerData>;
   medias: Record<string, PeerMedia>;
   conditions: Record<string, PeerCondition>;
-  positions: Record<string, number>; // id and array position;
+  positions: {
+    id: string;
+    lastActiveSpeechTimestamp: number;
+  }[]; // id and array position;
   //Actions
   addData: (data: PeerData, isYou?: boolean) => void;
   updateData: (id: string, data: Partial<PeerData>) => void;
   updateMedia: (id: string, media: Partial<PeerMedia>) => void;
   updateCondition: (id: string, condition: Partial<PeerCondition>) => void;
-  swapPositions: (id1: string, id2: string) => void;
+  updateLastActiveSpeechTimestamp: (id: string, timeStamp: number) => void;
+  swapPositions: (activeIndex: number, passiveIndex: number) => void;
   remove: (id: string) => void;
   clear: () => void;
 }
@@ -28,7 +32,7 @@ export const createPeerSlice: StateCreator<
   others: {},
   medias: {},
   conditions: {},
-  positions: {},
+  positions: [],
 
   addData: (data, isYou = false) =>
     set(state => {
@@ -43,8 +47,12 @@ export const createPeerSlice: StateCreator<
       state.peers.conditions[data.id] = {
         id: data.id,
       };
-      state.peers.positions[data.id] =
-        Object.keys(state.peers.positions).length - 1;
+
+      if (!state.peers.positions.find(value => value.id === data.id))
+        state.peers.positions.push({
+          id: data.id,
+          lastActiveSpeechTimestamp: 0,
+        });
       return state;
     }),
 
@@ -71,12 +79,26 @@ export const createPeerSlice: StateCreator<
       }
       return state;
     }),
-  swapPositions: (id1, id2) =>
+  updateLastActiveSpeechTimestamp: (id, timeStamp) =>
     set(state => {
-      const id1Position = state.peers.positions[id1];
-      const id2Position = state.peers.positions[id2];
-      state.peers.positions[id1] = id2Position;
-      state.peers.positions[id2] = id1Position;
+      const index = state.peers.positions.findIndex(value => value.id === id);
+      if (index >= 0) {
+        state.peers.positions[index] = {
+          id,
+          lastActiveSpeechTimestamp: timeStamp,
+        };
+      }
+      return state;
+    }),
+  swapPositions: (activeIndex, passiveIndex) =>
+    set(state => {
+      const activePosition = state.peers.positions[activeIndex];
+      const passivePosition = state.peers.positions[passiveIndex];
+      state.peers.positions[passiveIndex] = {
+        ...activePosition,
+        lastActiveSpeechTimestamp: Date.now(),
+      };
+      state.peers.positions[activeIndex] = passivePosition;
       return state;
     }),
   remove: id =>
@@ -84,7 +106,11 @@ export const createPeerSlice: StateCreator<
       delete state.peers.others[id];
       delete state.peers.medias[id];
       delete state.peers.conditions[id];
-      delete state.peers.positions[id];
+
+      const index = state.peers.positions.findIndex(value => value.id === id);
+      if (index >= 0) {
+        state.peers.positions.splice(index, 1);
+      }
       return state;
     }),
   clear: () =>
@@ -92,7 +118,7 @@ export const createPeerSlice: StateCreator<
       state.peers.others = {};
       state.peers.medias = {};
       state.peers.conditions = {};
-      state.peers.positions = {};
+      state.peers.positions = [];
       return state;
     }),
 });
