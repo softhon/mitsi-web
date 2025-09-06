@@ -1,4 +1,10 @@
-import type { GridCalculatorConfig, Participant } from '@/types';
+import { types as mediasoupTypes } from 'mediasoup-client';
+
+import type {
+  GridCalculatorConfig,
+  Participant,
+  ProducerSource,
+} from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -116,4 +122,64 @@ export const generateSampleParticipants = (
   return Array.from({ length: count }, (_, i) =>
     createParticipant(participantsName[i] || `User ${i + 1}`)
   );
+};
+
+export const getSimulcastEncoding = (source: ProducerSource) => {
+  // Simulcast encodings for camera, sharedVideo and screen sharing
+  const encodings: mediasoupTypes.RtpEncodingParameters[] =
+    source === 'screen'
+      ? [
+          {
+            rid: 'r0',
+            maxBitrate: 200000,
+            scaleResolutionDownBy: 8.0, // ~240x135 for 1080p, ~180x90 for 720p
+            maxFramerate: 10,
+            priority: 'low', // Explicitly use literal type
+            networkPriority: 'low',
+          },
+          {
+            rid: 'r1',
+            maxBitrate: 600000,
+            scaleResolutionDownBy: 2.0, // ~960x540 for 1080p, ~640x360 for 720p
+            maxFramerate: 20,
+            priority: 'medium',
+            networkPriority: 'medium',
+          },
+          {
+            rid: 'r2',
+            maxBitrate: 2000000,
+            scaleResolutionDownBy: 1.0, // 1920x1080 or 1280x720
+            maxFramerate: 30,
+            priority: 'high',
+            networkPriority: 'high',
+          },
+        ]
+      : [
+          {
+            rid: 'r0',
+            maxBitrate: 150000,
+            scaleResolutionDownBy: 4.0, // ~480x270 for 1080p, ~360x180 for 720p
+            maxFramerate: 15,
+            priority: 'low',
+            networkPriority: 'low',
+          },
+          {
+            rid: 'r1',
+            maxBitrate: 600000,
+            scaleResolutionDownBy: 2.0, // ~960x540 for 1080p, ~640x360 for 720p
+            maxFramerate: 24,
+            priority: 'medium',
+            networkPriority: 'medium',
+          },
+          {
+            rid: 'r2',
+            maxBitrate: 1800000,
+            scaleResolutionDownBy: 1.0, // 1920x1080 or 1280x720
+            maxFramerate: 30,
+            priority: 'high',
+            networkPriority: 'high',
+          },
+        ];
+
+  return encodings;
 };
