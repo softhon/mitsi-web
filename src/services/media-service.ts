@@ -42,6 +42,19 @@ class MediaService {
     this.screenAudioTrack = null;
   }
 
+  static async start(signalingService: SignalingService) {
+    const device = new Device();
+    const { routerRtpCapabilities } = await signalingService.message<{
+      routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
+    }>({
+      action: Actions.GetRouterRtpCapabilities,
+    });
+    await device.load({ routerRtpCapabilities });
+    const mediaService = new MediaService(device, signalingService);
+    return mediaService;
+    // console.log("media service started")
+  }
+
   async reloadDevice() {
     const device = new Device();
     const { routerRtpCapabilities } = await this.signalingService.message<{
@@ -51,7 +64,6 @@ class MediaService {
     });
     await device.load({ routerRtpCapabilities });
     this.device = device;
-    // console.log("Reload device- > rtpCapabilities", rtpCapabilities)
   }
 
   async createProducerNew(
