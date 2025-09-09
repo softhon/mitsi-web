@@ -125,6 +125,11 @@ export interface ConsumerData {
   producerPaused: boolean;
 }
 
+export interface MediaServiceConfig {
+  simulcastEnabled?: boolean;
+  svcEnabled?: boolean;
+}
+
 export interface Participant {
   id: string;
   name: string;
