@@ -4,8 +4,9 @@
 
 import { Device, types as mediasoupTypes } from 'mediasoup-client';
 import SignalingService from './signaling-service';
-import type { ConsumerData, ProducerSource } from '@/types';
+import type { ConsumerData, MediaServiceConfig, ProducerSource } from '@/types';
 import { Actions } from '@/types/actions';
+import appConfig from '@/config';
 
 import { getSimulcastEncoding } from '@/lib/utils';
 
@@ -24,8 +25,13 @@ class MediaService {
   private cameraTrack: MediaStreamTrack | null;
   private screenTrack: MediaStreamTrack | null;
   private screenAudioTrack: MediaStreamTrack | null;
+  private config: MediaServiceConfig;
 
-  constructor(device: Device, signalingService: SignalingService) {
+  constructor(
+    device: Device,
+    signalingService: SignalingService,
+    config?: MediaServiceConfig
+  ) {
     this.device = device;
 
     this.signalingService = signalingService;
@@ -40,6 +46,7 @@ class MediaService {
     this.cameraTrack = null;
     this.screenTrack = null;
     this.screenAudioTrack = null;
+    this.config = config ? config : appConfig.media;
   }
 
   static async start(signalingService: SignalingService) {
@@ -50,9 +57,19 @@ class MediaService {
       action: Actions.GetRouterRtpCapabilities,
     });
     await device.load({ routerRtpCapabilities });
-    const mediaService = new MediaService(device, signalingService);
-    return mediaService;
+    return new MediaService(device, signalingService);
+
     // console.log("media service started")
+  }
+
+  // Helper method to get user media with proper constraints
+  async getUserMedia(constraints: MediaStreamConstraints) {
+    return await navigator.mediaDevices.getUserMedia(constraints);
+  }
+
+  // Helper method to get display media
+  async getDisplayMedia(constraints?: DisplayMediaStreamOptions) {
+    return await navigator.mediaDevices.getDisplayMedia(constraints);
   }
 
   async reloadDevice() {
