@@ -9,11 +9,28 @@ export interface SocketConnectionOptions {
   passcode?: string;
 }
 
-class SignalingService {
-  public connection: Socket;
+export enum ConnectionState {
+  Disconnected = 'disconnected',
+  Connecting = 'connecting',
+  Connected = 'connected',
+  Reconnecting = 'reconnecting',
+  Error = 'error',
+}
 
-  constructor(url: string, options: SocketConnectionOptions) {
-    this.connection = socketIOClient(url, {
+class SignalingService {
+  private connection: Socket;
+  private connectionState: ConnectionState = ConnectionState.Disconnected;
+
+  constructor(connection: Socket) {
+    this.connection = connection;
+    this.setupEventHandlers();
+  }
+
+  static connect(
+    url: string,
+    options: SocketConnectionOptions
+  ): SignalingService {
+    const connection = socketIOClient(url, {
       transports: ['websocket'],
       query: {
         meetingId: options.roomId,
@@ -24,16 +41,17 @@ class SignalingService {
         key: options.authkey,
       },
     });
+    return new SignalingService(connection);
+  }
 
-    // Add connection error handling
-    this.connection.on('connect_error', error => {
-      console.error('Socket connection failed:', error);
-    });
-
-    this.connection.io.on('reconnect_failed', () => {
-      this.disconnect();
-      window.location.reload();
-    });
+  getConnection(): Socket {
+    return this.connection;
+  }
+  getConnectionState(): ConnectionState {
+    return this.connectionState;
+  }
+  isConnected(): boolean {
+    return this.connectionState === ConnectionState.Connected;
   }
 
   message<T = { [key: string]: unknown }>(message: MessageData): Promise<T> {
@@ -52,6 +70,37 @@ class SignalingService {
           }
         }
       );
+    });
+  }
+
+  private setupEventHandlers(): void {
+    this.connection.on('connect', () => {
+      this.connectionState = ConnectionState.Connected;
+    });
+
+    this.connection.on('disconnect', reason => {
+      console.log('Socket disconnected:', reason);
+      this.connectionState = ConnectionState.Disconnected;
+    });
+
+    this.connection.on('connect_error', error => {
+      console.error('Socket connection failed:', error);
+      this.connectionState = ConnectionState.Error;
+    });
+
+    this.connection.on('reconnecting', attemptNumber => {
+      console.log(`Reconnecting attempt ${attemptNumber}`);
+      this.connectionState = ConnectionState.Reconnecting;
+    });
+
+    this.connection.on('reconnect', attemptNumber => {
+      console.log(`Reconnected after ${attemptNumber} attempts`);
+      this.connectionState = ConnectionState.Connected;
+    });
+
+    this.connection.on('reconnect_failed', () => {
+      console.error('Reconnection failed');
+      this.connectionState = ConnectionState.Error;
     });
   }
 

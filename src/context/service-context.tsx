@@ -57,8 +57,9 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
 
       // Cleanup signaling service
       if (signalingService) {
-        signalingService.connection.off('reconnect_failed');
-        signalingService.connection.off('connect_error');
+        const connection = signalingService.getConnection();
+        connection.off('reconnect_failed');
+        connection.off('connect_error');
         signalingService.disconnect();
       }
     } catch (error) {
@@ -76,9 +77,12 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       // Initialize signaling service
-      const newSignalingService = new SignalingService(config.signalingServer, {
-        authkey: config.apiKey,
-      });
+      const newSignalingService = SignalingService.connect(
+        config.signalingServer,
+        {
+          authkey: config.apiKey,
+        }
+      );
 
       setSignalingService(newSignalingService);
 

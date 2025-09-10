@@ -21,6 +21,7 @@ class MediaService {
   private screenConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
   private screenAudioConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
   // preview tracks
+
   private micTrack: MediaStreamTrack | null;
   private cameraTrack: MediaStreamTrack | null;
   private screenTrack: MediaStreamTrack | null;
@@ -58,8 +59,6 @@ class MediaService {
     });
     await device.load({ routerRtpCapabilities });
     return new MediaService(device, signalingService);
-
-    // console.log("media service started")
   }
 
   // Helper method to get user media with proper constraints
