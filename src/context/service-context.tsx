@@ -1,15 +1,3 @@
-/**
- * Meeting Service Provider
- * Provides access to signaling service and media service
- * Handles events to join and participant in meeting
- * Steps
- * 1. initialise signalling
- * 2. listen to events required at join meeting page
- * 3. User attempt to join meeting
- * 4. Start mediaserver
- * 5. Listen to events to participate in meeting
- */
-
 import config from '@/config';
 import MediaService from '@/services/media-service';
 import SignalingService from '@/services/signaling-service';
@@ -39,14 +27,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Use refs to track cleanup
-  const cleanupRef = useRef<(() => void) | null>(null);
-  const isCleaningUpRef = useRef(false);
-
-  const cleanup = useCallback(() => {
-    if (isCleaningUpRef.current) return;
-    isCleaningUpRef.current = true;
-
+  const cleanup = () => {
     try {
       // Cleanup media service
       if (mediaService) {
@@ -64,60 +45,48 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (error) {
       console.error('Cleanup error:', error);
-    } finally {
-      isCleaningUpRef.current = false;
     }
-  }, [mediaService, signalingService]);
-
-  const initializeServices = useCallback(async () => {
-    if (isCleaningUpRef.current) return;
-
-    setIsInitializing(true);
-    setError(null);
-
-    try {
-      // Initialize signaling service
-      const newSignalingService = SignalingService.connect(
-        config.signalingServer,
-        {
-          authkey: config.apiKey,
-        }
-      );
-
-      setSignalingService(newSignalingService);
-
-      // Initialize media service
-      const newMediaService = await MediaService.start(newSignalingService);
-      setMediaService(newMediaService);
-
-      setError(null);
-    } catch (error) {
-      console.error('Service initialization error:', error);
-      setError(
-        error instanceof Error ? error.message : 'Failed to initialize services'
-      );
-    } finally {
-      setIsInitializing(false);
-    }
-  }, []);
+  };
 
   useEffect(() => {
+    const initializeServices = async () => {
+      setIsInitializing(true);
+      setError(null);
+
+      try {
+        // Initialize signaling service
+        const newSignalingService = SignalingService.connect(
+          config.signalingServer,
+          {
+            authkey: config.apiKey,
+          }
+        );
+
+        setSignalingService(newSignalingService);
+
+        // Initialize media service
+        const newMediaService = await MediaService.start(newSignalingService);
+        setMediaService(newMediaService);
+        console.log('signaling and media service started');
+        setError(null);
+      } catch (error) {
+        console.error('Service initialization error:', error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to initialize services'
+        );
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
     initializeServices();
 
-    // Store cleanup function
-    cleanupRef.current = cleanup;
-
-    return () => {
-      cleanupRef.current?.();
-    };
-  }, [initializeServices, cleanup]);
-
-  // Cleanup on unmount
-  useEffect(() => {
     return () => {
       cleanup();
     };
-  }, [cleanup]);
+  }, []);
 
   return (
     <ServiceContext.Provider
