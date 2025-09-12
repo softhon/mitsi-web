@@ -32,6 +32,7 @@ class SignalingService {
   ): SignalingService {
     const connection = socketIOClient(url, {
       transports: ['websocket'],
+      reconnectionAttempts: 5,
       query: {
         meetingId: options.roomId,
         passcode: options.passcode,
