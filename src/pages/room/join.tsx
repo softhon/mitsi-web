@@ -12,6 +12,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { useSignaling } from '@/hooks/use-signaling';
+import { Actions } from '@/types/actions';
 
 interface MediaControlButtonProps {
   isActive: boolean;
@@ -48,6 +50,25 @@ const JoinRoom: React.FC = () => {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { signalingService } = useSignaling();
+
+  useEffect(() => {
+    if (!signalingService) return;
+
+    const joinRoom = async () => {
+      const res = await signalingService.message({
+        action: Actions.JoinVisitors,
+        args: {
+          roomId: 'room1',
+          peerId: 'peerI',
+        },
+      });
+
+      console.log(res);
+    };
+
+    joinRoom();
+  }, [signalingService]);
 
   // Simulate camera stream
   useEffect(() => {

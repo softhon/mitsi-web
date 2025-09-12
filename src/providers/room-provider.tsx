@@ -30,7 +30,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     ) => void;
   } = {
     [Actions.PeerAdded]: async (args, callback) => {
-      console.log('Peer Added');
+      console.log('Peer Added', args);
     },
 
     [Actions.PeerLeft]: async (args, callback) => {
