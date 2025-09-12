@@ -20,6 +20,8 @@ export enum Actions {
   RestartIce = 'restart_ice',
 
   CreatePeer = 'create_peer',
+  PeerAdded = 'peer_added',
+  PeerLeft = 'peer_left',
 
   Mute = 'mute',
   OffCamera = 'off_camera',

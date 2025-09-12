@@ -42,7 +42,7 @@ const MediaControlButton: React.FC<MediaControlButtonProps> = ({
   </Button>
 );
 
-const JoinMeetingPage: React.FC = () => {
+const JoinRoom: React.FC = () => {
   const [name, setName] = useState('');
   const [isMicOn, setIsMicOn] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(false);
@@ -117,12 +117,12 @@ const JoinMeetingPage: React.FC = () => {
               <div className="absolute -top-2 left-8 w-1 h-1 bg-blue-300/40 rounded-full animate-pulse delay-1200" />
               <div className="absolute -bottom-1 right-12 w-0.5 h-0.5 bg-purple-300/50 rounded-full animate-pulse delay-1600" />
             </h1>
-            <p className="text-gray-400 text-lg relative">
+            <div className="text-gray-400 text-lg relative">
               Setup your audio and video before joining
               {/* More subtle particles around subtitle */}
               <div className="absolute top-1/2 -left-4 w-0.5 h-0.5 bg-gray-300/30 rounded-full animate-pulse delay-2100" />
               <div className="absolute top-1/2 -right-4 w-0.5 h-0.5 bg-gray-400/25 rounded-full animate-pulse delay-2800" />
-            </p>
+            </div>
           </div>
 
           {/* Enhanced Status Badge */}
@@ -373,4 +373,4 @@ const JoinMeetingPage: React.FC = () => {
   );
 };
 
-export default JoinMeetingPage;
+export default JoinRoom;
