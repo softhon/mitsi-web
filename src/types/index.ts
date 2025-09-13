@@ -16,10 +16,10 @@ export type ReactionName =
   | 'thinkingFace';
 
 export enum Access {
-  Allowed = 'ALLOWED',
-  Declined = 'DECLINED',
-  Waiting = 'WAITING',
-  Visiting = 'VISITING', // have click join button
+  Allowed = 'Allowed',
+  Declined = 'Declined',
+  Waiting = 'Waiting',
+  Visiting = 'Visiting', // have click join button
 }
 
 export type AckCallbackData<T = { [key: string]: unknown }> = {
@@ -54,13 +54,11 @@ export interface User {
   photo?: string;
   color?: string;
 }
-
-export interface MeetingType {
+export interface RoomData {
   id: string;
-  title: string;
-  meetingId: string;
+  roomId: string;
+  name: string;
 }
-
 export interface PrivateChatPeer {
   id: string;
   name: string;
