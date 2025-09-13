@@ -40,3 +40,45 @@ export const useCameraActions = () =>
 // ============================================================================
 // PEER SELECTORS
 // ============================================================================
+export const usePeerMe = () => useConfStore(state => state.peers.me);
+export const usePeerOthers = () => useConfStore(state => state.peers.others);
+export const usePeerOthersList = () => {
+  const peerOthers = usePeerOthers();
+  return useMemo(() => {
+    return Object.values(peerOthers);
+  }, [peerOthers]);
+};
+export const usePeerMedias = () => useConfStore(state => state.peers.medias);
+export const usePeerConditions = () =>
+  useConfStore(state => state.peers.conditions);
+export const usePeerPosition = () =>
+  useConfStore(state => state.peers.positions);
+export const usePeerActions = () =>
+  useMemo(
+    () => ({
+      addData: useConfStore.getState().peers.addData,
+      updateData: useConfStore.getState().peers.updateData,
+      updateMedia: useConfStore.getState().peers.updateMedia,
+      updateCondition: useConfStore.getState().peers.updateCondition,
+      updateLastActiveSpeechTimestamp:
+        useConfStore.getState().peers.updateLastActiveSpeechTimestamp,
+      swapPositions: useConfStore.getState().peers.swapPositions,
+      remove: useConfStore.getState().peers.remove,
+      clear: useConfStore.getState().peers.clear,
+    }),
+    []
+  );
+
+// ============================================================================
+// ROOM SELECTORS
+// ============================================================================
+export const useRoomData = () => useConfStore(state => state.room.data);
+export const useRoomAccess = () => useConfStore(state => state.room.access);
+export const useRoomActions = () =>
+  useMemo(
+    () => ({
+      setData: useConfStore.getState().room.setData,
+      setAccess: useConfStore.getState().room.setAccess,
+    }),
+    []
+  );
