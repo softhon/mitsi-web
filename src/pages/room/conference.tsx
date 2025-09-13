@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import ControlBar from '@/components/conference/control-bar';
 import Header from '@/components/conference/header';
@@ -9,8 +9,17 @@ import {
   generateSampleParticipants,
   participantsName,
 } from '@/lib/utils';
+import { usePeerMe, useRoomData } from '@/store/conf/hooks';
+import { useSignaling } from '@/hooks/use-signaling';
+import { useMedia } from '@/hooks/use-media';
+import { Actions } from '@/types/actions';
 
-export const VideoConferencingDemo: React.FC = () => {
+export const Conference: React.FC = () => {
+  const peerMe = usePeerMe();
+  const roomData = useRoomData();
+  const { signalingService } = useSignaling();
+  const { mediaService } = useMedia();
+
   const [participants, setParticipants] = useState<Participant[]>(
     generateSampleParticipants(1)
   );
@@ -35,6 +44,29 @@ export const VideoConferencingDemo: React.FC = () => {
     setChatOn(prev => !prev);
   }, [chatOn]);
 
+  const joinRoom = async () => {};
+
+  useEffect(() => {
+    const setup = async () => {
+      if (!peerMe || !signalingService || !mediaService) return;
+      try {
+        const result = await signalingService.message({
+          action: Actions.JoinRoom,
+          args: {
+            roomId: roomData?.roomId,
+            peerData: peerMe,
+            rtpCapabilities: mediaService.getDeviceRtpCapabilities(),
+          },
+        });
+
+        console.log(Actions.JoinRoom, result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setup();
+  }, []);
+
   return (
     <div className=" relative h-screen bg-gray-900 flex flex-col overflow-hidden justify-between">
       {/* Header */}
@@ -58,4 +90,4 @@ export const VideoConferencingDemo: React.FC = () => {
   );
 };
 
-export default VideoConferencingDemo;
+export default Conference;
