@@ -55,7 +55,9 @@ class SignalingService {
     return this.connectionState === ConnectionState.Connected;
   }
 
-  message<T = { [key: string]: unknown }>(message: MessageData): Promise<T> {
+  message<T = { [key: string]: unknown }>(
+    message: MessageData
+  ): Promise<T | undefined> {
     return new Promise((resolve, reject) => {
       this.connection.emit(
         Actions.Message,
@@ -63,11 +65,8 @@ class SignalingService {
         (res: AckCallbackData<T>) => {
           if (res.status === 'error') {
             reject(res?.error || 'Unknown error');
-          } else if (res.response !== undefined) {
-            resolve(res.response);
           } else {
-            // Handle unexpected response format
-            reject('Invalid response format');
+            resolve(res.response);
           }
         }
       );
