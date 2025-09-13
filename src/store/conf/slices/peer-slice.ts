@@ -3,7 +3,7 @@ import type { StateCreator } from 'zustand';
 import type { ConfStoreState } from '../type';
 
 export interface PeerSlice {
-  you: PeerData | null;
+  me: PeerData | null;
   others: Record<string, PeerData>;
   medias: Record<string, PeerMedia>;
   conditions: Record<string, PeerCondition>;
@@ -12,7 +12,7 @@ export interface PeerSlice {
     lastActiveSpeechTimestamp: number;
   }[]; // id and array position;
   //Actions
-  addData: (data: PeerData, isYou?: boolean) => void;
+  addData: (data: PeerData, isMe?: boolean) => void;
   updateData: (id: string, data: Partial<PeerData>) => void;
   updateMedia: (id: string, media: Partial<PeerMedia>) => void;
   updateCondition: (id: string, condition: Partial<PeerCondition>) => void;
@@ -28,7 +28,7 @@ export const createPeerSlice: StateCreator<
   [['zustand/immer', PeerSlice]],
   PeerSlice
 > = set => ({
-  you: null,
+  me: null,
   others: {},
   medias: {},
   conditions: {},
@@ -37,7 +37,7 @@ export const createPeerSlice: StateCreator<
   addData: (data, isYou = false) =>
     set(state => {
       if (isYou) {
-        state.peers.you = data;
+        state.peers.me = data;
       } else {
         state.peers.others[data.id] = data;
       }
@@ -58,8 +58,8 @@ export const createPeerSlice: StateCreator<
 
   updateData: (id, data) =>
     set(state => {
-      if (state.peers.you?.id === id) {
-        Object.assign(state.peers.you, data);
+      if (state.peers.me?.id === id) {
+        Object.assign(state.peers.me, data);
       } else if (state.peers.others[id]) {
         Object.assign(state.peers.others[id], data);
       }
@@ -67,14 +67,14 @@ export const createPeerSlice: StateCreator<
     }),
   updateMedia: (id, media) =>
     set(state => {
-      if (state.peers.you?.id === id || state.peers.others[id]) {
+      if (state.peers.me?.id === id || state.peers.others[id]) {
         Object.assign(state.peers.medias[id], media);
       }
       return state;
     }),
   updateCondition: (id, condition) =>
     set(state => {
-      if (state.peers.you?.id === id || state.peers.others[id]) {
+      if (state.peers.me?.id === id || state.peers.others[id]) {
         Object.assign(state.peers.conditions[id], condition);
       }
       return state;
