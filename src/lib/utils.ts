@@ -7,6 +7,8 @@ import type {
 } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import config from '@/config';
+import { v4 as uuidv4 } from 'uuid';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -45,6 +47,26 @@ export const createParticipant = (name: string): Participant => {
     isMuted: Math.random() > 0.5,
     hasVideo: Math.random() > 0.5,
   };
+};
+
+export const setPeerId = (peerId: string) => {
+  if (config.isDevMode) {
+    sessionStorage.setItem('peerId', peerId);
+    return;
+  }
+  localStorage.setItem('peerId', peerId);
+};
+
+export const getPeerId = () => {
+  let peerId = config.isDevMode
+    ? sessionStorage.getItem('peerId')
+    : localStorage.getItem('peerId');
+  if (!peerId) {
+    const newPeerId = uuidv4();
+    setPeerId(newPeerId);
+    peerId = newPeerId;
+  }
+  return peerId;
 };
 
 export const participantsName = [
