@@ -168,7 +168,7 @@ export interface VideoConferencingGridProps {
 }
 
 export interface ParticipantTileProps {
-  participant: Participant;
+  participant: PeerData;
   layout: Layout;
 }
 

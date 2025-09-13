@@ -2,43 +2,21 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import ControlBar from '@/components/conference/control-bar';
 import Header from '@/components/conference/header';
-import { VideoConferencingGrid } from '@/components/conference/grid/video-conferencing-grid';
-import type { Participant } from '@/types';
-import {
-  createParticipant,
-  generateSampleParticipants,
-  participantsName,
-} from '@/lib/utils';
-import { usePeerMe, useRoomData } from '@/store/conf/hooks';
+import { ConferenceGrid } from '@/components/conference/grid/conference-grid';
+
+import { usePeerActions, usePeerMe, useRoomData } from '@/store/conf/hooks';
 import { useSignaling } from '@/hooks/use-signaling';
 import { useMedia } from '@/hooks/use-media';
 import { Actions } from '@/types/actions';
+import type { PeerData, RoomData } from '@/types';
 
 export const Conference: React.FC = () => {
   const peerMe = usePeerMe();
   const roomData = useRoomData();
   const { signalingService } = useSignaling();
   const { mediaService } = useMedia();
-
-  const [participants, setParticipants] = useState<Participant[]>(
-    generateSampleParticipants(1)
-  );
-
+  const peerActions = usePeerActions();
   const [chatOn, setChatOn] = useState(false);
-
-  const handleAddParticipant = useCallback(() => {
-    const newParticipant =
-      participants.length - 1 > participantsName.length
-        ? createParticipant(`User ${participants.length + 1}`)
-        : createParticipant(participantsName[participants.length]);
-    setParticipants(prev => [...prev, newParticipant]);
-  }, [participants.length]);
-
-  const handleRemoveParticipant = useCallback(() => {
-    if (participants.length > 0) {
-      setParticipants(prev => prev.slice(0, -1));
-    }
-  }, [participants.length]);
 
   const toggleChat = useCallback(() => {
     setChatOn(prev => !prev);
@@ -50,7 +28,10 @@ export const Conference: React.FC = () => {
     const setup = async () => {
       if (!peerMe || !signalingService || !mediaService) return;
       try {
-        const result = await signalingService.message({
+        const result = await signalingService.message<{
+          peers: PeerData[];
+          roomData: RoomData;
+        }>({
           action: Actions.JoinRoom,
           args: {
             roomId: roomData?.roomId,
@@ -59,7 +40,11 @@ export const Conference: React.FC = () => {
           },
         });
 
-        console.log(Actions.JoinRoom, result);
+        const peers = result?.peers;
+        peerActions.clear();
+        if (peers) {
+          peerActions.addOthersData(peers);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -70,19 +55,10 @@ export const Conference: React.FC = () => {
   return (
     <div className=" relative h-screen bg-gray-900 flex flex-col overflow-hidden justify-between">
       {/* Header */}
-      <Header
-        onAddParticipant={handleAddParticipant}
-        onRemoveParticipant={handleRemoveParticipant}
-      />
+      <Header />
 
       {/* Main Video Grid */}
-      <VideoConferencingGrid
-        participants={participants}
-        onAddParticipant={handleAddParticipant}
-        onRemoveParticipant={handleRemoveParticipant}
-        showControls={true}
-        showChat={chatOn}
-      />
+      <ConferenceGrid />
 
       {/* Bottom Controls */}
       <ControlBar onToggleChat={toggleChat} />

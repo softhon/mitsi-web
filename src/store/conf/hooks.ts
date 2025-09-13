@@ -57,6 +57,7 @@ export const usePeerActions = () =>
   useMemo(
     () => ({
       addData: useConfStore.getState().peers.addData,
+      addOthersData: useConfStore.getState().peers.addOthersData,
       updateData: useConfStore.getState().peers.updateData,
       updateMedia: useConfStore.getState().peers.updateMedia,
       updateCondition: useConfStore.getState().peers.updateCondition,

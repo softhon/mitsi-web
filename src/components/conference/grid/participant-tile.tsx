@@ -14,18 +14,8 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
     >
       {/* Video/Avatar Area */}
       <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
-        {participant.hasVideo ? (
-          <div className="w-full h-full bg-gradient-to-br  flex items-center justify-center text-white text-lg font-semibold">
-            {participant.avatarUrl ? (
-              <img
-                src={participant.avatarUrl}
-                alt={participant.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span>Video Feed</span>
-            )}
-          </div>
+        {participant.userId ? (
+          <div className="w-full h-full bg-gradient-to-br  flex items-center justify-center text-white text-lg font-semibold"></div>
         ) : (
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold"
@@ -39,11 +29,11 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
 
         {/* Mic Status */}
         <div className="absolute top-2 right-2 p-1 rounded-full bg-black/50">
-          {participant.isMuted ? (
+          {/* {participant.isMuted ? (
             <MicOff className="w-4 h-4 text-red-400" />
           ) : (
-            <Mic className="w-4 h-4 text-green-400" />
-          )}
+          )} */}
+          <Mic className="w-4 h-4 text-green-400" />
         </div>
       </div>
 

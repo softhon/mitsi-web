@@ -13,6 +13,7 @@ export interface PeerSlice {
   }[]; // id and array position;
   //Actions
   addData: (data: PeerData, isMe?: boolean) => void;
+  addOthersData: (data: PeerData[]) => void;
   updateData: (id: string, data: Partial<PeerData>) => void;
   updateMedia: (id: string, media: Partial<PeerMedia>) => void;
   updateCondition: (id: string, condition: Partial<PeerCondition>) => void;
@@ -55,7 +56,13 @@ export const createPeerSlice: StateCreator<
         });
       return state;
     }),
-
+  addOthersData: data =>
+    set(state => {
+      data.forEach(peerData => {
+        state.peers.others[peerData.id] = peerData;
+      });
+      return state;
+    }),
   updateData: (id, data) =>
     set(state => {
       if (state.peers.me?.id === id) {

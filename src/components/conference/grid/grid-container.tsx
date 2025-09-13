@@ -1,9 +1,10 @@
-import type { Layout, Participant } from '@/types';
+import type { Layout, PeerData } from '@/types';
 import React from 'react';
 import { ParticipantTile } from './participant-tile';
+import { usePeerMe } from '@/store/conf/hooks';
 
 interface GridContainerProps {
-  participants: Participant[];
+  participants: PeerData[];
   layout: Layout | null;
 }
 
@@ -11,7 +12,8 @@ export const GridContainer: React.FC<GridContainerProps> = ({
   participants,
   layout,
 }) => {
-  if (participants.length === 0) {
+  const myPeer = usePeerMe();
+  if (!myPeer) {
     return (
       <div
         className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center gap-3 p-4 overflow-hidden `}
