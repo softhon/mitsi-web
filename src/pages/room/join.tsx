@@ -9,11 +9,29 @@ import {
   User,
   Loader2,
 } from 'lucide-react';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
+import { cn, getPeerId } from '@/lib/utils';
 import { useSignaling } from '@/hooks/use-signaling';
 import { Actions } from '@/types/actions';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { Access, type PeerData, type RoomData } from '@/types';
+import {
+  usePeerActions,
+  usePeerOthersList,
+  useRoomActions,
+  useRoomData,
+} from '@/store/conf/hooks';
 
 interface MediaControlButtonProps {
   isActive: boolean;
@@ -44,56 +62,97 @@ const MediaControlButton: React.FC<MediaControlButtonProps> = ({
   </Button>
 );
 
+const FormValues = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters long')
+    .refine(
+      val => (val.match(/[a-zA-Z]/g) || []).length >= 2,
+      'Name must contain at least two alphabetic characters'
+    ),
+});
+
 const JoinRoom: React.FC = () => {
-  const [name, setName] = useState('');
   const [isMicOn, setIsMicOn] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(false);
-  const [isJoining, setIsJoining] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { signalingService } = useSignaling();
+  const roomData = useRoomData();
+  const roomActions = useRoomActions();
+  const peerOthersList = usePeerOthersList();
+  const peerActions = usePeerActions();
+
+  type FormType = z.infer<typeof FormValues>;
+
+  const form = useForm<FormType>({
+    resolver: zodResolver(FormValues),
+    defaultValues: {
+      name: '',
+    },
+  });
+  const name = form.watch('name');
 
   useEffect(() => {
-    if (!signalingService) return;
+    roomActions.setData({
+      id: 'ieieirhhrhur',
+      roomId: 'ib34ceb',
+      name: 'Days Catch Up',
+    });
+  }, []);
 
-    const joinRoom = async () => {
-      const res = await signalingService.message({
-        action: Actions.JoinVisitors,
+  useEffect(() => {
+    if (!signalingService || !roomData) return;
+    const JoinVisitor = async () => {
+      try {
+        peerActions.clear();
+        const res = await signalingService.message<{ peers: PeerData[] }>({
+          action: Actions.JoinVisitors,
+          args: {
+            roomId: roomData.roomId,
+            peerId: getPeerId(),
+          },
+        });
+        console.log(Actions.JoinVisitors, res);
+        const allConnectedPeers = res.peers;
+        for (const peer of allConnectedPeers) {
+          peerActions.addData(peer);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    JoinVisitor();
+  }, [signalingService, roomData]);
+
+  const onSubmit = async (data: FormType) => {
+    try {
+      const peerData: PeerData = {
+        id: getPeerId(),
+        name: data.name,
+      };
+
+      peerActions.addData(peerData, true);
+
+      const res = await signalingService?.message<{ roomData: RoomData }>({
+        action: Actions.GetRoomData,
         args: {
-          roomId: 'room1',
-          peerId: 'peerI',
+          roomId: roomData?.roomId,
         },
       });
 
-      console.log(res);
-    };
-
-    joinRoom();
-  }, [signalingService]);
-
-  // Simulate camera stream
-  useEffect(() => {
-    if (isCameraOn && videoRef.current) {
-      // In a real app, you'd get user media here
-      // navigator.mediaDevices.getUserMedia({ video: true })
+      console.log(Actions.GetRoomData, res);
+      roomActions.setAccess(Access.Allowed);
+    } catch (error) {
+      console.log(error);
     }
-  }, [isCameraOn]);
 
-  const handleJoinMeeting = () => {
-    if (!name.trim()) return;
-
-    setIsJoining(true);
-    // Simulate join process
-    setTimeout(() => {
-      console.log('Joining meeting with:', { name, isMicOn, isCameraOn });
-      setIsJoining(false);
-    }, 2000);
+    console.log(data);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && name.trim()) {
-      handleJoinMeeting();
-    }
-  };
+  if (!roomData || !signalingService) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -133,7 +192,7 @@ const JoinRoom: React.FC = () => {
 
           <div className="space-y-2 relative">
             <h1 className="text-4xl font-semibold text-white relative">
-              Get Started
+              {roomData.name}
               {/* Subtle glow particles around title */}
               <div className="absolute -top-2 left-8 w-1 h-1 bg-blue-300/40 rounded-full animate-pulse delay-1200" />
               <div className="absolute -bottom-1 right-12 w-0.5 h-0.5 bg-purple-300/50 rounded-full animate-pulse delay-1600" />
@@ -152,7 +211,10 @@ const JoinRoom: React.FC = () => {
               variant="outline"
               className="bg-gray-800/50 text-gray-300 border-gray-600 relative"
             >
-              You are the first to join
+              {peerOthersList.length
+                ? `${peerOthersList.length} people have joined`
+                : 'You are the first to join'}
+
               {/* Tiny accent dots on badge */}
               <div className="absolute -top-1 left-2 w-0.5 h-0.5 bg-green-400/60 rounded-full animate-pulse delay-1400" />
               <div className="absolute -bottom-1 right-2 w-0.5 h-0.5 bg-blue-400/50 rounded-full animate-pulse delay-1900" />
@@ -310,31 +372,45 @@ const JoinRoom: React.FC = () => {
         </div>
 
         {/* Name Input and Join Button */}
-        <div className="flex items-center gap-3">
-          <input
-            type="text"
-            placeholder="Enter name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-          <Button
-            onClick={handleJoinMeeting}
-            disabled={!name.trim() || isJoining}
-            className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex items-center gap-3"
           >
-            {isJoining ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Joining...
-              </>
-            ) : (
-              'Join Now'
-            )}
-          </Button>
-        </div>
-
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className=" flex-1">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter name"
+                      // onKeyUp={handleKeyPress}
+                      className="w-full h-11 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              disabled={!name.trim() || form.formState.isSubmitting}
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {form.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Joining...
+                </>
+              ) : (
+                'Join Now'
+              )}
+            </Button>
+          </form>
+        </Form>
         {/* Additional Info */}
         <div className="text-center">
           <p className="text-gray-500 text-sm">
