@@ -4,6 +4,7 @@ const config = {
   signalingServer: env.VITE_REACT_APP_SIGNALING_SERVER,
   apiServer: env.VITE_REACT_APP_API_SERVER,
   apiKey: env.VITE_REACT_APP_API_KEY,
+  isDevMode: env.DEV,
   media: {
     simulcastEnabled: true,
     svcEnabled: false,
