@@ -4,7 +4,11 @@
 
 import { Device, types as mediasoupTypes } from 'mediasoup-client';
 import SignalingService from './signaling-service';
-import type { ConsumerData, MediaServiceConfig, ProducerSource } from '@/types';
+import type {
+  CreateConsumerData,
+  MediaServiceConfig,
+  ProducerSource,
+} from '@/types';
 import { Actions } from '@/types/actions';
 import appConfig from '@/config';
 
@@ -299,7 +303,7 @@ class MediaService {
   }
 
   async createConsumer(
-    consumerOptions: ConsumerData
+    consumerOptions: CreateConsumerData
   ): Promise<mediasoupTypes.Consumer | null> {
     const {
       id,

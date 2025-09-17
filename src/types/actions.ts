@@ -17,6 +17,11 @@ export enum Actions {
   ResumeProducer = 'resume_producer',
   ResumeConsumer = 'resume_consumer',
   PauseConsumer = 'pause_consumer',
+  // consumed by client
+  ConsumerCreated = 'consumer_created',
+  ConsumerPaused = 'consumer_paused',
+  ConsumerResumed = 'consumer_resumed',
+  ConsumerClosed = 'consumer_closed',
   RestartIce = 'restart_ice',
 
   CreatePeer = 'create_peer',

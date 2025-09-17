@@ -1,12 +1,18 @@
 import { types as mediasoupTypes } from 'mediasoup-client';
 import { useCallback } from 'react';
-import type { ProducerSource } from '@/types';
+import type {
+  ConsumerStateData,
+  CreateConsumerData,
+  PeerMedia,
+  ProducerSource,
+} from '@/types';
 import { useServices } from './use-services';
+import { usePeerActions } from '@/store/conf/hooks';
 
 // Hook for media operations
 export const useMedia = () => {
   const { mediaService, isInitializing, error } = useServices();
-
+  const peerActions = usePeerActions();
   const createProducer = useCallback(
     async (
       track: MediaStreamTrack,
@@ -43,6 +49,75 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const createConsumer = useCallback(
+    async (consumerData: CreateConsumerData) => {
+      if (!mediaService) return;
+      const { producerSource, producerPeerId, producerPaused } = consumerData;
+
+      peerActions.updateMedia(producerPeerId, { [producerSource]: false }); // a trick to ensure the peerview and audio is rebuilt to get consumer
+
+      await mediaService.createConsumer(consumerData);
+
+      const mediaUpdate: Partial<PeerMedia> =
+        producerSource !== 'camera'
+          ? {
+              [producerSource]:
+                producerSource === 'mic' && producerPaused ? false : true,
+            }
+          : { [producerSource]: true, cameraPaused: true }; // create camera in a pause state
+      peerActions.updateMedia(producerPeerId, mediaUpdate);
+
+      // console.log("create consumer --- source", producerSource)
+    },
+    [mediaService, peerActions]
+  );
+
+  const pauseConsumer = useCallback(
+    async (consumerData: ConsumerStateData) => {
+      if (!mediaService) return;
+      const { producerSource, producerPeerId } = consumerData;
+
+      await mediaService.pauseConsumer(producerPeerId, producerSource);
+      const mediaUpdate: Partial<PeerMedia> =
+        producerSource !== 'camera'
+          ? { [producerSource]: false }
+          : { [producerSource]: true, cameraPaused: true }; //   camera is paused
+      peerActions.updateMedia(producerPeerId, mediaUpdate);
+    },
+    [mediaService, peerActions]
+  );
+
+  const resumeConsumer = useCallback(
+    async (consumerData: ConsumerStateData) => {
+      if (!mediaService) return;
+      const { producerSource, producerPeerId } = consumerData;
+
+      await mediaService.resumeConsumer(producerPeerId, producerSource);
+      const mediaUpdate: Partial<PeerMedia> =
+        producerSource !== 'camera'
+          ? { [producerSource]: true }
+          : { [producerSource]: true, cameraPaused: false };
+      peerActions.updateMedia(producerPeerId, mediaUpdate);
+      // console.log("resumeConsumer --- source", producerSource)
+    },
+    []
+  );
+
+  const closeConsumer = useCallback(
+    async (consumerOptions: ConsumerStateData) => {
+      if (!mediaService) return;
+      const { producerSource, producerPeerId } = consumerOptions;
+
+      mediaService.closeConsumer(producerPeerId, producerSource);
+      const mediaUpdate: Partial<PeerMedia> =
+        producerSource !== 'camera'
+          ? { [producerSource]: false }
+          : { [producerSource]: false, cameraPaused: false };
+      peerActions.updateMedia(producerPeerId, mediaUpdate);
+    },
+    []
+  );
+
   const getUserMedia = useCallback(
     async (constraints: MediaStreamConstraints) => {
       if (!mediaService) throw new Error('MediaService not initialized');
@@ -67,6 +142,10 @@ export const useMedia = () => {
     pauseProducer,
     resumeProducer,
     closeProducer,
+    createConsumer,
+    pauseConsumer,
+    resumeConsumer,
+    closeConsumer,
     getUserMedia,
     getDisplayMedia,
   };

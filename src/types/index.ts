@@ -110,7 +110,7 @@ export interface MessageData {
   args?: { [key: string]: unknown };
 }
 
-export interface ConsumerData {
+export interface CreateConsumerData {
   producerPeerId: string;
   producerId: string;
   transportId: string;
@@ -121,6 +121,13 @@ export interface ConsumerData {
   type: string; //mediasoup consumer type 'simple' | 'simulcast' | 'svc' | 'pipe';
   appData: any;
   producerPaused: boolean;
+}
+
+export interface ConsumerStateData {
+  consumerId: string;
+  producerPeerId: string;
+  producerSource: ProducerSource;
+  fromProducer?: boolean;
 }
 
 export interface MediaServiceConfig {

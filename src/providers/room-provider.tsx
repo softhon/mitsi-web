@@ -8,7 +8,13 @@ import { useEffect, type ReactNode } from 'react';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { signalingService } = useSignaling();
-  const { mediaService } = useMedia();
+  const {
+    mediaService,
+    createConsumer,
+    pauseConsumer,
+    closeConsumer,
+    resumeConsumer,
+  } = useMedia();
   const peerActions = usePeerActions();
   useEffect(() => {
     if (!signalingService || !mediaService) return;
@@ -17,7 +23,10 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
       .getConnection()
       .on(
         Actions.Message,
-        async (data: MessageData, callback: AckCallbackData) => {
+        async (
+          data: MessageData,
+          callback: (data: AckCallbackData) => void
+        ) => {
           const { action, args = {} } = data;
           console.log(Actions.Message, 'Got a message');
           console.log(Actions.Message, args);
@@ -30,18 +39,41 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   const actionHandlers: {
     [key in Actions]?: (
       args: { [key: string]: unknown },
-      callback: AckCallbackData
+      callback: (data: AckCallbackData) => void
     ) => void;
   } = {
     [Actions.PeerAdded]: async args => {
       const data = ValidationSchema.peerData.parse(args);
       peerActions.addData(data);
-      console.log(Actions.PeerAdded, args);
     },
 
     [Actions.PeerLeft]: async args => {
       const data = ValidationSchema.peerId.parse(args);
       peerActions.remove(data.id);
+    },
+
+    [Actions.ConsumerCreated]: async (args, callback) => {
+      const data = ValidationSchema.createConsumerData.parse(args);
+      await createConsumer(data);
+      callback({ status: 'success' });
+      console.log(Actions.ConsumerCreated, data);
+      callback({ status: 'success' });
+    },
+
+    [Actions.ConsumerPaused]: async args => {
+      const data = ValidationSchema.consumerStateData.parse(args);
+      pauseConsumer(data);
+      console.log(Actions.ConsumerPaused, data);
+    },
+    [Actions.ConsumerResumed]: async args => {
+      const data = ValidationSchema.consumerStateData.parse(args);
+      resumeConsumer(data);
+      console.log(Actions.ConsumerResumed, data);
+    },
+    [Actions.ConsumerClosed]: async args => {
+      const data = ValidationSchema.consumerStateData.parse(args);
+      closeConsumer(data);
+      console.log(Actions.ConsumerPaused, data);
     },
   };
 
