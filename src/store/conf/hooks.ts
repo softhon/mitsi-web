@@ -49,6 +49,10 @@ export const usePeerOthersList = () => {
   }, [peerOthers]);
 };
 export const usePeerMedias = () => useConfStore(state => state.peers.medias);
+export const usePeerMediasById = (id: string) =>
+  useConfStore(state => state.peers.medias[id]);
+export const usePeerConditionsById = (id: string) =>
+  useConfStore(state => state.peers.conditions[id]);
 export const usePeerConditions = () =>
   useConfStore(state => state.peers.conditions);
 export const usePeerPosition = () =>

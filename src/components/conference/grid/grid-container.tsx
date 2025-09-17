@@ -1,15 +1,15 @@
 import type { Layout, PeerData } from '@/types';
 import React from 'react';
-import { ParticipantTile } from './participant-tile';
+import { PeerTitle } from './peer-tile';
 import { usePeerMe } from '@/store/conf/hooks';
 
 interface GridContainerProps {
-  participants: PeerData[];
+  peerData: PeerData[];
   layout: Layout | null;
 }
 
 export const GridContainer: React.FC<GridContainerProps> = ({
-  participants,
+  peerData,
   layout,
 }) => {
   const myPeer = usePeerMe();
@@ -46,12 +46,8 @@ export const GridContainer: React.FC<GridContainerProps> = ({
     <div
       className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center content-center gap-3 p-4 overflow-hidden `}
     >
-      {participants.map(participant => (
-        <ParticipantTile
-          key={participant.id}
-          participant={participant}
-          layout={layout}
-        />
+      {peerData.map(data => (
+        <PeerTitle key={data.id} peerData={data} layout={layout} />
       ))}
     </div>
   );

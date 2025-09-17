@@ -115,8 +115,7 @@ const JoinRoom: React.FC = () => {
           },
         });
         console.log(Actions.JoinVisitors, res);
-        const allConnectedPeers = res.peers;
-        for (const peer of allConnectedPeers) {
+        for (const peer of res?.peers || []) {
           peerActions.addData(peer);
         }
       } catch (error) {

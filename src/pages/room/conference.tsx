@@ -22,7 +22,7 @@ export const Conference: React.FC = () => {
     setChatOn(prev => !prev);
   }, [chatOn]);
 
-  const joinRoom = async () => {};
+  // const joinRoom = async () => {};
 
   useEffect(() => {
     const setup = async () => {

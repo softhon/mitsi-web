@@ -100,7 +100,7 @@ export const ConferenceGrid = () => {
       />
 
       {/* Grid Container */}
-      <GridContainer participants={currentPageParticipants} layout={layout} />
+      <GridContainer peerData={currentPageParticipants} layout={layout} />
 
       <ChatContainer showChat={false} />
     </div>

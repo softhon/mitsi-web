@@ -167,11 +167,6 @@ export interface VideoConferencingGridProps {
   footerClassName?: string;
 }
 
-export interface ParticipantTileProps {
-  participant: PeerData;
-  layout: Layout;
-}
-
 export interface PaginationControlsProps {
   currentPage: number;
   totalPages: number;

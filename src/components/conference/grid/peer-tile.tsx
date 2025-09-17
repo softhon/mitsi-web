@@ -1,12 +1,15 @@
 import React from 'react';
 import { Mic, MicOff } from 'lucide-react';
-import type { ParticipantTileProps } from '@/types';
+import type { Layout, PeerData } from '@/types';
 import { getInitials } from '@/lib/utils';
+import { usePeerMediasById } from '@/store/conf/hooks';
 
-export const ParticipantTile: React.FC<ParticipantTileProps> = ({
-  participant,
-  layout,
-}) => {
+interface PeerTileProps {
+  peerData: PeerData;
+  layout: Layout;
+}
+export const PeerTitle: React.FC<PeerTileProps> = ({ peerData, layout }) => {
+  const media = usePeerMediasById(peerData.id);
   return (
     <div
       className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
@@ -14,7 +17,7 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
     >
       {/* Video/Avatar Area */}
       <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
-        {participant.userId ? (
+        {peerData.userId ? (
           <div className="w-full h-full bg-gradient-to-br  flex items-center justify-center text-white text-lg font-semibold"></div>
         ) : (
           <div
@@ -23,23 +26,23 @@ export const ParticipantTile: React.FC<ParticipantTileProps> = ({
               background: 'linear-gradient(135deg, #667fea 0%, #0d1db2 100%)',
             }}
           >
-            {getInitials(participant.name)}
+            {getInitials(peerData.name)}
           </div>
         )}
 
         {/* Mic Status */}
         <div className="absolute top-2 right-2 p-1 rounded-full bg-black/50">
-          {/* {participant.isMuted ? (
-            <MicOff className="w-4 h-4 text-red-400" />
+          {media?.mic ? (
+            <Mic className="w-4 h-4 text-green-400" />
           ) : (
-          )} */}
-          <Mic className="w-4 h-4 text-green-400" />
+            <MicOff className="w-4 h-4 text-red-400" />
+          )}
         </div>
       </div>
 
       {/* Name Bar */}
       <div className="bg-gray-700 px-3 py-2 text-white text-sm font-medium truncate">
-        {participant.name}
+        {peerData.name}
       </div>
     </div>
   );
