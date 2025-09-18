@@ -63,9 +63,11 @@ class SignalingService {
         Actions.Message,
         message,
         (res: AckCallbackData<T>) => {
+          console.log('AckCallbackData', res);
           if (res.status === 'error') {
             reject(res?.error || 'Unknown error');
           } else {
+            console.log(message.action, res.response);
             resolve(res.response);
           }
         }

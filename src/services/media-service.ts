@@ -419,7 +419,7 @@ class MediaService {
     }>({
       action: Actions.CreateWebrtcTransports,
     });
-    console.log('createWebRtcTransports');
+    console.log('createWebRtcTransports', response);
     // console.log({ transportsParams })
     if (!response)
       throw 'Transport not created, - transport params were not recieved';
@@ -431,6 +431,7 @@ class MediaService {
     if (!this.device) {
       throw new Error('Device not intialised');
     }
+    console.log('createWebRtcSendTransport', transportParams);
     this.sendTransport = this.device.createSendTransport({
       id: transportParams.id,
       iceParameters: transportParams.iceParameters,
