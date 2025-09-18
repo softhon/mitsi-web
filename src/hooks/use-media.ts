@@ -8,10 +8,12 @@ import type {
 } from '@/types';
 import { useServices } from './use-services';
 import { usePeerActions } from '@/store/conf/hooks';
+import { Actions } from '@/types/actions';
 
 // Hook for media operations
 export const useMedia = () => {
-  const { mediaService, isInitializing, error } = useServices();
+  const { mediaService, signalingService, isInitializing, error } =
+    useServices();
   const peerActions = usePeerActions();
   const createProducer = useCallback(
     async (
@@ -51,7 +53,8 @@ export const useMedia = () => {
 
   const createConsumer = useCallback(
     async (consumerData: CreateConsumerData) => {
-      if (!mediaService) return;
+      if (!mediaService) throw new Error('MediaService not initialized');
+
       const { producerSource, producerPeerId, producerPaused } = consumerData;
 
       peerActions.updateMedia(producerPeerId, { [producerSource]: false }); // a trick to ensure the peerview and audio is rebuilt to get consumer
@@ -74,7 +77,8 @@ export const useMedia = () => {
 
   const pauseConsumer = useCallback(
     async (consumerData: ConsumerStateData) => {
-      if (!mediaService) return;
+      if (!mediaService) throw new Error('MediaService not initialized');
+
       const { producerSource, producerPeerId } = consumerData;
 
       await mediaService.pauseConsumer(producerPeerId, producerSource);
@@ -89,7 +93,8 @@ export const useMedia = () => {
 
   const resumeConsumer = useCallback(
     async (consumerData: ConsumerStateData) => {
-      if (!mediaService) return;
+      if (!mediaService) throw new Error('MediaService not initialized');
+
       const { producerSource, producerPeerId } = consumerData;
 
       await mediaService.resumeConsumer(producerPeerId, producerSource);
@@ -105,7 +110,8 @@ export const useMedia = () => {
 
   const closeConsumer = useCallback(
     async (consumerOptions: ConsumerStateData) => {
-      if (!mediaService) return;
+      if (!mediaService) throw new Error('MediaService not initialized');
+
       const { producerSource, producerPeerId } = consumerOptions;
 
       mediaService.closeConsumer(producerPeerId, producerSource);
@@ -117,6 +123,21 @@ export const useMedia = () => {
     },
     []
   );
+
+  const createWebRtcConnections = useCallback(async () => {
+    if (!mediaService || !signalingService)
+      throw new Error('MediaService or signalingService not initialized');
+    // creates transports
+
+    await mediaService.createWebRtcTransports();
+    console.log('Create transport');
+
+    // create consumer for producer in the room
+    await signalingService?.message({
+      action: Actions.CreateConsumersOfAllProducers,
+    });
+    console.log('Create CreateConsumersOfAllProducers');
+  }, [mediaService, signalingService]);
 
   const getUserMedia = useCallback(
     async (constraints: MediaStreamConstraints) => {
@@ -146,6 +167,7 @@ export const useMedia = () => {
     pauseConsumer,
     resumeConsumer,
     closeConsumer,
+    createWebRtcConnections,
     getUserMedia,
     getDisplayMedia,
   };
