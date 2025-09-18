@@ -1,21 +1,17 @@
 import { useMedia } from '@/hooks/use-media';
+import { useRoom } from '@/hooks/use-room';
 import { useSignaling } from '@/hooks/use-signaling';
-import { ValidationSchema } from '@/lib/schema';
-import { usePeerActions } from '@/store/conf/hooks';
-import type { AckCallbackData, MessageData } from '@/types';
+import { useRoomAccess } from '@/store/conf/hooks';
+import { Access, type AckCallbackData, type MessageData } from '@/types';
 import { Actions } from '@/types/actions';
 import { useEffect, type ReactNode } from 'react';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { signalingService } = useSignaling();
-  const {
-    mediaService,
-    createConsumer,
-    pauseConsumer,
-    closeConsumer,
-    resumeConsumer,
-  } = useMedia();
-  const peerActions = usePeerActions();
+  const { mediaService, createWebRtcConnections } = useMedia();
+  const roomAccess = useRoomAccess();
+  const { joinRoom, actionHandlers } = useRoom();
+
   useEffect(() => {
     if (!signalingService || !mediaService) return;
 
@@ -28,54 +24,28 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
           callback: (data: AckCallbackData) => void
         ) => {
           const { action, args = {} } = data;
-          console.log(Actions.Message, 'Got a message');
           console.log(Actions.Message, args);
           const handler = actionHandlers[action as Actions];
           if (handler) handler(args, callback);
         }
       );
-  }, [signalingService, mediaService]);
+  }, [signalingService, mediaService, actionHandlers]);
 
-  const actionHandlers: {
-    [key in Actions]?: (
-      args: { [key: string]: unknown },
-      callback: (data: AckCallbackData) => void
-    ) => void;
-  } = {
-    [Actions.PeerAdded]: async args => {
-      const data = ValidationSchema.peerData.parse(args);
-      peerActions.addData(data);
-    },
+  useEffect(() => {
+    if (roomAccess !== Access.Allowed) return;
+    const setup = async () => {
+      try {
+        await joinRoom();
+        console.log('join room');
 
-    [Actions.PeerLeft]: async args => {
-      const data = ValidationSchema.peerId.parse(args);
-      peerActions.remove(data.id);
-    },
-
-    [Actions.ConsumerCreated]: async (args, callback) => {
-      const data = ValidationSchema.createConsumerData.parse(args);
-      await createConsumer(data);
-      callback({ status: 'success' });
-      console.log(Actions.ConsumerCreated, data);
-      callback({ status: 'success' });
-    },
-
-    [Actions.ConsumerPaused]: async args => {
-      const data = ValidationSchema.consumerStateData.parse(args);
-      pauseConsumer(data);
-      console.log(Actions.ConsumerPaused, data);
-    },
-    [Actions.ConsumerResumed]: async args => {
-      const data = ValidationSchema.consumerStateData.parse(args);
-      resumeConsumer(data);
-      console.log(Actions.ConsumerResumed, data);
-    },
-    [Actions.ConsumerClosed]: async args => {
-      const data = ValidationSchema.consumerStateData.parse(args);
-      closeConsumer(data);
-      console.log(Actions.ConsumerPaused, data);
-    },
-  };
+        await createWebRtcConnections();
+        console.log('Set up room');
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setup();
+  }, [roomAccess]);
 
   return <div>{children}</div>;
 };
