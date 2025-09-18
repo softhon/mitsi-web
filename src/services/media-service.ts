@@ -56,12 +56,16 @@ class MediaService {
 
   static async start(signalingService: SignalingService) {
     const device = new Device();
-    const { routerRtpCapabilities } = await signalingService.message<{
+    const response = await signalingService.message<{
       routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
     }>({
       action: Actions.GetRouterRtpCapabilities,
     });
-    await device.load({ routerRtpCapabilities });
+    if (!response) throw 'routerRtpCapabilities was not set';
+
+    await device.load({
+      routerRtpCapabilities: response.routerRtpCapabilities,
+    });
     return new MediaService(device, signalingService);
   }
 
@@ -77,12 +81,15 @@ class MediaService {
 
   async reloadDevice() {
     const device = new Device();
-    const { routerRtpCapabilities } = await this.signalingService.message<{
+    const response = await this.signalingService.message<{
       routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
     }>({
       action: Actions.GetRouterRtpCapabilities,
     });
-    await device.load({ routerRtpCapabilities });
+    if (!response) throw 'routerRtpCapabilities was not set';
+    await device.load({
+      routerRtpCapabilities: response?.routerRtpCapabilities,
+    });
     this.device = device;
   }
 
@@ -406,15 +413,18 @@ class MediaService {
   }
 
   async createWebRtcTransports() {
-    const transportsParams = await this.signalingService.message<{
+    const response = await this.signalingService.message<{
       sendTransportParams: mediasoupTypes.TransportOptions;
       recvTransportParams: mediasoupTypes.TransportOptions;
     }>({
       action: Actions.CreateWebrtcTransports,
     });
+    console.log('createWebRtcTransports');
     // console.log({ transportsParams })
-    this.createWebRtcSendTransport(transportsParams.sendTransportParams);
-    this.createWebRtcRecvTransport(transportsParams.recvTransportParams);
+    if (!response)
+      throw 'Transport not created, - transport params were not recieved';
+    this.createWebRtcSendTransport(response.sendTransportParams);
+    this.createWebRtcRecvTransport(response.recvTransportParams);
   }
 
   createWebRtcSendTransport(transportParams: mediasoupTypes.TransportOptions) {
@@ -467,7 +477,7 @@ class MediaService {
       'produce',
       async ({ kind, rtpParameters, appData }, callback, errback) => {
         try {
-          const { producerId } = await this.signalingService.message<{
+          const response = await this.signalingService.message<{
             producerId: string;
           }>({
             action: Actions.CreateProducer,
@@ -478,7 +488,9 @@ class MediaService {
               appData,
             },
           });
-          callback({ id: producerId });
+          if (!response)
+            return errback(new Error('ProducerId was not recieved'));
+          callback({ id: response.producerId });
         } catch (error) {
           errback(error as Error);
         }
@@ -533,7 +545,7 @@ class MediaService {
   }
 
   async restartICE(transport: mediasoupTypes.Transport) {
-    const { iceParameters } = await this.signalingService.message<{
+    const response = await this.signalingService.message<{
       iceParameters: mediasoupTypes.IceParameters;
     }>({
       action: Actions.RestartIce,
@@ -541,7 +553,8 @@ class MediaService {
         transportId: transport.id,
       },
     });
-    await transport.restartIce({ iceParameters });
+    if (!response) throw 'Ice Parameters was not recieved';
+    await transport.restartIce({ iceParameters: response.iceParameters });
   }
 
   async closeAllTransports() {
