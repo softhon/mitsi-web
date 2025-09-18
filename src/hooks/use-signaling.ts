@@ -9,10 +9,10 @@ export const useSignaling = () => {
   const sendMessage = useCallback(
     async <T = { [key: string]: unknown }>(
       message: MessageData
-    ): Promise<T> => {
+    ): Promise<T | undefined> => {
       if (!signalingService)
         throw new Error('SignalingService not initialized');
-      return await signalingService.message<T>(message);
+      return await signalingService.message<T | undefined>(message);
     },
     [signalingService]
   );
