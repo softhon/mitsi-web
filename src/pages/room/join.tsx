@@ -11,9 +11,9 @@ import {
 } from '@/store/conf/hooks';
 import JoinForm from '@/components/join/join-form';
 import Terms from '@/components/join/terms';
-import Header from '@/components/join/header';
-import CameraPreview from '@/components/join/camera-preview';
-import Controls from './controls';
+import Header from '@/components/join/join-header';
+import CameraPreview from '@/components/join/join-camera-preview';
+import Controls from '../../components/join/join-controls';
 
 const JoinRoom: React.FC = () => {
   const { signalingService } = useSignaling();
@@ -27,7 +27,7 @@ const JoinRoom: React.FC = () => {
       roomId: 'ib34ceb',
       name: 'Days Catch Up',
     });
-  }, []);
+  }, [roomActions]);
 
   useEffect(() => {
     if (!signalingService || !roomData) return;

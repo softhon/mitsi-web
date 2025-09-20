@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 const Header = () => {
   const roomData = useRoomData();
   const peerOthersList = usePeerOthersList();
+
   return (
     <div className="text-center space-y-4">
       {/* Enhanced Loading Spinner Icon */}
