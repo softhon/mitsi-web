@@ -23,11 +23,6 @@ class MediaService {
   private producers: Map<ProducerSource, mediasoupTypes.Producer>;
   private consumers: Map<ProducerSource, Map<string, mediasoupTypes.Consumer>>; // key of the inner map is the producerPeerId
   private tracks: Map<ProducerSource, MediaStreamTrack | null>;
-  // private tracks:
-  // private micTrack: MediaStreamTrack | null;
-  // private cameraTrack: MediaStreamTrack | null;
-  // private screenTrack: MediaStreamTrack | null;
-  // private screenAudioTrack: MediaStreamTrack | null;
   private config: MediaServiceConfig;
 
   constructor(
@@ -293,7 +288,7 @@ class MediaService {
       producerId,
       kind,
       rtpParameters,
-      appData, //producerPeer inside the appdata is use to delete this later
+      appData, //producerPeer in the appdata is use to delete this later
     });
     if (!consumer) {
       throw new Error('Failed to create consumer');
