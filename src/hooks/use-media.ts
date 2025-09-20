@@ -128,16 +128,11 @@ export const useMedia = () => {
     if (!mediaService || !signalingService)
       throw new Error('MediaService or signalingService not initialized');
     // creates transports
-    console.log('createWebRtcConnections');
-
     await mediaService.createWebRtcTransports();
-    console.log('Create transport');
-
     // create consumer for producer in the room
-    await signalingService?.message({
+    await signalingService.message({
       action: Actions.CreateConsumersOfAllProducers,
     });
-    console.log('Create CreateConsumersOfAllProducers');
   }, [mediaService, signalingService]);
 
   const getUserMedia = useCallback(

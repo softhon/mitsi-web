@@ -5,6 +5,7 @@
 import { Device, types as mediasoupTypes } from 'mediasoup-client';
 import SignalingService from './signaling-service';
 import type {
+  AppData,
   CreateConsumerData,
   MediaServiceConfig,
   ProducerSource,
@@ -20,16 +21,13 @@ class MediaService {
   private sendTransport: mediasoupTypes.Transport | null;
   private recvTransport: mediasoupTypes.Transport | null;
   private producers: Map<ProducerSource, mediasoupTypes.Producer>;
-  private micConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
-  private cameraConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
-  private screenConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
-  private screenAudioConsumers: Map<string, mediasoupTypes.Consumer>; // producerPeerId as key
-  // preview tracks
-
-  private micTrack: MediaStreamTrack | null;
-  private cameraTrack: MediaStreamTrack | null;
-  private screenTrack: MediaStreamTrack | null;
-  private screenAudioTrack: MediaStreamTrack | null;
+  private consumers: Map<ProducerSource, Map<string, mediasoupTypes.Consumer>>; // key of the inner map is the producerPeerId
+  private tracks: Map<ProducerSource, MediaStreamTrack | null>;
+  // private tracks:
+  // private micTrack: MediaStreamTrack | null;
+  // private cameraTrack: MediaStreamTrack | null;
+  // private screenTrack: MediaStreamTrack | null;
+  // private screenAudioTrack: MediaStreamTrack | null;
   private config: MediaServiceConfig;
 
   constructor(
@@ -43,14 +41,11 @@ class MediaService {
     this.sendTransport = null;
     this.recvTransport = null;
     this.producers = new Map();
-    this.micConsumers = new Map();
-    this.cameraConsumers = new Map();
-    this.screenConsumers = new Map();
-    this.screenAudioConsumers = new Map();
-    this.micTrack = null;
-    this.cameraTrack = null;
-    this.screenTrack = null;
-    this.screenAudioTrack = null;
+
+    this.consumers = new Map();
+
+    this.tracks = new Map();
+
     this.config = config ? config : appConfig.media;
   }
 
@@ -259,42 +254,11 @@ class MediaService {
   }
 
   setTrack(track: MediaStreamTrack | null, source: ProducerSource) {
-    switch (source) {
-      case 'mic':
-        this.micTrack = track;
-        break;
-      case 'camera':
-        this.cameraTrack = track;
-        break;
-      case 'screen':
-        this.screenTrack = track;
-        break;
-      case 'screenAudio':
-        this.screenAudioTrack = track;
-        break;
-      default:
-    }
+    this.tracks.set(source, track);
   }
 
   getTrack(source: ProducerSource) {
-    let track: MediaStreamTrack | null = null;
-
-    switch (source) {
-      case 'mic':
-        track = this.micTrack;
-        break;
-      case 'camera':
-        track = this.cameraTrack;
-        break;
-      case 'screen':
-        track = this.screenTrack;
-        break;
-      case 'screenAudio':
-        track = this.screenAudioTrack;
-        break;
-      default:
-    }
-    return track;
+    return this.tracks.get(source) || null;
   }
 
   stopTrack(source: ProducerSource) {
@@ -334,46 +298,24 @@ class MediaService {
     if (!consumer) {
       throw new Error('Failed to create consumer');
     }
+    if (!this.consumers.has(producerSource))
+      this.consumers.set(producerSource, new Map());
 
-    if (producerSource === 'mic')
-      this.micConsumers.set(producerPeerId, consumer);
-    if (producerSource === 'camera')
-      this.cameraConsumers.set(producerPeerId, consumer);
-    if (producerSource === 'screen')
-      this.screenConsumers.set(producerPeerId, consumer);
-    if (producerSource === 'screenAudio')
-      this.screenAudioConsumers.set(producerPeerId, consumer);
+    const consumers = this.consumers.get(producerSource);
+    consumers?.set(producerPeerId, consumer);
 
     consumer.observer.on('close', () => {
-      if (producerSource === 'mic') this.micConsumers.delete(producerPeerId);
-      if (producerSource === 'camera')
-        this.cameraConsumers.delete(producerPeerId);
-      if (producerSource === 'screen')
-        this.screenConsumers.delete(producerPeerId);
-      if (producerSource === 'screenAudio')
-        this.screenAudioConsumers.delete(producerPeerId);
+      consumers?.delete(producerPeerId);
     });
 
     return consumer;
   }
 
   getConsumer(producerPeerId: string, source: ProducerSource) {
-    let consumer: mediasoupTypes.Consumer | undefined;
-
-    switch (source) {
-      case 'mic':
-        consumer = this.micConsumers.get(producerPeerId);
-        break;
-      case 'camera':
-        consumer = this.cameraConsumers.get(producerPeerId);
-        break;
-      case 'screen':
-        consumer = this.screenConsumers.get(producerPeerId);
-        break;
-      case 'screenAudio':
-        consumer = this.screenAudioConsumers.get(producerPeerId);
-        break;
-      default:
+    let consumer: mediasoupTypes.Consumer<AppData> | undefined;
+    const consumers = this.consumers.get(source);
+    if (consumers) {
+      consumer = consumers.get(producerPeerId);
     }
     return consumer;
   }
@@ -393,23 +335,14 @@ class MediaService {
   }
 
   closeAllConsumers() {
-    this.micConsumers.forEach(consumer => {
-      consumer.close();
-    });
-    this.cameraConsumers.forEach(consumer => {
-      consumer.close();
-    });
-    this.screenConsumers.forEach(consumer => {
-      consumer.close();
-    });
-    this.screenAudioConsumers.forEach(consumer => {
-      consumer.close();
+    this.consumers.forEach(sourceConsumers => {
+      sourceConsumers.forEach(consumer => {
+        consumer.close();
+      });
+      sourceConsumers.clear();
     });
 
-    this.micConsumers.clear();
-    this.cameraConsumers.clear();
-    this.screenConsumers.clear();
-    this.screenAudioConsumers.clear();
+    this.consumers.clear();
   }
 
   async createWebRtcTransports() {
