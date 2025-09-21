@@ -166,6 +166,21 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const getTrack = useCallback(
+    (source: ProducerSource) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      return mediaService.getTrack(source);
+    },
+    [mediaService]
+  );
+  const setTrack = useCallback(
+    (track: MediaStreamTrack | null, source: ProducerSource) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      return mediaService.setTrack(track, source);
+    },
+    [mediaService]
+  );
+
   return {
     mediaService,
     isInitializing,
@@ -183,5 +198,7 @@ export const useMedia = () => {
     getDisplayMedia,
     startUserMedia,
     stopUserMedia,
+    setTrack,
+    getTrack,
   };
 };

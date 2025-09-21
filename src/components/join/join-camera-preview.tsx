@@ -1,12 +1,22 @@
+import { useMedia } from '@/hooks/use-media';
 import { cn } from '@/lib/utils';
-import { useCameraOn, useMicOn } from '@/store/conf/hooks';
+import { useCameraDeviceId, useCameraOn, useMicOn } from '@/store/conf/hooks';
 import { Mic, MicOff, User } from 'lucide-react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const CameraPreview = () => {
+  const { getTrack } = useMedia();
   const videoRef = useRef<HTMLVideoElement>(null);
   const micOn = useMicOn();
   const cameraOn = useCameraOn();
+  const cameraDeviceId = useCameraDeviceId();
+
+  useEffect(() => {
+    if (!cameraOn || !videoRef.current) return;
+    const track = getTrack('camera');
+    if (!track) return;
+    videoRef.current.srcObject = new MediaStream([track]);
+  }, [cameraOn, cameraDeviceId, getTrack]);
 
   return (
     <div className="relative">

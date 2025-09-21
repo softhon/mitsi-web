@@ -1,15 +1,21 @@
 import MediaControlButton from '../media-control-button';
-import { useMicActions, useMicDeviceId, useMicOn } from '@/store/conf/hooks';
-import { MicOff, Mic as MicphoneOn, MoreVertical } from 'lucide-react';
-import { Button } from '../ui/button';
+import {
+  useMicActions,
+  useMicDeviceId,
+  useMicDevices,
+  useMicOn,
+} from '@/store/conf/hooks';
+import { MicOff, Mic as MicphoneOn } from 'lucide-react';
 import { type MediaPermissionsError, requestMediaPermissions } from 'mic-check';
 import { DEVICE_ERRORS } from '@/lib/constants';
 import { useMedia } from '@/hooks/use-media';
+import MediaDeviceDropdown from '../media-device-dropdown';
 
 const Mic = () => {
   const { mediaService, startUserMedia } = useMedia();
   const micOn = useMicOn();
   const micDeviceId = useMicDeviceId();
+  const micDevices = useMicDevices();
   const micActions = useMicActions();
 
   const requestMicPermission = () => {
@@ -50,13 +56,11 @@ const Mic = () => {
           <MicOff className="w-5 h-5" />
         )}
       </MediaControlButton>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
-      >
-        <MoreVertical className="w-4 h-4" />
-      </Button>
+      <MediaDeviceDropdown
+        devices={micDevices}
+        selectedDeviceId={micDeviceId}
+        source="mic"
+      />
     </div>
   );
 };

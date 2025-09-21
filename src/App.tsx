@@ -6,7 +6,7 @@ import { ThemeProvider } from './providers/theme-provider';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider storageKey="vite-ui-theme">
       <ToastProvider defaultPosition="top-right">
         <BrowserRouter>
           <Routes>

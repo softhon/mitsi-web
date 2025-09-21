@@ -1,20 +1,22 @@
-import { MoreVertical, Video, VideoOff } from 'lucide-react';
+import { Video, VideoOff } from 'lucide-react';
 import MediaControlButton from '../media-control-button';
 import {
   useCameraActions,
   useCameraDeviceId,
+  useCameraDevices,
   useCameraOn,
 } from '@/store/conf/hooks';
-import { Button } from '../ui/button';
 import { type MediaPermissionsError, requestMediaPermissions } from 'mic-check';
 import { useMedia } from '@/hooks/use-media';
 import { DEVICE_ERRORS } from '@/lib/constants';
+import MediaDeviceDropdown from '../media-device-dropdown';
 
 const Camera = () => {
   const { mediaService, startUserMedia, stopUserMedia } = useMedia();
 
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
+  const cameraDevices = useCameraDevices();
   const cameraActions = useCameraActions();
 
   const requestCameraPermission = () => {
@@ -55,13 +57,12 @@ const Camera = () => {
           <VideoOff className="w-5 h-5" />
         )}
       </MediaControlButton>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
-      >
-        <MoreVertical className="w-4 h-4" />
-      </Button>
+
+      <MediaDeviceDropdown
+        devices={cameraDevices}
+        selectedDeviceId={cameraDeviceId}
+        source="camera"
+      />
     </div>
   );
 };
