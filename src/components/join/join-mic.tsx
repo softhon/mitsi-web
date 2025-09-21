@@ -34,7 +34,7 @@ const Mic = () => {
     if (!micDeviceId) return requestMicPermission();
 
     try {
-      if (!micOn) startUserMedia('mic', micDeviceId);
+      if (!micOn) await startUserMedia('mic', micDeviceId);
       micActions.toggle();
     } catch (error) {
       console.log(error);
