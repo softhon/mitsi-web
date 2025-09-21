@@ -205,3 +205,32 @@ export const getSimulcastEncoding = (source: ProducerSource) => {
 
   return encodings;
 };
+
+export const videoConstraints = (deviceId: string) => ({
+  video: {
+    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    height: {
+      ideal: 480, // Moderate resolution (480p)
+      max: 720, // Cap at 720p to limit data
+      min: 240, // Minimum fallback
+    },
+    width: {
+      ideal: 854, // Matches 480p aspect ratio (16:9)
+      max: 1280, // Cap at 720p width
+      min: 320, // Minimum fallback
+    },
+    frameRate: {
+      ideal: 24, // Smooth motion with lower data than 30fps
+      max: 30, // Reasonable upper limit
+      min: 15, // Minimum for basic fluidity
+    },
+  },
+});
+
+export const audioContraints = (deviceId: string) => ({
+  audio: {
+    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    echoCancellation: { ideal: true },
+    noiseSuppression: { ideal: true },
+  },
+});

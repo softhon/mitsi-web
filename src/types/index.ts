@@ -22,6 +22,8 @@ export enum Access {
   Visiting = 'Visiting', // have click join button
 }
 
+export type MediaDeviceType = 'microphone' | 'camera';
+
 export type AckCallbackData<T = { [key: string]: unknown }> = {
   status: 'success' | 'error';
   error?: Error | unknown | null;
