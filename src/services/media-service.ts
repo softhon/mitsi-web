@@ -13,7 +13,11 @@ import type {
 import { Actions } from '@/types/actions';
 import appConfig from '@/config';
 
-import { getSimulcastEncoding } from '@/lib/utils';
+import {
+  audioContraints,
+  getSimulcastEncoding,
+  videoConstraints,
+} from '@/lib/utils';
 
 class MediaService {
   private device: Device;
@@ -62,6 +66,27 @@ class MediaService {
   // Helper method to get user media with proper constraints
   async getUserMedia(constraints: MediaStreamConstraints) {
     return await navigator.mediaDevices.getUserMedia(constraints);
+  }
+  async startUserMedia(mediaSource: 'mic' | 'camera', deviceId: string) {
+    const mediaTrack = this.getTrack(mediaSource);
+    if (mediaTrack && mediaTrack.enabled) {
+      if (mediaTrack.getSettings().deviceId === deviceId) return true;
+      mediaTrack.stop();
+    }
+    const stream = await navigator.mediaDevices.getUserMedia(
+      mediaSource === 'mic'
+        ? audioContraints(deviceId)
+        : videoConstraints(deviceId)
+    );
+    this.setTrack(stream.getTracks()[0], mediaSource);
+    return true;
+  }
+  async stopUserMedia(mediaSource: 'mic' | 'camera') {
+    const mediaTrack = this.getTrack(mediaSource);
+    if (!mediaTrack) return true;
+    if (mediaTrack.enabled) mediaTrack.stop();
+    this.setTrack(null, mediaSource);
+    return true;
   }
 
   // Helper method to get display media

@@ -151,6 +151,21 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const startUserMedia = useCallback(
+    async (mediaSource: 'mic' | 'camera', deviceId: string) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      return await mediaService.startUserMedia(mediaSource, deviceId);
+    },
+    [mediaService]
+  );
+  const stopUserMedia = useCallback(
+    async (mediaSource: 'mic' | 'camera') => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      return await mediaService.stopUserMedia(mediaSource);
+    },
+    [mediaService]
+  );
+
   return {
     mediaService,
     isInitializing,
@@ -166,5 +181,7 @@ export const useMedia = () => {
     createWebRtcConnections,
     getUserMedia,
     getDisplayMedia,
+    startUserMedia,
+    stopUserMedia,
   };
 };
