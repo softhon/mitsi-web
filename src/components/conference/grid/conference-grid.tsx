@@ -16,7 +16,7 @@ export const ConferenceGrid = () => {
 
   // Calculate layout and pagination
   const { layout, totalPages, currentPageParticipants } = useMemo(() => {
-    const totalParticipants = peers.length; // 1 represent current peer
+    const totalParticipants = peers.length + 1; // 1 represent current peer
     if (totalParticipants === 0) {
       return {
         layout: null,

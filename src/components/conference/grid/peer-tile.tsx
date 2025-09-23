@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import type { Layout, PeerData } from '@/types';
 import { getInitials } from '@/lib/utils';
@@ -8,8 +8,14 @@ interface PeerTileProps {
   peerData: PeerData;
   layout: Layout;
 }
-export const PeerTitle: React.FC<PeerTileProps> = ({ peerData, layout }) => {
+export const PeerTile: React.FC<PeerTileProps> = ({ peerData, layout }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
   const media = usePeerMediasById(peerData.id);
+
+  useEffect(() => {
+    if (!media?.camera || !videoRef.current) return;
+  }, [media?.camera]);
+
   return (
     <div
       className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
@@ -17,8 +23,14 @@ export const PeerTitle: React.FC<PeerTileProps> = ({ peerData, layout }) => {
     >
       {/* Video/Avatar Area */}
       <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
-        {peerData.userId ? (
-          <div className="w-full h-full bg-gradient-to-br  flex items-center justify-center text-white text-lg font-semibold"></div>
+        {media?.camera ? (
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover relative z-10"
+            autoPlay
+            muted
+            playsInline
+          />
         ) : (
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold"

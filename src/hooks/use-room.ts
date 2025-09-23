@@ -36,6 +36,7 @@ export const useRoom = () => {
       if (!peerMe || !roomData?.roomId || !signalingService || !mediaService)
         return;
       const result = await signalingService.message<{
+        you: PeerData;
         peers: PeerData[];
         roomData: RoomData;
       }>({
