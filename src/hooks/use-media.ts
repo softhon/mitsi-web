@@ -7,14 +7,23 @@ import type {
   ProducerSource,
 } from '@/types';
 import { useServices } from './use-services';
-import { usePeerActions } from '@/store/conf/hooks';
+import {
+  useCameraActions,
+  useMicActions,
+  usePeerActions,
+} from '@/store/conf/hooks';
 import { Actions } from '@/types/actions';
+import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
+import { DEVICE_ERRORS } from '@/lib/constants';
 
 // Hook for media operations
 export const useMedia = () => {
   const { mediaService, signalingService, isInitializing, error } =
     useServices();
   const peerActions = usePeerActions();
+  const micActions = useMicActions();
+  const cameraActions = useCameraActions();
+
   const createProducer = useCallback(
     async (
       track: MediaStreamTrack,
@@ -181,6 +190,77 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const requestMicPermission = useCallback(() => {
+    requestMediaPermissions({ audio: true, video: false })
+      .then(async () => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputDevices = devices.filter(
+          device => device.kind === 'audioinput'
+        );
+        if (!audioInputDevices.length) throw 'Device not found';
+        micActions.setDeviceId(audioInputDevices[0].deviceId);
+        micActions.setDevices(audioInputDevices);
+      })
+      .catch((err: MediaPermissionsError) => {
+        const type = err?.type || 'DeviceNotFound';
+        return alert(DEVICE_ERRORS[type]('microphone'));
+      });
+  }, [micActions]);
+
+  const requestCameraPermission = useCallback(() => {
+    requestMediaPermissions({ audio: false, video: true })
+      .then(async () => {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const audioInputDevices = devices.filter(
+          device => device.kind === 'audioinput'
+        );
+        if (!audioInputDevices.length) throw 'Device not found';
+        cameraActions.setDeviceId(audioInputDevices[0].deviceId);
+        cameraActions.setDevices(audioInputDevices);
+      })
+      .catch((err: MediaPermissionsError) => {
+        const type = err?.type || 'DeviceNotFound';
+        return alert(DEVICE_ERRORS[type]('camera'));
+      });
+  }, [cameraActions]);
+
+  const requestCameraAndMicPermissions = useCallback(() => {
+    requestMediaPermissions()
+      .catch((err: MediaPermissionsError) => {
+        console.log(err);
+      })
+      .finally(async () => {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const audioInputDevices = devices.filter(
+            device => device.kind === 'audioinput'
+          );
+          const videoInputDevices = devices.filter(
+            device => device.kind === 'videoinput'
+          );
+          // const audioOutputDevices = devices.filter(
+          //   device => device.kind === 'audiooutput'
+          // );
+
+          // soundActions.setDeviceId(
+          //   audioOutputDevices.length ? audioOutputDevices[0].deviceId : null
+          // );
+          cameraActions.setDeviceId(
+            videoInputDevices.length ? videoInputDevices[0].deviceId : null
+          );
+          micActions.setDeviceId(
+            audioInputDevices.length ? audioInputDevices[0].deviceId : null
+          );
+
+          // soundActions.setDevices(audioOutputDevices);
+          cameraActions.setDevices(videoInputDevices);
+          micActions.setDevices(audioInputDevices);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  }, [micActions, cameraActions]);
+
   return {
     mediaService,
     isInitializing,
@@ -200,5 +280,8 @@ export const useMedia = () => {
     stopUserMedia,
     setTrack,
     getTrack,
+    requestMicPermission,
+    requestCameraPermission,
+    requestCameraAndMicPermissions,
   };
 };

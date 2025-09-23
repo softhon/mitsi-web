@@ -1,54 +1,15 @@
 import { Button } from '@/components/ui/button';
-import { useCameraActions, useMicActions } from '@/store/conf/hooks';
 import { Monitor, Settings } from 'lucide-react';
 import { useEffect } from 'react';
-import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
 import Mic from './join-mic';
 import Camera from './join-camera';
+import { useMedia } from '@/hooks/use-media';
 
 const Controls = () => {
-  const micActions = useMicActions();
-  const cameraActions = useCameraActions();
-
+  const { requestCameraAndMicPermissions } = useMedia();
   useEffect(() => {
-    const getDevices = async () => {
-      requestMediaPermissions()
-        .catch((err: MediaPermissionsError) => {
-          console.log(err);
-        })
-        .finally(async () => {
-          try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const audioInputDevices = devices.filter(
-              device => device.kind === 'audioinput'
-            );
-            const videoInputDevices = devices.filter(
-              device => device.kind === 'videoinput'
-            );
-            // const audioOutputDevices = devices.filter(
-            //   device => device.kind === 'audiooutput'
-            // );
-
-            // soundActions.setDeviceId(
-            //   audioOutputDevices.length ? audioOutputDevices[0].deviceId : null
-            // );
-            cameraActions.setDeviceId(
-              videoInputDevices.length ? videoInputDevices[0].deviceId : null
-            );
-            micActions.setDeviceId(
-              audioInputDevices.length ? audioInputDevices[0].deviceId : null
-            );
-
-            // soundActions.setDevices(audioOutputDevices);
-            cameraActions.setDevices(videoInputDevices);
-            micActions.setDevices(audioInputDevices);
-          } catch (error) {
-            console.log(error);
-          }
-        });
-    };
-    getDevices();
-  }, []);
+    requestCameraAndMicPermissions();
+  }, [requestCameraAndMicPermissions]);
 
   return (
     <div className="flex items-center justify-center gap-4">

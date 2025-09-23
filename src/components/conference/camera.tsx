@@ -2,8 +2,7 @@ import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Video, VideoOff } from 'lucide-react';
 import MediaDeviceDropdown from '../media-device-dropdown';
-import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
-import { DEVICE_ERRORS } from '@/lib/constants';
+
 import {
   useCameraActions,
   useCameraDeviceId,
@@ -13,29 +12,17 @@ import {
 import { useMedia } from '@/hooks/use-media';
 
 const Camera = () => {
-  const { mediaService, startUserMedia, stopUserMedia } = useMedia();
+  const {
+    mediaService,
+    startUserMedia,
+    stopUserMedia,
+    requestCameraPermission,
+  } = useMedia();
 
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
   const cameraDevices = useCameraDevices();
   const cameraActions = useCameraActions();
-
-  const requestCameraPermission = () => {
-    requestMediaPermissions({ audio: false, video: true })
-      .then(async () => {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const audioInputDevices = devices.filter(
-          device => device.kind === 'audioinput'
-        );
-        if (!audioInputDevices.length) throw 'Device not found';
-        cameraActions.setDeviceId(audioInputDevices[0].deviceId);
-        cameraActions.setDevices(audioInputDevices);
-      })
-      .catch((err: MediaPermissionsError) => {
-        const type = err?.type || 'DeviceNotFound';
-        return alert(DEVICE_ERRORS[type]('camera'));
-      });
-  };
 
   const toggleCamera = async () => {
     if (!mediaService) return console.log('Media service not intialised');
