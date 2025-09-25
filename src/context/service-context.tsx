@@ -1,7 +1,7 @@
 import config from '@/config';
 import MediaService from '@/services/media-service';
 import SignalingService from '@/services/signaling-service';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface ServiceContextType {
