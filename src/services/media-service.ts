@@ -7,11 +7,11 @@ import SignalingService from './signaling-service';
 import type {
   AppData,
   CreateConsumerData,
-  MediaServiceConfig,
+  // MediaServiceConfig,
   ProducerSource,
 } from '@/types';
 import { Actions } from '@/types/actions';
-import appConfig from '@/config';
+// import appConfig from '@/config';
 
 import {
   audioContraints,
@@ -27,12 +27,12 @@ class MediaService {
   private producers: Map<ProducerSource, mediasoupTypes.Producer>;
   private consumers: Map<ProducerSource, Map<string, mediasoupTypes.Consumer>>; // key of the inner map is the producerPeerId
   private tracks: Map<ProducerSource, MediaStreamTrack | null>;
-  private config: MediaServiceConfig;
+  // private config: MediaServiceConfig;
 
   constructor(
     device: Device,
-    signalingService: SignalingService,
-    config?: MediaServiceConfig
+    signalingService: SignalingService
+    // config?: MediaServiceConfig
   ) {
     this.device = device;
 
@@ -45,7 +45,7 @@ class MediaService {
 
     this.tracks = new Map();
 
-    this.config = config ? config : appConfig.media;
+    // this.config = config ? config : appConfig.media;
   }
 
   static async start(signalingService: SignalingService) {
