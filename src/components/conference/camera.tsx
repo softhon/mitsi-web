@@ -10,6 +10,7 @@ import {
   useCameraOn,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
+import { useCallback } from 'react';
 
 const Camera = () => {
   const {
@@ -17,6 +18,7 @@ const Camera = () => {
     startUserMedia,
     stopUserMedia,
     requestCameraPermission,
+    createProducer,
   } = useMedia();
 
   const cameraOn = useCameraOn();
@@ -24,17 +26,30 @@ const Camera = () => {
   const cameraDevices = useCameraDevices();
   const cameraActions = useCameraActions();
 
-  const toggleCamera = async () => {
+  const toggleCamera = useCallback(async () => {
     if (!mediaService) return console.log('Media service not intialised');
     if (!cameraDeviceId) return requestCameraPermission();
     try {
-      if (cameraOn) await stopUserMedia('camera');
-      else await startUserMedia('camera', cameraDeviceId);
+      if (cameraOn) {
+        await stopUserMedia('camera');
+      } else {
+        await startUserMedia('camera', cameraDeviceId);
+        await createProducer('camera');
+      }
       cameraActions.toggle();
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [
+    cameraActions,
+    cameraDeviceId,
+    cameraOn,
+    mediaService,
+    requestCameraPermission,
+    startUserMedia,
+    stopUserMedia,
+    createProducer,
+  ]);
   return (
     <div className="flex items-center gap-1">
       <Button

@@ -23,10 +23,16 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
           data: MessageData,
           callback: (data: AckCallbackData) => void
         ) => {
-          const { action, args = {} } = data;
-          console.log(Actions.Message, args);
-          const handler = actionHandlers[action as Actions];
-          if (handler) handler(args, callback);
+          try {
+            const { action, args = {} } = data;
+            console.log(Actions.Message, args, 'callback', callback);
+            const handler = actionHandlers[action as Actions];
+            if (handler) handler(args, callback);
+            else
+              console.log(`no handler for for action ${action} args =>`, args);
+          } catch (error) {
+            console.log(error);
+          }
         }
       );
   }, [signalingService, mediaService, actionHandlers]);

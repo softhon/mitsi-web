@@ -25,13 +25,9 @@ export const useMedia = () => {
   const cameraActions = useCameraActions();
 
   const createProducer = useCallback(
-    async (
-      track: MediaStreamTrack,
-      source: ProducerSource,
-      appData?: mediasoupTypes.AppData
-    ) => {
+    async (source: ProducerSource, appData?: mediasoupTypes.AppData) => {
       if (!mediaService) throw new Error('MediaService not initialized');
-      return await mediaService.createProducer(track, source, appData);
+      return await mediaService.createProducer(source, appData);
     },
     [mediaService]
   );
@@ -175,6 +171,13 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const getConsumer = useCallback(
+    (producerPeerId: string, source: ProducerSource) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      return mediaService.getConsumer(producerPeerId, source);
+    },
+    [mediaService]
+  );
   const getTrack = useCallback(
     (source: ProducerSource) => {
       if (!mediaService) throw new Error('MediaService not initialized');
@@ -278,6 +281,7 @@ export const useMedia = () => {
     getDisplayMedia,
     startUserMedia,
     stopUserMedia,
+    getConsumer,
     setTrack,
     getTrack,
     requestMicPermission,

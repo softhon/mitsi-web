@@ -3,18 +3,28 @@ import { Mic, MicOff } from 'lucide-react';
 import type { Layout, PeerData } from '@/types';
 import { getInitials } from '@/lib/utils';
 import { usePeerMediasById } from '@/store/conf/hooks';
+import { useMedia } from '@/hooks/use-media';
 
 interface PeerTileProps {
   peerData: PeerData;
   layout: Layout;
 }
 export const PeerTile: React.FC<PeerTileProps> = ({ peerData, layout }) => {
+  const { getConsumer } = useMedia();
   const videoRef = useRef<HTMLVideoElement>(null);
   const media = usePeerMediasById(peerData.id);
 
   useEffect(() => {
     if (!media?.camera || !videoRef.current) return;
-  }, [media?.camera]);
+    const consumer = getConsumer(peerData.id, 'camera');
+    if (!consumer) return;
+    const { track } = consumer;
+
+    console.log({ track });
+    const stream = new MediaStream([track]);
+
+    videoRef.current.srcObject = stream;
+  }, [media?.camera, getConsumer]);
 
   return (
     <div

@@ -60,6 +60,12 @@ export const createPeerSlice: StateCreator<
     set(state => {
       data.forEach(peerData => {
         state.peers.others[peerData.id] = peerData;
+        state.peers.medias[peerData.id] = {
+          id: peerData.id,
+        };
+        state.peers.conditions[peerData.id] = {
+          id: peerData.id,
+        };
       });
       return state;
     }),

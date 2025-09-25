@@ -179,7 +179,6 @@ class MediaService {
   }
 
   async createProducer(
-    track: MediaStreamTrack,
     source: ProducerSource,
     appData?: mediasoupTypes.AppData
   ) {
@@ -187,7 +186,12 @@ class MediaService {
       throw new Error('Send transport not initialized');
     }
     let producer: mediasoupTypes.Producer;
-    const clonedTrack = track.clone();
+    const clonedTrack = this.getTrack(source);
+
+    console.log({ clonedTrack });
+
+    if (!clonedTrack)
+      throw `${source} track was not found -- start ${source} before you create producer`;
 
     if (source === 'camera') {
       // Simulcast encoding settings
@@ -213,7 +217,7 @@ class MediaService {
         appData: { ...appData, source },
       });
     }
-    this.setTrack(track, source);
+    // this.setTrack(track, source);
     this.producers.set(source, producer);
     return producer;
   }
@@ -420,6 +424,7 @@ class MediaService {
               dtlsParameters,
             },
           });
+          console.log('connected webrtc transports');
           callback();
         } catch (error) {
           errback(error as Error);
@@ -442,6 +447,7 @@ class MediaService {
               appData,
             },
           });
+          console.log('Create Producer, producerId', response?.producerId);
           if (!response)
             return errback(new Error('ProducerId was not recieved'));
           callback({ id: response.producerId });

@@ -44,7 +44,7 @@ export const useRoom = () => {
         args: {
           roomId: roomData.roomId,
           peerData: peerMe,
-          rtpCapabilities: mediaService.getDeviceRtpCapabilities(),
+          deviceRtpCapabilities: mediaService.getDeviceRtpCapabilities(),
           isRejoining,
         },
       });
