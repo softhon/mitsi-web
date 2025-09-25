@@ -121,7 +121,7 @@ export interface CreateConsumerData {
   kind: mediasoupTypes.MediaKind;
   rtpParameters: mediasoupTypes.RtpParameters;
   type: string; //mediasoup consumer type 'simple' | 'simulcast' | 'svc' | 'pipe';
-  appData: any;
+  appData: AppData;
   producerPaused: boolean;
 }
 

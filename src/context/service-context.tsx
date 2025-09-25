@@ -1,7 +1,7 @@
 import config from '@/config';
 import MediaService from '@/services/media-service';
 import SignalingService from '@/services/signaling-service';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface ServiceContextType {
@@ -27,7 +27,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const cleanup = () => {
+  const cleanup = useCallback(() => {
     try {
       // Cleanup media service
       if (mediaService) {
@@ -46,7 +46,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error('Cleanup error:', error);
     }
-  };
+  }, [mediaService, signalingService]);
 
   useEffect(() => {
     const initializeServices = async () => {
@@ -86,7 +86,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cleanup();
     };
-  }, []);
+  }, [cleanup]);
 
   return (
     <ServiceContext.Provider

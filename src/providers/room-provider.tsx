@@ -51,7 +51,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
       }
     };
     setup();
-  }, [roomAccess]);
+  }, [roomAccess, createWebRtcConnections, joinRoom]);
 
   return <div>{children}</div>;
 };

@@ -24,7 +24,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerData, layout }) => {
     const stream = new MediaStream([track]);
 
     videoRef.current.srcObject = stream;
-  }, [media?.camera, getConsumer]);
+  }, [media?.camera, getConsumer, peerData?.id]);
 
   return (
     <div

@@ -110,7 +110,7 @@ export const useMedia = () => {
       peerActions.updateMedia(producerPeerId, mediaUpdate);
       // console.log("resumeConsumer --- source", producerSource)
     },
-    []
+    [mediaService, peerActions]
   );
 
   const closeConsumer = useCallback(
@@ -126,7 +126,7 @@ export const useMedia = () => {
           : { [producerSource]: false, cameraPaused: false };
       peerActions.updateMedia(producerPeerId, mediaUpdate);
     },
-    []
+    [mediaService, peerActions]
   );
 
   const createWebRtcConnections = useCallback(async () => {
