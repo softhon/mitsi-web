@@ -4,7 +4,7 @@ import Home from './pages/home';
 import Room from './pages/room';
 import { ThemeProvider } from './providers/theme-provider';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider storageKey="vite-ui-theme">
       <ToastProvider defaultPosition="top-right">
@@ -18,6 +18,6 @@ function App() {
       </ToastProvider>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
