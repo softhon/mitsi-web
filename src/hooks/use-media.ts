@@ -135,7 +135,7 @@ export const useMedia = () => {
     // creates transports
     await mediaService.createWebRtcTransports();
     // create consumer for producer in the room
-    await signalingService.message({
+    await signalingService.sendMessage({
       action: Actions.CreateConsumersOfAllProducers,
     });
   }, [mediaService, signalingService]);

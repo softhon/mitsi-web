@@ -35,7 +35,7 @@ export const useRoom = () => {
       if (roomAccess !== Access.Allowed) return;
       if (!peerMe || !roomData?.roomId || !signalingService || !mediaService)
         return;
-      const result = await signalingService.message<{
+      const result = await signalingService.sendMessage<{
         you: PeerData;
         peers: PeerData[];
         roomData: RoomData;

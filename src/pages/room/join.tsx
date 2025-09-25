@@ -34,7 +34,7 @@ const JoinRoom: React.FC = () => {
     const JoinVisitor = async () => {
       try {
         peerActions.clear();
-        const res = await signalingService.message<{ peers: PeerData[] }>({
+        const res = await signalingService.sendMessage<{ peers: PeerData[] }>({
           action: Actions.JoinVisitors,
           args: {
             roomId: roomData.roomId,

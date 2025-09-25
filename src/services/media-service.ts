@@ -50,7 +50,7 @@ class MediaService {
 
   static async start(signalingService: SignalingService) {
     const device = new Device();
-    const response = await signalingService.message<{
+    const response = await signalingService.sendMessage<{
       routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
     }>({
       action: Actions.GetRouterRtpCapabilities,
@@ -96,7 +96,7 @@ class MediaService {
 
   async reloadDevice() {
     const device = new Device();
-    const response = await this.signalingService.message<{
+    const response = await this.signalingService.sendMessage<{
       routerRtpCapabilities: mediasoupTypes.RtpCapabilities;
     }>({
       action: Actions.GetRouterRtpCapabilities,
@@ -227,7 +227,7 @@ class MediaService {
     if (!producer) return;
 
     producer.pause();
-    await this.signalingService.message({
+    await this.signalingService.sendMessage({
       action: Actions.PauseProducer,
       args: {
         producerId: producer.id,
@@ -241,7 +241,7 @@ class MediaService {
     if (!producer) return;
 
     producer.resume();
-    await this.signalingService.message({
+    await this.signalingService.sendMessage({
       action: Actions.ResumeProducer,
       args: {
         producerId: producer.id,
@@ -257,7 +257,7 @@ class MediaService {
     if (!producer) return;
     producer.close();
     this.producers.delete(source);
-    await this.signalingService.message({
+    await this.signalingService.sendMessage({
       action: Actions.CloseProducer,
       args: {
         producerId: producer.id,
@@ -370,7 +370,7 @@ class MediaService {
   }
 
   async createWebRtcTransports() {
-    const response = await this.signalingService.message<{
+    const response = await this.signalingService.sendMessage<{
       sendTransportParams: mediasoupTypes.TransportOptions;
       recvTransportParams: mediasoupTypes.TransportOptions;
     }>({
@@ -417,7 +417,7 @@ class MediaService {
       'connect',
       async ({ dtlsParameters }, callback, errback) => {
         try {
-          await this.signalingService.message({
+          await this.signalingService.sendMessage({
             action: Actions.ConnectWebrtcTransports,
             args: {
               transportId: sendTransport.id,
@@ -436,7 +436,7 @@ class MediaService {
       'produce',
       async ({ kind, rtpParameters, appData }, callback, errback) => {
         try {
-          const response = await this.signalingService.message<{
+          const response = await this.signalingService.sendMessage<{
             producerId: string;
           }>({
             action: Actions.CreateProducer,
@@ -478,7 +478,7 @@ class MediaService {
       'connect',
       async ({ dtlsParameters }, callback, errback) => {
         try {
-          await this.signalingService.message({
+          await this.signalingService.sendMessage({
             action: Actions.ConnectWebrtcTransports,
             args: {
               transportId: recvTransport.id,
@@ -505,7 +505,7 @@ class MediaService {
   }
 
   async restartICE(transport: mediasoupTypes.Transport) {
-    const response = await this.signalingService.message<{
+    const response = await this.signalingService.sendMessage<{
       iceParameters: mediasoupTypes.IceParameters;
     }>({
       action: Actions.RestartIce,

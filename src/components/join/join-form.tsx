@@ -57,7 +57,7 @@ const JoinForm = () => {
 
       peerActions.addData(peerData, true);
 
-      const res = await signalingService?.message<{ roomData: RoomData }>({
+      const res = await signalingService?.sendMessage<{ roomData: RoomData }>({
         action: Actions.GetRoomData,
         args: {
           roomId: roomData?.roomId,

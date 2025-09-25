@@ -12,7 +12,7 @@ export const useSignaling = () => {
     ): Promise<T | undefined> => {
       if (!signalingService)
         throw new Error('SignalingService not initialized');
-      return await signalingService.message<T | undefined>(message);
+      return await signalingService.sendMessage<T | undefined>(message);
     },
     [signalingService]
   );

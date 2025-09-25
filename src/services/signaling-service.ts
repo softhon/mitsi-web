@@ -55,7 +55,7 @@ class SignalingService {
     return this.connectionState === ConnectionState.Connected;
   }
 
-  message<T = { [key: string]: unknown }>(
+  sendMessage<T = { [key: string]: unknown }>(
     message: MessageData
   ): Promise<T | undefined> {
     return new Promise((resolve, reject) => {
