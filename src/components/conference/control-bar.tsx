@@ -4,7 +4,7 @@ import Display from './display';
 import Hand from './hand';
 import Emoji from './emoji';
 import End from './end';
-import Chat from './chat';
+import Chat from './chat/chat';
 import Users from './users';
 import Menu from './menu';
 
