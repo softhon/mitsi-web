@@ -1,7 +1,7 @@
 import config from '@/config';
 import MediaService from '@/services/media-service';
 import SignalingService from '@/services/signaling-service';
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface ServiceContextType {
@@ -27,26 +27,26 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const cleanup = useCallback(() => {
-    try {
-      // Cleanup media service
-      if (mediaService) {
-        mediaService.closeAllTransports();
-        mediaService.closeAllProducers();
-        mediaService.closeAllConsumers();
-      }
+  // const cleanup = useCallback(() => {
+  //   try {
+  //     // Cleanup media service
+  //     if (mediaService) {
+  //       mediaService.closeAllTransports();
+  //       mediaService.closeAllProducers();
+  //       mediaService.closeAllConsumers();
+  //     }
 
-      // Cleanup signaling service
-      if (signalingService) {
-        const connection = signalingService.getConnection();
-        connection.off('reconnect_failed');
-        connection.off('connect_error');
-        signalingService.disconnect();
-      }
-    } catch (error) {
-      console.error('Cleanup error:', error);
-    }
-  }, [mediaService, signalingService]);
+  //     // Cleanup signaling service
+  //     if (signalingService) {
+  //       const connection = signalingService.getConnection();
+  //       connection.off('reconnect_failed');
+  //       connection.off('connect_error');
+  //       signalingService.disconnect();
+  //     }
+  //   } catch (error) {
+  //     console.error('Cleanup error:', error);
+  //   }
+  // }, [mediaService, signalingService]);
 
   useEffect(() => {
     const initializeServices = async () => {
@@ -82,11 +82,7 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
     };
 
     initializeServices();
-
-    return () => {
-      cleanup();
-    };
-  }, [cleanup]);
+  }, []);
 
   return (
     <ServiceContext.Provider
