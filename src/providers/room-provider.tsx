@@ -1,14 +1,16 @@
 import { useMedia } from '@/hooks/use-media';
 import { useRoom } from '@/hooks/use-room';
 import { useSignaling } from '@/hooks/use-signaling';
+import { HEARTBEAT_INTERVAL } from '@/lib/constants';
 import { useRoomAccess } from '@/store/conf/hooks';
 import { Access, type AckCallbackData, type MessageData } from '@/types';
 import { Actions } from '@/types/actions';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
-  const { signalingService } = useSignaling();
+  const { signalingService, sendHeartBeat } = useSignaling();
   const { mediaService, createWebRtcConnections } = useMedia();
+  const heartBeatIntervalRef = useRef<NodeJS.Timeout>(null);
   const roomAccess = useRoomAccess();
   const { joinRoom, actionHandlers } = useRoom();
 
@@ -42,16 +44,23 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     const setup = async () => {
       try {
         await joinRoom();
-        console.log('join room');
-
         await createWebRtcConnections();
-        console.log('Set up room');
+        // register heartbeat interval
+        heartBeatIntervalRef.current = setInterval(
+          sendHeartBeat,
+          HEARTBEAT_INTERVAL
+        );
       } catch (error) {
         console.log(error);
       }
     };
     setup();
-  }, [roomAccess, createWebRtcConnections, joinRoom]);
+
+    return () => {
+      if (heartBeatIntervalRef.current)
+        clearInterval(heartBeatIntervalRef.current);
+    };
+  }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat]);
 
   return <div>{children}</div>;
 };

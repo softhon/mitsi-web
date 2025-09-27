@@ -1,10 +1,19 @@
 import { useCallback } from 'react';
 import { useServices } from './use-services';
 import type { MessageData } from '@/types';
+import { Actions } from '@/types/actions';
 
 // Hook for signaling operations
 export const useSignaling = () => {
   const { signalingService, isInitializing, error } = useServices();
+
+  const sendHeartBeat = useCallback(() => {
+    if (!signalingService) throw new Error('SignalingService not initialized');
+    signalingService.sendMessage({
+      action: Actions.Heartbeat,
+    });
+    console.log('Send heart beat');
+  }, [signalingService]);
 
   const sendMessage = useCallback(
     async <T = { [key: string]: unknown }>(
@@ -34,6 +43,7 @@ export const useSignaling = () => {
     signalingService,
     isInitializing,
     error,
+    sendHeartBeat,
     sendMessage,
     isConnected,
     getConnection,

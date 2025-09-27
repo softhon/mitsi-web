@@ -1,5 +1,6 @@
 import type { MediaDeviceType } from '@/types';
 import { MediaPermissionsErrorType } from 'mic-check';
+export const HEARTBEAT_INTERVAL = 45000;
 
 export const APP_NAME = 'Mitsi';
 
