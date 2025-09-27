@@ -59,29 +59,32 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
   const [position, setPosition] = useState<ToastPosition>(defaultPosition);
   const toastIdRef = useRef(0);
 
-  const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
-    const id = `toast-${++toastIdRef.current}`;
-    const newToast: Toast = {
-      ...toast,
-      id,
-      duration: toast.duration ?? 5000,
-    };
-
-    setToasts(prev => [...prev, newToast]);
-
-    // Auto remove toast after duration
-    if ((newToast.duration as number) > 0) {
-      setTimeout(() => {
-        removeToast(id);
-      }, newToast.duration);
-    }
-
-    return id;
-  }, []);
-
   const removeToast = useCallback((id: string) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
+
+  const addToast = useCallback(
+    (toast: Omit<Toast, 'id'>) => {
+      const id = `toast-${++toastIdRef.current}`;
+      const newToast: Toast = {
+        ...toast,
+        id,
+        duration: toast.duration ?? 5000,
+      };
+
+      setToasts(prev => [...prev, newToast]);
+
+      // Auto remove toast after duration
+      if ((newToast.duration as number) > 0) {
+        setTimeout(() => {
+          removeToast(id);
+        }, newToast.duration);
+      }
+
+      return id;
+    },
+    [removeToast]
+  );
 
   return (
     <ToastContext.Provider

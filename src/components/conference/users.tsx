@@ -1,14 +1,14 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Users as UsersIcon } from 'lucide-react';
 
 const Users = () => {
-  const [showParticipants, setShowParticipants] = useState(false);
+  // const [showParticipants, setShowParticipants] = useState(false);
 
   return (
     <Button
-      onClick={() => setShowParticipants(!showParticipants)}
+      // onClick={() => add()}
       variant="ghost"
       size="icon"
       className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"

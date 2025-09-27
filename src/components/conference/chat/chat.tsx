@@ -1,5 +1,5 @@
 // import React, { useState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { MessageSquare } from 'lucide-react';
 
 const Chat = ({ onToggleChat }: { onToggleChat: () => void }) => {
