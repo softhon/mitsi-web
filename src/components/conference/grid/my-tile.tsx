@@ -43,6 +43,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
             autoPlay
             muted
             playsInline
+            webkit-playsinline="true"
           />
         ) : (
           <div

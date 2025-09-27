@@ -40,6 +40,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerData, layout }) => {
             autoPlay
             muted
             playsInline
+            webkit-playsinline="true"
           />
         ) : (
           <div
