@@ -3,6 +3,7 @@ export enum Actions {
   Connected = 'connected',
   Disconnect = 'disconnect',
   JoinRoom = 'join_room',
+  LeaveRoom = 'leave_room',
   JoinVisitors = 'join_visitors',
   JoinWaiters = 'join_waiters',
   GetRoomData = 'get_room_data',

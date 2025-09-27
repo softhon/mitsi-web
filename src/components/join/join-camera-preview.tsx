@@ -31,6 +31,7 @@ const CameraPreview = () => {
             autoPlay
             muted
             playsInline
+            webkit-playsinline="true"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center relative z-10">

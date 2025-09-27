@@ -15,6 +15,7 @@ import { Actions } from '@/types/actions';
 import { useSignaling } from './use-signaling';
 import { useMedia } from './use-media';
 import { ValidationSchema } from '@/lib/schema';
+import { getPeerId } from '@/lib/utils';
 
 export const useRoom = () => {
   const { signalingService } = useSignaling();
@@ -29,6 +30,23 @@ export const useRoom = () => {
   const peerMe = usePeerMe();
   const roomData = useRoomData();
   const roomAccess = useRoomAccess();
+
+  const joinVisitors = useCallback(async () => {
+    if (!signalingService || !roomData) return;
+
+    peerActions.clear();
+    const res = await signalingService.sendMessage<{ peers: PeerData[] }>({
+      action: Actions.JoinVisitors,
+      args: {
+        roomId: roomData.roomId,
+        peerId: getPeerId(),
+      },
+    });
+    console.log(Actions.JoinVisitors, res);
+    for (const peer of res?.peers || []) {
+      peerActions.addData(peer);
+    }
+  }, [peerActions, signalingService, roomData]);
 
   const joinRoom = useCallback(
     async (isRejoining?: boolean) => {
@@ -65,6 +83,13 @@ export const useRoom = () => {
     ]
   );
 
+  const leaveRoom = useCallback(() => {
+    if (!signalingService) return;
+    signalingService.sendMessage({
+      action: Actions.LeaveRoom,
+    });
+  }, [signalingService]);
+
   const actionHandlers: {
     [key in Actions]?: (
       args: { [key: string]: unknown },
@@ -78,6 +103,7 @@ export const useRoom = () => {
       },
 
       [Actions.PeerLeft]: async args => {
+        console.log('Left room');
         const data = ValidationSchema.peerId.parse(args);
         peerActions.remove(data.id);
       },
@@ -109,5 +135,5 @@ export const useRoom = () => {
     [closeConsumer, createConsumer, pauseConsumer, peerActions, resumeConsumer]
   );
 
-  return { joinRoom, actionHandlers };
+  return { joinVisitors, joinRoom, leaveRoom, actionHandlers };
 };

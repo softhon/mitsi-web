@@ -12,7 +12,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { mediaService, createWebRtcConnections } = useMedia();
   const heartBeatIntervalRef = useRef<NodeJS.Timeout>(null);
   const roomAccess = useRoomAccess();
-  const { joinRoom, actionHandlers } = useRoom();
+  const { joinRoom, leaveRoom, actionHandlers } = useRoom();
 
   useEffect(() => {
     if (!signalingService || !mediaService) return;
@@ -41,26 +41,23 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (roomAccess !== Access.Allowed) return;
-    const setup = async () => {
-      try {
-        await joinRoom();
-        await createWebRtcConnections();
-        // register heartbeat interval
-        heartBeatIntervalRef.current = setInterval(
-          sendHeartBeat,
-          HEARTBEAT_INTERVAL
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    setup();
+    (async () => {
+      await joinRoom();
+      await createWebRtcConnections();
+      // register heartbeat interval
+      heartBeatIntervalRef.current = setInterval(
+        sendHeartBeat,
+        HEARTBEAT_INTERVAL
+      );
+
+      addEventListener('unload', leaveRoom);
+    })().catch(err => console.log(err));
 
     return () => {
       if (heartBeatIntervalRef.current)
         clearInterval(heartBeatIntervalRef.current);
     };
-  }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat]);
+  }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat, leaveRoom]);
 
   return <div>{children}</div>;
 };

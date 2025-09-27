@@ -1,25 +1,19 @@
 import React, { useEffect } from 'react';
 
-import { getPeerId } from '@/lib/utils';
 import { useSignaling } from '@/hooks/use-signaling';
-import { Actions } from '@/types/actions';
-import { type PeerData } from '@/types';
-import {
-  usePeerActions,
-  useRoomActions,
-  useRoomData,
-} from '@/store/conf/hooks';
+import { useRoomActions, useRoomData } from '@/store/conf/hooks';
 import JoinForm from '@/components/join/join-form';
 import Terms from '@/components/join/terms';
 import Header from '@/components/join/join-header';
 import CameraPreview from '@/components/join/join-camera-preview';
 import Controls from '../../components/join/join-controls';
+import { useRoom } from '@/hooks/use-room';
 
 const JoinRoom: React.FC = () => {
   const { signalingService } = useSignaling();
+  const { joinVisitors } = useRoom();
   const roomData = useRoomData();
   const roomActions = useRoomActions();
-  const peerActions = usePeerActions();
 
   useEffect(() => {
     roomActions.setData({
@@ -31,27 +25,9 @@ const JoinRoom: React.FC = () => {
 
   useEffect(() => {
     if (!signalingService || !roomData) return;
-    const JoinVisitor = async () => {
-      try {
-        peerActions.clear();
-        const res = await signalingService.sendMessage<{ peers: PeerData[] }>({
-          action: Actions.JoinVisitors,
-          args: {
-            roomId: roomData.roomId,
-            peerId: getPeerId(),
-          },
-        });
-        console.log(Actions.JoinVisitors, res);
-        for (const peer of res?.peers || []) {
-          peerActions.addData(peer);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
 
-    JoinVisitor();
-  }, [signalingService, roomData, peerActions]);
+    joinVisitors().catch(err => console.log(err));
+  }, [signalingService, roomData, joinVisitors]);
 
   if (!roomData || !signalingService) return null;
 
