@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Monitor, Settings } from 'lucide-react';
 import { useEffect } from 'react';
-import Mic from './join-mic';
-import Camera from './join-camera';
 import { useMedia } from '@/hooks/use-media';
+import Mic from '../mic';
+import Camera from '../camera';
 
 const Controls = () => {
   const { requestCameraAndMicPermissions } = useMedia();

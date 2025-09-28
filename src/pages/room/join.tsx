@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 
 import { useSignaling } from '@/hooks/use-signaling';
 import { useRoomActions, useRoomData } from '@/store/conf/hooks';
-import JoinForm from '@/components/join/join-form';
-import Terms from '@/components/join/terms';
-import Header from '@/components/join/join-header';
-import CameraPreview from '@/components/join/join-camera-preview';
-import Controls from '../../components/join/join-controls';
+import JoinForm from '@/components/room/join/join-form';
+import Terms from '@/components/room/join/join-terms';
+import Header from '@/components/room/join/join-header';
+import CameraPreview from '@/components/room/join/join-camera-preview';
+import Controls from '../../components/room/join/join-controls';
 import { useRoom } from '@/hooks/use-room';
 
 const JoinRoom: React.FC = () => {

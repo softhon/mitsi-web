@@ -18,7 +18,7 @@ import { getPeerId } from '@/lib/utils';
 import { Access, type PeerData, type RoomData } from '@/types';
 import { useSignaling } from '@/hooks/use-signaling';
 import { Actions } from '@/types/actions';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { Loader2 } from 'lucide-react';
 
 const FormValues = z.object({

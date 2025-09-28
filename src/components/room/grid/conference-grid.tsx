@@ -5,11 +5,11 @@ import { useDimensions } from '@/hooks/use-dimensions';
 import { DEFAULT_GRID_CONFIG } from '@/lib/utils';
 import { useGridCalculator } from '@/hooks/use-grid-calculator';
 import ChatContainer from '../chat/chat-container';
-import { usePeerOthersList } from '@/store/conf/hooks';
+import { usePeerOthersValues } from '@/store/conf/hooks';
 
 export const ConferenceGrid = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const peers = usePeerOthersList();
+  const peers = usePeerOthersValues();
 
   const dimensions = useDimensions(true, false);
   const { calculateOptimalLayout } = useGridCalculator(DEFAULT_GRID_CONFIG);

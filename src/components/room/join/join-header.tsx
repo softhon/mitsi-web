@@ -1,10 +1,10 @@
-import { usePeerOthersList, useRoomData } from '@/store/conf/hooks';
+import { usePeerOthersValues, useRoomData } from '@/store/conf/hooks';
 import { Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const Header = () => {
   const roomData = useRoomData();
-  const peerOthersList = usePeerOthersList();
+  const peerOthersList = usePeerOthersValues();
 
   return (
     <div className="text-center space-y-4">

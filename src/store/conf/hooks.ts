@@ -42,7 +42,13 @@ export const useCameraActions = () =>
 // ============================================================================
 export const usePeerMe = () => useConfStore(state => state.peers.me);
 export const usePeerOthers = () => useConfStore(state => state.peers.others);
-export const usePeerOthersList = () => {
+export const usePeerOthersKeys = () => {
+  const peerOthers = usePeerOthers();
+  return useMemo(() => {
+    return Object.keys(peerOthers);
+  }, [peerOthers]);
+};
+export const usePeerOthersValues = () => {
   const peerOthers = usePeerOthers();
   return useMemo(() => {
     return Object.values(peerOthers);

@@ -1,16 +1,22 @@
 import { types as mediasoupTypes } from 'mediasoup-client';
 import { useCallback } from 'react';
-import type {
-  ConsumerStateData,
-  CreateConsumerData,
-  PeerMedia,
-  ProducerSource,
+import {
+  Access,
+  type ConsumerStateData,
+  type CreateConsumerData,
+  type PeerMedia,
+  type ProducerSource,
 } from '@/types';
 import { useServices } from './use-services';
 import {
   useCameraActions,
+  useCameraDeviceId,
+  useCameraOn,
   useMicActions,
+  useMicDeviceId,
+  useMicOn,
   usePeerActions,
+  useRoomAccess,
 } from '@/store/conf/hooks';
 import { Actions } from '@/types/actions';
 import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
@@ -20,9 +26,15 @@ import { DEVICE_ERRORS } from '@/lib/constants';
 export const useMedia = () => {
   const { mediaService, signalingService, isInitializing, error } =
     useServices();
+  const roomAccess = useRoomAccess();
+
   const peerActions = usePeerActions();
   const micActions = useMicActions();
+  const micOn = useMicOn();
+  const micDeviceId = useMicDeviceId();
   const cameraActions = useCameraActions();
+  const cameraDeviceId = useCameraDeviceId();
+  const cameraOn = useCameraOn();
 
   const createProducer = useCallback(
     async (source: ProducerSource, appData?: mediasoupTypes.AppData) => {
@@ -264,6 +276,57 @@ export const useMedia = () => {
       });
   }, [micActions, cameraActions]);
 
+  const toggleCamera = useCallback(async () => {
+    if (!mediaService) return console.log('Media service not intialised');
+    if (!cameraDeviceId) return requestCameraPermission();
+    try {
+      if (cameraOn) {
+        await stopUserMedia('camera');
+      } else {
+        await startUserMedia('camera', cameraDeviceId);
+        if (roomAccess === Access.Allowed) await createProducer('camera');
+      }
+      cameraActions.toggle();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [
+    cameraActions,
+    cameraDeviceId,
+    cameraOn,
+    mediaService,
+    roomAccess,
+    requestCameraPermission,
+    startUserMedia,
+    stopUserMedia,
+    createProducer,
+  ]);
+  const toggleMic = useCallback(async () => {
+    if (!mediaService) return console.log('Media service not intialised');
+    if (!micDeviceId) return requestCameraPermission();
+    try {
+      if (micOn) {
+        await stopUserMedia('mic');
+      } else {
+        await startUserMedia('mic', micDeviceId);
+        if (roomAccess === Access.Allowed) await createProducer('mic');
+      }
+      micActions.toggle();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [
+    micActions,
+    micDeviceId,
+    micOn,
+    mediaService,
+    roomAccess,
+    requestCameraPermission,
+    startUserMedia,
+    stopUserMedia,
+    createProducer,
+  ]);
+
   return {
     mediaService,
     isInitializing,
@@ -287,5 +350,7 @@ export const useMedia = () => {
     requestMicPermission,
     requestCameraPermission,
     requestCameraAndMicPermissions,
+    toggleCamera,
+    toggleMic,
   };
 };

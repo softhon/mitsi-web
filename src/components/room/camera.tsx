@@ -1,38 +1,20 @@
 import { Video, VideoOff } from 'lucide-react';
-import MediaControlButton from '../media-control-button';
+import MediaDeviceDropdown from '../media-device-dropdown';
+
 import {
-  useCameraActions,
   useCameraDeviceId,
   useCameraDevices,
   useCameraOn,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
-import MediaDeviceDropdown from '../media-device-dropdown';
+import MediaControlButton from '../media-control-button';
 
 const Camera = () => {
-  const {
-    mediaService,
-    startUserMedia,
-    stopUserMedia,
-    requestCameraPermission,
-  } = useMedia();
+  const { toggleCamera } = useMedia();
 
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
   const cameraDevices = useCameraDevices();
-  const cameraActions = useCameraActions();
-
-  const toggleCamera = async () => {
-    if (!mediaService) return console.log('Media service not intialised');
-    if (!cameraDeviceId) return requestCameraPermission();
-    try {
-      if (cameraOn) await stopUserMedia('camera');
-      else await startUserMedia('camera', cameraDeviceId);
-      cameraActions.toggle();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <div className="flex items-center gap-2">
