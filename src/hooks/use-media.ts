@@ -87,6 +87,10 @@ export const useMedia = () => {
           : { [producerSource]: true, cameraPaused: true }; // create camera in a pause state
       peerActions.updateMedia(producerPeerId, mediaUpdate);
 
+      if (producerSource === 'screen') {
+        peerActions.addScreen(producerPeerId);
+      }
+
       // console.log("create consumer --- source", producerSource)
     },
     [mediaService, peerActions]
@@ -137,6 +141,9 @@ export const useMedia = () => {
           ? { [producerSource]: false }
           : { [producerSource]: false, cameraPaused: false };
       peerActions.updateMedia(producerPeerId, mediaUpdate);
+      if (producerSource === 'screen') {
+        peerActions.removeScreen(producerPeerId);
+      }
     },
     [mediaService, peerActions]
   );
@@ -183,6 +190,18 @@ export const useMedia = () => {
       if (roomAccess == Access.Allowed) closeProducer(mediaSource);
     },
     [mediaService, roomAccess, closeProducer]
+  );
+
+  const startDisplayMedia = useCallback(
+    async (constraints?: DisplayMediaStreamOptions) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      await mediaService.startDisplayMedia(constraints);
+      if (roomAccess == Access.Allowed) {
+        createProducer('screen');
+        createProducer('screenAudio');
+      }
+    },
+    [mediaService, roomAccess, createProducer]
   );
 
   const getConsumer = useCallback(
@@ -340,6 +359,7 @@ export const useMedia = () => {
     getDisplayMedia,
     startUserMedia,
     stopUserMedia,
+    startDisplayMedia,
     getConsumer,
     setTrack,
     getTrack,

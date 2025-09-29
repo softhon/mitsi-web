@@ -94,6 +94,14 @@ class MediaService {
     return await navigator.mediaDevices.getDisplayMedia(constraints);
   }
 
+  async startDisplayMedia(constraints?: DisplayMediaStreamOptions) {
+    const stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+    if (stream.getVideoTracks().length)
+      this.setTrack(stream.getVideoTracks()[0], 'screen');
+    if (stream.getAudioTracks().length)
+      this.setTrack(stream.getAudioTracks()[0], 'screenAudio');
+  }
+
   async reloadDevice() {
     const device = new Device();
     const response = await this.signalingService.sendMessage<{
@@ -188,10 +196,10 @@ class MediaService {
     let producer: mediasoupTypes.Producer;
     const clonedTrack = this.getTrack(source);
 
-    console.log({ clonedTrack });
-
     if (!clonedTrack)
-      throw `${source} track was not found -- start ${source} before you create producer`;
+      return console.log(
+        `${source} track was not found -- start ${source} before you create producer`
+      );
 
     if (source === 'camera') {
       // Simulcast encoding settings

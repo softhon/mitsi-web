@@ -11,6 +11,8 @@ export interface PeerSlice {
     id: string;
     lastActiveSpeechTimestamp: number;
   }[]; // id and array position;
+
+  screens: string[]; // ids of peers sharing screen -> for optimization
   //Actions
   addData: (data: PeerData, isMe?: boolean) => void;
   addOthersData: (data: PeerData[]) => void;
@@ -19,6 +21,8 @@ export interface PeerSlice {
   updateCondition: (id: string, condition: Partial<PeerCondition>) => void;
   updateLastActiveSpeechTimestamp: (id: string, timeStamp: number) => void;
   swapPositions: (activeIndex: number, passiveIndex: number) => void;
+  addScreen: (id: string) => void;
+  removeScreen: (id: string) => void;
   remove: (id: string) => void;
   clear: () => void;
 }
@@ -34,7 +38,7 @@ export const createPeerSlice: StateCreator<
   medias: {},
   conditions: {},
   positions: [],
-
+  screens: [],
   addData: (data, isYou = false) =>
     set(state => {
       if (isYou) {
@@ -119,15 +123,34 @@ export const createPeerSlice: StateCreator<
       state.peers.positions[activeIndex] = passivePosition;
       return state;
     }),
+  addScreen: id =>
+    set(state => {
+      state.peers.screens.push(id);
+      return state;
+    }),
+  removeScreen: id =>
+    set(state => {
+      const index = state.peers.screens.findIndex(val => val === id);
+      if (index >= 0) {
+        state.peers.screens.splice(index, 1);
+      }
+      return state;
+    }),
   remove: id =>
     set(state => {
       delete state.peers.others[id];
       delete state.peers.medias[id];
       delete state.peers.conditions[id];
 
-      const index = state.peers.positions.findIndex(value => value.id === id);
-      if (index >= 0) {
-        state.peers.positions.splice(index, 1);
+      const positionIndex = state.peers.positions.findIndex(
+        value => value.id === id
+      );
+      if (positionIndex >= 0) {
+        state.peers.positions.splice(positionIndex, 1);
+      }
+      const screenIndex = state.peers.screens.findIndex(val => val === id);
+      if (screenIndex >= 0) {
+        state.peers.screens.splice(screenIndex, 1);
       }
       return state;
     }),
@@ -137,6 +160,7 @@ export const createPeerSlice: StateCreator<
       state.peers.medias = {};
       state.peers.conditions = {};
       state.peers.positions = [];
+      state.peers.screens = [];
       return state;
     }),
 });

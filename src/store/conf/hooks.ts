@@ -42,6 +42,7 @@ export const useCameraActions = () =>
 // ============================================================================
 export const usePeerMe = () => useConfStore(state => state.peers.me);
 export const usePeerOthers = () => useConfStore(state => state.peers.others);
+export const usePeerScreens = () => useConfStore(state => state.peers.screens);
 export const usePeerOthersById = (id: string) =>
   useConfStore(state => state.peers.others[id]);
 export const usePeerOthersKeys = () => {
@@ -82,6 +83,8 @@ export const usePeerActions = () =>
       updateLastActiveSpeechTimestamp:
         useConfStore.getState().peers.updateLastActiveSpeechTimestamp,
       swapPositions: useConfStore.getState().peers.swapPositions,
+      addScreen: useConfStore.getState().peers.addScreen,
+      removeScreen: useConfStore.getState().peers.removeScreen,
       remove: useConfStore.getState().peers.remove,
       clear: useConfStore.getState().peers.clear,
     }),

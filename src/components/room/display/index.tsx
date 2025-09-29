@@ -1,5 +1,6 @@
 import Sidebar from '../sidebar';
 import MainGrid from './main-grid';
+import ScreenView from './screen-view';
 
 const Display = () => {
   return (
@@ -7,7 +8,7 @@ const Display = () => {
       className={`${'fixed h-full inset-0 pl-2 pt-10 pb-18 flex flex-row w-full justify-between overflow-hidden '}`}
     >
       {/* screen sharing */}
-      <div className=" bg-black w-5/6  rounded-2xl "></div>
+      <ScreenView />
       {/* peers grid */}
       <MainGrid />
       {/* chat and attendees */}

@@ -5,6 +5,7 @@ import type { MicSlice } from './slices/mic-slice';
 import type { ModalSlice } from './slices/modal-slice';
 import type { PeerSlice } from './slices/peer-slice';
 import type { RoomSlice } from './slices/room-slice';
+import type { ScreenSlice } from './slices/screen-slice';
 
 export interface ConfStoreState {
   mic: MicSlice;
@@ -14,4 +15,5 @@ export interface ConfStoreState {
   grid: GridSlice;
   chat: ChatSlice;
   modal: ModalSlice;
+  screen: ScreenSlice;
 }
