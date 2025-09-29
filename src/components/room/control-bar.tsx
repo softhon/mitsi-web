@@ -1,12 +1,12 @@
 import Mic from './mic';
 import Camera from './camera';
-import Display from './display';
 import Hand from './hand';
 import Emoji from './emoji';
 import End from './end';
 import Chat from './chat/chat';
 import Users from './users';
 import Menu from './menu';
+import Screen from './screen';
 
 const ControlBar = ({ onToggleChat }: { onToggleChat: () => void }) => {
   return (
@@ -21,7 +21,7 @@ const ControlBar = ({ onToggleChat }: { onToggleChat: () => void }) => {
           <Camera />
 
           {/* Screen Share */}
-          <Display />
+          <Screen />
         </div>
 
         {/* Center Controls */}

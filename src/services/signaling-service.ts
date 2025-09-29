@@ -63,11 +63,9 @@ class SignalingService {
         Actions.Message,
         message,
         (res: AckCallbackData<T>) => {
-          console.log('AckCallbackData', res);
           if (res.status === 'error') {
             reject(res?.error || 'Unknown error');
           } else {
-            console.log(message.action, res.response);
             resolve(res.response);
           }
         }
@@ -80,30 +78,30 @@ class SignalingService {
       this.connectionState = ConnectionState.Connected;
     });
 
-    this.connection.on('disconnect', reason => {
-      console.log('Socket disconnected:', reason);
-      this.connectionState = ConnectionState.Disconnected;
-    });
+    // this.connection.on('disconnect', reason => {
+    //   // console.log('Socket disconnected:', reason);
+    //   this.connectionState = ConnectionState.Disconnected;
+    // });
 
-    this.connection.on('connect_error', error => {
-      console.error('Socket connection failed:', error);
-      this.connectionState = ConnectionState.Error;
-    });
+    // this.connection.on('connect_error', error => {
+    //   // console.error('Socket connection failed:', error);
+    //   this.connectionState = ConnectionState.Error;
+    // });
 
-    this.connection.on('reconnecting', attemptNumber => {
-      console.log(`Reconnecting attempt ${attemptNumber}`);
-      this.connectionState = ConnectionState.Reconnecting;
-    });
+    // this.connection.on('reconnecting', attemptNumber => {
+    //   // console.log(`Reconnecting attempt ${attemptNumber}`);
+    //   this.connectionState = ConnectionState.Reconnecting;
+    // });
 
-    this.connection.on('reconnect', attemptNumber => {
-      console.log(`Reconnected after ${attemptNumber} attempts`);
-      this.connectionState = ConnectionState.Connected;
-    });
+    // this.connection.on('reconnect', attemptNumber => {
+    //   // console.log(`Reconnected after ${attemptNumber} attempts`);
+    //   this.connectionState = ConnectionState.Connected;
+    // });
 
-    this.connection.on('reconnect_failed', () => {
-      console.error('Reconnection failed');
-      this.connectionState = ConnectionState.Error;
-    });
+    // this.connection.on('reconnect_failed', () => {
+    //   // console.error('Reconnection failed');
+    //   this.connectionState = ConnectionState.Error;
+    // });
   }
 
   // Add cleanup method

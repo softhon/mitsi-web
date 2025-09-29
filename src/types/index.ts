@@ -150,6 +150,11 @@ export interface AspectRatio {
   name: string;
 }
 
+export interface GridTable {
+  rows: number;
+  cols: number;
+}
+
 export interface Layout {
   rows: number;
   cols: number;
@@ -189,4 +194,9 @@ export interface PaginationInfoProps {
   participantsPerPage: number;
   totalParticipants: number;
   totalPages: number;
+}
+
+export interface Dimensions {
+  width: number;
+  height: number;
 }

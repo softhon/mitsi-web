@@ -171,16 +171,18 @@ export const useMedia = () => {
   const startUserMedia = useCallback(
     async (mediaSource: 'mic' | 'camera', deviceId: string) => {
       if (!mediaService) throw new Error('MediaService not initialized');
-      return await mediaService.startUserMedia(mediaSource, deviceId);
+      await mediaService.startUserMedia(mediaSource, deviceId);
+      if (roomAccess == Access.Allowed) createProducer(mediaSource);
     },
-    [mediaService]
+    [mediaService, roomAccess, createProducer]
   );
   const stopUserMedia = useCallback(
     async (mediaSource: 'mic' | 'camera') => {
       if (!mediaService) throw new Error('MediaService not initialized');
-      return await mediaService.stopUserMedia(mediaSource);
+      await mediaService.stopUserMedia(mediaSource);
+      if (roomAccess == Access.Allowed) closeProducer(mediaSource);
     },
-    [mediaService]
+    [mediaService, roomAccess, closeProducer]
   );
 
   const getConsumer = useCallback(
@@ -284,7 +286,6 @@ export const useMedia = () => {
         await stopUserMedia('camera');
       } else {
         await startUserMedia('camera', cameraDeviceId);
-        if (roomAccess === Access.Allowed) await createProducer('camera');
       }
       cameraActions.toggle();
     } catch (error) {
@@ -295,11 +296,9 @@ export const useMedia = () => {
     cameraDeviceId,
     cameraOn,
     mediaService,
-    roomAccess,
     requestCameraPermission,
     startUserMedia,
     stopUserMedia,
-    createProducer,
   ]);
   const toggleMic = useCallback(async () => {
     if (!mediaService) return console.log('Media service not intialised');
@@ -309,7 +308,6 @@ export const useMedia = () => {
         await stopUserMedia('mic');
       } else {
         await startUserMedia('mic', micDeviceId);
-        if (roomAccess === Access.Allowed) await createProducer('mic');
       }
       micActions.toggle();
     } catch (error) {
@@ -320,11 +318,9 @@ export const useMedia = () => {
     micDeviceId,
     micOn,
     mediaService,
-    roomAccess,
     requestCameraPermission,
     startUserMedia,
     stopUserMedia,
-    createProducer,
   ]);
 
   return {

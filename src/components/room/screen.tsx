@@ -3,7 +3,7 @@ import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { Monitor } from 'lucide-react';
 
-const Display = () => {
+const Screen = () => {
   const [isScreenSharing, setIsScreenSharing] = useState(false);
 
   return (
@@ -23,4 +23,4 @@ const Display = () => {
   );
 };
 
-export default Display;
+export default Screen;

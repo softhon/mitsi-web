@@ -48,6 +48,12 @@ export const usePeerOthersKeys = () => {
     return Object.keys(peerOthers);
   }, [peerOthers]);
 };
+export const usePeersCount = () => {
+  const peerKeys = usePeerOthersKeys();
+  return useMemo(() => {
+    return peerKeys.length + 1; // 1 is current speaker
+  }, [peerKeys]);
+};
 export const usePeerOthersValues = () => {
   const peerOthers = usePeerOthers();
   return useMemo(() => {
@@ -90,6 +96,20 @@ export const useRoomActions = () =>
     () => ({
       setData: useConfStore.getState().room.setData,
       setAccess: useConfStore.getState().room.setAccess,
+    }),
+    []
+  );
+
+// ============================================================================
+// GRID SELECTORS
+// ============================================================================
+export const useGridHeight = () =>
+  useConfStore(state => state.grid.size.height);
+export const useGridWidth = () => useConfStore(state => state.grid.size.width);
+export const useGridActions = () =>
+  useMemo(
+    () => ({
+      setSize: useConfStore.getState().grid.setSize,
     }),
     []
   );

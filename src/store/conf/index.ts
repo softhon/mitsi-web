@@ -6,6 +6,7 @@ import { createMicSlice } from './slices/mic-slice';
 import { createCameraSlice } from './slices/camera-slice';
 import { createPeerSlice } from './slices/peer-slice';
 import { createRoomSlice } from '@/store/conf/slices/room-slice';
+import { createGridSlice } from './slices/grid-slice';
 
 export const useConfStore = create<ConfStoreState>()(
   devtools(
@@ -14,6 +15,7 @@ export const useConfStore = create<ConfStoreState>()(
       camera: createCameraSlice(set, get, api),
       peers: createPeerSlice(set, get, api),
       room: createRoomSlice(set, get, api),
+      grid: createGridSlice(set, get, api),
     })),
     { name: 'conf-store' }
   )

@@ -70,7 +70,7 @@ class MediaService {
   async startUserMedia(mediaSource: 'mic' | 'camera', deviceId: string) {
     const mediaTrack = this.getTrack(mediaSource);
     if (mediaTrack && mediaTrack.enabled) {
-      if (mediaTrack.getSettings().deviceId === deviceId) return true;
+      if (mediaTrack.getSettings().deviceId === deviceId) return;
       mediaTrack.stop();
     }
     const stream = await navigator.mediaDevices.getUserMedia(
@@ -79,14 +79,14 @@ class MediaService {
         : videoConstraints(deviceId)
     );
     this.setTrack(stream.getTracks()[0], mediaSource);
-    return true;
+    return;
   }
   async stopUserMedia(mediaSource: 'mic' | 'camera') {
     const mediaTrack = this.getTrack(mediaSource);
-    if (!mediaTrack) return true;
+    if (!mediaTrack) return;
     if (mediaTrack.enabled) mediaTrack.stop();
     this.setTrack(null, mediaSource);
-    return true;
+    return;
   }
 
   // Helper method to get display media
