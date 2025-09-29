@@ -40,6 +40,11 @@ export const createPeerSlice: StateCreator<
       if (isYou) {
         state.peers.me = data;
       } else {
+        if (!state.peers.others[data.id])
+          state.peers.positions.push({
+            id: data.id,
+            lastActiveSpeechTimestamp: 0,
+          });
         state.peers.others[data.id] = data;
       }
       state.peers.medias[data.id] = {
@@ -48,18 +53,17 @@ export const createPeerSlice: StateCreator<
       state.peers.conditions[data.id] = {
         id: data.id,
       };
-
-      if (!state.peers.positions.find(value => value.id === data.id))
-        state.peers.positions.push({
-          id: data.id,
-          lastActiveSpeechTimestamp: 0,
-        });
       return state;
     }),
+
   addOthersData: data =>
     set(state => {
       data.forEach(peerData => {
         state.peers.others[peerData.id] = peerData;
+        state.peers.positions.push({
+          id: peerData.id,
+          lastActiveSpeechTimestamp: 0,
+        });
         state.peers.medias[peerData.id] = {
           id: peerData.id,
         };
@@ -69,6 +73,7 @@ export const createPeerSlice: StateCreator<
       });
       return state;
     }),
+
   updateData: (id, data) =>
     set(state => {
       if (state.peers.me?.id === id) {

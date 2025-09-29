@@ -1,22 +1,19 @@
 import { useGridCalculator } from '@/hooks/use-grid-calculator';
 import { DEFAULT_GRID_CONFIG } from '@/lib/utils';
-import { usePeerOthersValues } from '@/store/conf/hooks';
+import { usePeerPosition } from '@/store/conf/hooks';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { PeerTile } from '../grid/peer-tile';
 import MyTile from '../grid/my-tile';
 import type { Dimensions } from '@/types';
 
-const PeerGrid = () => {
+const MainGrid = () => {
   const { calculateOptimalLayout } = useGridCalculator(DEFAULT_GRID_CONFIG);
   const gridRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: 0,
     height: 0,
   });
-  // const gridActions = useGridActions();
-  // const gridHeight = useGridHeight();
-  // const gridWidth = useGridWidth();
-  const peers = usePeerOthersValues();
+  const peerPositions = usePeerPosition();
 
   useLayoutEffect(() => {
     if (!gridRef.current) return;
@@ -35,10 +32,9 @@ const PeerGrid = () => {
     };
   }, []);
 
-  const { layout, totalPages, currentPageParticipants } = useMemo(() => {
-    const totalParticipants = peers.length + 1; // 1 represent current peer
+  const { layout, currentPageParticipants } = useMemo(() => {
+    const totalParticipants = peerPositions.length + 1; // 1 represent current peer
 
-    // Find maximum participants that can fit on one page
     let maxParticipantsPerPage = totalParticipants;
     let optimalLayout = calculateOptimalLayout(
       dimensions.width,
@@ -67,7 +63,7 @@ const PeerGrid = () => {
       startIndex + maxParticipantsPerPage,
       totalParticipants
     );
-    const pageParticipants = peers.slice(startIndex, endIndex);
+    const pageParticipants = peerPositions.slice(startIndex, endIndex);
 
     return {
       layout: optimalLayout,
@@ -75,7 +71,12 @@ const PeerGrid = () => {
       totalPages: pages,
       currentPageParticipants: pageParticipants,
     };
-  }, [dimensions.height, dimensions.width, peers, calculateOptimalLayout]);
+  }, [
+    dimensions.height,
+    dimensions.width,
+    peerPositions,
+    calculateOptimalLayout,
+  ]);
 
   return (
     <div
@@ -88,7 +89,7 @@ const PeerGrid = () => {
       {layout ? (
         <>
           {currentPageParticipants.map(data => (
-            <PeerTile key={data.id} peerData={data} layout={layout} />
+            <PeerTile key={data.id} peerId={data.id} layout={layout} />
           ))}
           <MyTile layout={layout} />
         </>
@@ -99,4 +100,4 @@ const PeerGrid = () => {
   );
 };
 
-export default PeerGrid;
+export default MainGrid;

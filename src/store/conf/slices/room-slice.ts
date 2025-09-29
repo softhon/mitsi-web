@@ -6,9 +6,11 @@ export interface RoomSlice {
   data: RoomData | null;
   access: Access;
   gridDimensions: Dimensions;
+  maxPeerPerPage: number;
   setData: (data: RoomData) => void;
   setAccess: (access: Access) => void;
   setGridDimensions: (dimensions: Dimensions) => void;
+  setMaxPeerPerPage: (num: number) => void;
 }
 
 export const createRoomSlice: StateCreator<
@@ -19,6 +21,7 @@ export const createRoomSlice: StateCreator<
 > = set => ({
   data: null,
   access: Access.Visiting,
+  maxPeerPerPage: 12,
   gridDimensions: {
     width: 0,
     height: 0,
@@ -36,6 +39,11 @@ export const createRoomSlice: StateCreator<
   setGridDimensions: dimensions =>
     set(state => {
       state.room.gridDimensions = dimensions;
+      return state;
+    }),
+  setMaxPeerPerPage: num =>
+    set(state => {
+      state.room.maxPeerPerPage = num;
       return state;
     }),
 });

@@ -42,6 +42,8 @@ export const useCameraActions = () =>
 // ============================================================================
 export const usePeerMe = () => useConfStore(state => state.peers.me);
 export const usePeerOthers = () => useConfStore(state => state.peers.others);
+export const usePeerOthersById = (id: string) =>
+  useConfStore(state => state.peers.others[id]);
 export const usePeerOthersKeys = () => {
   const peerOthers = usePeerOthers();
   return useMemo(() => {
@@ -110,6 +112,23 @@ export const useGridActions = () =>
   useMemo(
     () => ({
       setSize: useConfStore.getState().grid.setSize,
+    }),
+    []
+  );
+
+// ============================================================================
+// MODAL SELECTORS
+// ============================================================================
+export const useModalChatOpen = () =>
+  useConfStore(state => state.modal.chatOpen);
+export const useModalParticipantsOpen = () =>
+  useConfStore(state => state.modal.participantsOpen);
+export const useModalActions = () =>
+  useMemo(
+    () => ({
+      toggleChatOpen: useConfStore.getState().modal.toggleChatOpen,
+      toggleParticipantOpen:
+        useConfStore.getState().modal.toggleParticipantOpen,
     }),
     []
   );

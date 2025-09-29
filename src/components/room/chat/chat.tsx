@@ -1,13 +1,13 @@
 // import React, { useState } from 'react';
+import { useModalActions } from '@/store/conf/hooks';
 import { Button } from '../../ui/button';
 import { MessageSquare } from 'lucide-react';
 
-const Chat = ({ onToggleChat }: { onToggleChat: () => void }) => {
-  // const [showChat, setShowChat] = useState(false);
-
+const Chat = () => {
+  const modalActions = useModalActions();
   return (
     <Button
-      onClick={onToggleChat}
+      onClick={modalActions.toggleChatOpen}
       variant="ghost"
       size="icon"
       className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"

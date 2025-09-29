@@ -16,7 +16,7 @@ export const Conference: React.FC = () => {
       {/* <ConferenceGrid /> */}
       <Display />
       {/* Bottom Controls */}
-      <ControlBar onToggleChat={() => {}} />
+      <ControlBar />
       <PeerAudioList />
     </div>
   );

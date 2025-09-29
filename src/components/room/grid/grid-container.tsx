@@ -48,7 +48,7 @@ export const GridContainer: React.FC<GridContainerProps> = ({
       className={`w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center content-center gap-3 p-4 overflow-hidden `}
     >
       {peerData.map(data => (
-        <PeerTile key={data.id} peerData={data} layout={layout} />
+        <PeerTile key={data.id} peerId={data.id} layout={layout} />
       ))}
       <MyTile layout={layout} />
     </div>

@@ -1,4 +1,5 @@
-import PeerGrid from './peer-grid';
+import Sidebar from '../sidebar';
+import MainGrid from './main-grid';
 
 const Display = () => {
   return (
@@ -8,9 +9,9 @@ const Display = () => {
       {/* screen sharing */}
       <div className=" bg-teal-500">screen sharing</div>
       {/* peers grid */}
-      <PeerGrid />
+      <MainGrid />
       {/* chat and attendees */}
-      <div className=" bg-purple-500 w-96 shrink-0">chat and attendees</div>
+      <Sidebar />
     </div>
   );
 };
