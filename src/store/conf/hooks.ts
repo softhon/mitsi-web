@@ -38,6 +38,18 @@ export const useCameraActions = () =>
   );
 
 // ============================================================================
+// SCREEN SELECTORS
+// ============================================================================
+export const useScreenOn = () => useConfStore(state => state.screen.on);
+export const useScreenActions = () =>
+  useMemo(
+    () => ({
+      toggle: useConfStore.getState().screen.toggle,
+    }),
+    []
+  );
+
+// ============================================================================
 // PEER SELECTORS
 // ============================================================================
 export const usePeerMe = () => useConfStore(state => state.peers.me);

@@ -1,16 +1,21 @@
 import { cn } from '@/lib/utils';
-import { usePeerScreens } from '@/store/conf/hooks';
+import { usePeerScreens, useScreenOn } from '@/store/conf/hooks';
+import MyScreen from '../grid/my-screen';
+import PeerScreen from '../grid/peer-screen';
 
 const ScreenView = () => {
   const peerScreens = usePeerScreens();
+  const screenOn = useScreenOn();
 
   return (
     <div
       className={cn(
-        ' bg-black w-0  rounded-2xl ',
-        peerScreens.length && 'w-5/6'
+        'lg:ml-2 bg-black rounded-2xl ',
+        peerScreens.length || screenOn ? 'w-5/6' : 'w-0'
       )}
-    ></div>
+    >
+      {screenOn ? <MyScreen /> : <PeerScreen />}
+    </div>
   );
 };
 

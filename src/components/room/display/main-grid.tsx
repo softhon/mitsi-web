@@ -1,6 +1,10 @@
 import { useGridCalculator } from '@/hooks/use-grid-calculator';
 import { cn, DEFAULT_GRID_CONFIG } from '@/lib/utils';
-import { usePeerPosition, usePeerScreens } from '@/store/conf/hooks';
+import {
+  usePeerPosition,
+  usePeerScreens,
+  useScreenOn,
+} from '@/store/conf/hooks';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { PeerTile } from '../grid/peer-tile';
 import MyTile from '../grid/my-tile';
@@ -10,6 +14,7 @@ const MainGrid = () => {
   const { calculateOptimalLayout } = useGridCalculator(DEFAULT_GRID_CONFIG);
   const gridRef = useRef<HTMLDivElement>(null);
   const peerScreens = usePeerScreens();
+  const screenOn = useScreenOn();
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: 0,
     height: 0,
@@ -84,7 +89,7 @@ const MainGrid = () => {
       ref={gridRef}
       className={cn(
         `w-full h-full bg-gray-900/95 flex flex-wrap items-center justify-center content-center gap-3 py-2 overflow-hidden lg:min-w-[400px] xl:min-w-[450px] 2xl:min-w-[500px]`,
-        peerScreens.length && 'xl:w-2/6 2xl:w-3/12'
+        (screenOn || peerScreens.length) && 'xl:w-2/6 2xl:w-3/12'
       )}
     >
       {layout ? (

@@ -100,6 +100,17 @@ class MediaService {
       this.setTrack(stream.getVideoTracks()[0], 'screen');
     if (stream.getAudioTracks().length)
       this.setTrack(stream.getAudioTracks()[0], 'screenAudio');
+    return stream;
+  }
+
+  async stopDisplayMedia() {
+    const screenTrack = this.getTrack('screen');
+    const screenAudioTrack = this.getTrack('screenAudio');
+
+    if (screenTrack && screenTrack.enabled) screenTrack.stop();
+    if (screenAudioTrack && screenAudioTrack.enabled) screenAudioTrack.stop();
+    this.setTrack(null, 'screen');
+    this.setTrack(null, 'screenAudio');
   }
 
   async reloadDevice() {
@@ -197,9 +208,7 @@ class MediaService {
     const clonedTrack = this.getTrack(source);
 
     if (!clonedTrack)
-      return console.log(
-        `${source} track was not found -- start ${source} before you create producer`
-      );
+      throw `${source} track was not found -- start ${source} before you create producer`;
 
     if (source === 'camera') {
       // Simulcast encoding settings

@@ -17,6 +17,8 @@ import {
   useMicOn,
   usePeerActions,
   useRoomAccess,
+  useScreenActions,
+  useScreenOn,
 } from '@/store/conf/hooks';
 import { Actions } from '@/types/actions';
 import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
@@ -35,6 +37,8 @@ export const useMedia = () => {
   const cameraActions = useCameraActions();
   const cameraDeviceId = useCameraDeviceId();
   const cameraOn = useCameraOn();
+  const screenOn = useScreenOn();
+  const screenActions = useScreenActions();
 
   const createProducer = useCallback(
     async (source: ProducerSource, appData?: mediasoupTypes.AppData) => {
@@ -195,14 +199,23 @@ export const useMedia = () => {
   const startDisplayMedia = useCallback(
     async (constraints?: DisplayMediaStreamOptions) => {
       if (!mediaService) throw new Error('MediaService not initialized');
-      await mediaService.startDisplayMedia(constraints);
+      const stream = await mediaService.startDisplayMedia(constraints);
       if (roomAccess == Access.Allowed) {
         createProducer('screen');
-        createProducer('screenAudio');
+        if (stream.getAudioTracks().length) createProducer('screenAudio');
       }
     },
     [mediaService, roomAccess, createProducer]
   );
+
+  const stopDisplayMedia = useCallback(async () => {
+    if (!mediaService) throw new Error('MediaService not initialized');
+    await mediaService.startDisplayMedia();
+    if (roomAccess == Access.Allowed) {
+      closeProducer('screen');
+      closeProducer('screenAudio');
+    }
+  }, [mediaService, roomAccess, closeProducer]);
 
   const getConsumer = useCallback(
     (producerPeerId: string, source: ProducerSource) => {
@@ -342,6 +355,26 @@ export const useMedia = () => {
     stopUserMedia,
   ]);
 
+  const toggleScreen = useCallback(async () => {
+    if (!mediaService) return console.log('Media service not intialised');
+    try {
+      if (screenOn) {
+        await stopDisplayMedia();
+      } else {
+        await startDisplayMedia({ video: true, audio: true });
+      }
+      screenActions.toggle();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [
+    screenActions,
+    screenOn,
+    mediaService,
+    stopDisplayMedia,
+    startDisplayMedia,
+  ]);
+
   return {
     mediaService,
     isInitializing,
@@ -360,6 +393,7 @@ export const useMedia = () => {
     startUserMedia,
     stopUserMedia,
     startDisplayMedia,
+    stopDisplayMedia,
     getConsumer,
     setTrack,
     getTrack,
@@ -368,5 +402,6 @@ export const useMedia = () => {
     requestCameraAndMicPermissions,
     toggleCamera,
     toggleMic,
+    toggleScreen,
   };
 };

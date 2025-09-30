@@ -3,7 +3,7 @@ import type { ConfStoreState } from '../type';
 
 export interface ScreenSlice {
   on: boolean;
-  toggle: (state: boolean) => void;
+  toggle: () => void;
 }
 
 export const createScreenSlice: StateCreator<
