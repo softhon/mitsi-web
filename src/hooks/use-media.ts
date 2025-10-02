@@ -196,10 +196,27 @@ export const useMedia = () => {
     [mediaService, roomAccess, closeProducer]
   );
 
+  const stopDisplayMedia = useCallback(async () => {
+    if (!mediaService) throw new Error('MediaService not initialized');
+    console.log('stopDisplayMedia');
+    await mediaService.stopDisplayMedia();
+    if (roomAccess == Access.Allowed) {
+      closeProducer('screen');
+      closeProducer('screenAudio');
+    }
+  }, [mediaService, roomAccess, closeProducer]);
+
+  const handleDisplayMediaOnEnded = useCallback(async () => {
+    await stopDisplayMedia();
+    screenActions.toggle();
+  }, [stopDisplayMedia, screenActions]);
+
   const startDisplayMedia = useCallback(
     async (constraints?: DisplayMediaStreamOptions) => {
       if (!mediaService) throw new Error('MediaService not initialized');
       const stream = await mediaService.startDisplayMedia(constraints);
+      stream.getTracks()[0].onended = handleDisplayMediaOnEnded;
+
       if (roomAccess == Access.Allowed) {
         createProducer('screen');
         if (stream.getAudioTracks().length) createProducer('screenAudio');
@@ -207,15 +224,6 @@ export const useMedia = () => {
     },
     [mediaService, roomAccess, createProducer]
   );
-
-  const stopDisplayMedia = useCallback(async () => {
-    if (!mediaService) throw new Error('MediaService not initialized');
-    await mediaService.startDisplayMedia();
-    if (roomAccess == Access.Allowed) {
-      closeProducer('screen');
-      closeProducer('screenAudio');
-    }
-  }, [mediaService, roomAccess, closeProducer]);
 
   const getConsumer = useCallback(
     (producerPeerId: string, source: ProducerSource) => {
