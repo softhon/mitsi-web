@@ -2,10 +2,10 @@
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Users as UsersIcon } from 'lucide-react';
+import { usePeersCount } from '@/store/conf/hooks';
 
 const Users = () => {
-  // const [showParticipants, setShowParticipants] = useState(false);
-
+  const count = usePeersCount();
   return (
     <Button
       // onClick={() => add()}
@@ -18,7 +18,7 @@ const Users = () => {
         variant="secondary"
         className="absolute -top-2 -right-2 w-6 h-6 text-xs bg-gray-600 text-white border-gray-500"
       >
-        5
+        {count}
       </Badge>
     </Button>
   );

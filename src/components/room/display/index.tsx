@@ -5,7 +5,7 @@ import ScreenView from './screen-view';
 const Display = () => {
   return (
     <div
-      className={`${'fixed h-full inset-0  pt-10 pb-18 flex flex-row w-full justify-between overflow-hidden '}`}
+      className={`${'fixed h-full inset-0  pt-10 pb-18 px-3 flex  flex-row w-full justify-between overflow-hidden '}`}
     >
       {/* screen sharing */}
       <ScreenView />

@@ -19,11 +19,13 @@ export const createModalSlice: StateCreator<
   toggleChatOpen: () =>
     set(state => {
       state.modal.chatOpen = !state.modal.chatOpen;
+      state.modal.participantsOpen = false;
       return state;
     }),
   toggleParticipantOpen: () =>
     set(state => {
       state.modal.participantsOpen = !state.modal.participantsOpen;
+      state.modal.chatOpen = false;
       return state;
     }),
 });
