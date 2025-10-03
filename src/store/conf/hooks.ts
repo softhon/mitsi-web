@@ -144,6 +144,8 @@ export const useModalActions = () =>
       toggleChatOpen: useConfStore.getState().modal.toggleChatOpen,
       toggleParticipantOpen:
         useConfStore.getState().modal.toggleParticipantOpen,
+      closeChatAndParticipant:
+        useConfStore.getState().modal.closeChatAndParticipant,
     }),
     []
   );

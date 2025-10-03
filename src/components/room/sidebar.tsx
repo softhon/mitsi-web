@@ -7,12 +7,21 @@ import {
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';
 import ChatContainer from './chat/chat-container';
+import ParticipantContainer from './participant/participant-container';
+import { useCallback } from 'react';
 
 const Sidebar = () => {
   const chatOpen = useModalChatOpen();
   const participantsOpen = useModalParticipantsOpen();
   const modalActions = useModalActions();
 
+  const openParticipantsTab = useCallback(() => {
+    if (!participantsOpen) modalActions.toggleParticipantOpen();
+  }, [participantsOpen, modalActions]);
+
+  const openChatTab = useCallback(() => {
+    if (!chatOpen) modalActions.toggleChatOpen();
+  }, [chatOpen, modalActions]);
   return (
     <div
       className={cn(
@@ -24,7 +33,7 @@ const Sidebar = () => {
         <div className="flex flex-row items-center gap-x-3">
           <div className=" flex flex-1 gap-1 rounded-xl bg-black/50 p-1 ">
             <Button
-              onClick={modalActions.toggleChatOpen}
+              onClick={openChatTab}
               className={cn(
                 ' flex-1 text-white font-normal bg-transparent   hover:bg-gray-800 cursor-pointer',
                 chatOpen && ' bg-gray-800/80'
@@ -33,7 +42,7 @@ const Sidebar = () => {
               Chat
             </Button>
             <Button
-              onClick={modalActions.toggleParticipantOpen}
+              onClick={openParticipantsTab}
               className={cn(
                 ' flex-1 text-white font-normal bg-transparent   hover:bg-gray-800 cursor-pointer',
                 participantsOpen && ' bg-gray-800/80'
@@ -42,12 +51,16 @@ const Sidebar = () => {
               Participants
             </Button>
           </div>
-          <Button className="w-8 h-8 bg-gray-950/50 hover:bg-gray-950 ">
+          <Button
+            onClick={modalActions.closeChatAndParticipant}
+            className="w-8 h-8 bg-gray-950/50 hover:bg-gray-950 "
+          >
             <X className=" text-white" />
           </Button>
         </div>
 
         <ChatContainer />
+        <ParticipantContainer />
       </div>
     </div>
   );

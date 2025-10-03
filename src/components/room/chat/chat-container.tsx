@@ -1,11 +1,19 @@
 import { Assets } from '@/assets';
 import { Typography } from '@/components/typography';
+import { cn } from '@/lib/utils';
+import { useModalChatOpen } from '@/store/conf/hooks';
 
 import { ChevronRightIcon, SendHorizonal, Smile, Users } from 'lucide-react';
 
 const ChatContainer = () => {
+  const chatOpen = useModalChatOpen();
   return (
-    <div className={'flex flex-col gap-3 w-full flex-1 '}>
+    <div
+      className={cn(
+        'hidden flex-col gap-3 w-full flex-1 overflow-hidden transition-all duration-300 ease-in-out ',
+        chatOpen && 'flex'
+      )}
+    >
       {/* content */}
       <div className=" flex-1 flex justify-center items-center flex-col  gap-2 ">
         <img src={Assets.emptyChat} alt="Emtpy Chat" className=" w-3/5 " />

@@ -6,6 +6,7 @@ export interface ModalSlice {
   participantsOpen: boolean;
   toggleChatOpen: () => void;
   toggleParticipantOpen: () => void;
+  closeChatAndParticipant: () => void;
 }
 
 export const createModalSlice: StateCreator<
@@ -25,6 +26,12 @@ export const createModalSlice: StateCreator<
   toggleParticipantOpen: () =>
     set(state => {
       state.modal.participantsOpen = !state.modal.participantsOpen;
+      state.modal.chatOpen = false;
+      return state;
+    }),
+  closeChatAndParticipant: () =>
+    set(state => {
+      state.modal.participantsOpen = false;
       state.modal.chatOpen = false;
       return state;
     }),
