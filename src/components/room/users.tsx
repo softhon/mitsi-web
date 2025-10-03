@@ -2,13 +2,15 @@
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Users as UsersIcon } from 'lucide-react';
-import { usePeersCount } from '@/store/conf/hooks';
+import { useModalActions, usePeersCount } from '@/store/conf/hooks';
 
 const Users = () => {
   const count = usePeersCount();
+  const modalActions = useModalActions();
+
   return (
     <Button
-      // onClick={() => add()}
+      onClick={modalActions.toggleParticipantOpen}
       variant="ghost"
       size="icon"
       className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"
