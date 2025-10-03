@@ -4,6 +4,7 @@ import type { Layout } from '@/types';
 import { getInitials } from '@/lib/utils';
 import { usePeerMediasById, usePeerOthersById } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface PeerTileProps {
   peerId: string;
@@ -30,11 +31,11 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
 
   return (
     <div
-      className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className="bg-gray-900 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
+      <div className="flex-1 relative bg-gray-800/50 flex items-center justify-center">
         {media?.camera ? (
           <video
             ref={videoRef}
@@ -45,14 +46,12 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
             webkit-playsinline="true"
           />
         ) : (
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold"
-            style={{
-              background: 'linear-gradient(135deg, #667fea 0%, #0d1db2 100%)',
-            }}
-          >
-            {getInitials(peerData.name)}
-          </div>
+          <Avatar className=" w-24 h-24">
+            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+            <AvatarFallback className="text-white text-xl">
+              {getInitials(peerData.name)}
+            </AvatarFallback>
+          </Avatar>
         )}
 
         {/* Mic Status */}
@@ -66,7 +65,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className="bg-gray-700 px-3 py-2 text-white text-sm font-medium truncate">
+      <div className="bg-gray-800/70 px-3 py-2 text-white text-sm font-medium truncate">
         {peerData.name}
       </div>
     </div>

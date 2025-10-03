@@ -9,6 +9,7 @@ import {
   usePeerMe,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface PeerTileProps {
   layout: Layout;
@@ -31,11 +32,11 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   if (!peerMe) return null;
   return (
     <div
-      className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className=" bg-gray-900 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
+      <div className="flex-1 relative bg-gray-800/50 flex items-center justify-center">
         {cameraOn ? (
           <video
             ref={videoRef}
@@ -46,14 +47,12 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
             webkit-playsinline="true"
           />
         ) : (
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold"
-            style={{
-              background: 'linear-gradient(135deg, #667fea 0%, #0d1db2 100%)',
-            }}
-          >
-            {getInitials(peerMe.name)}
-          </div>
+          <Avatar className=" w-24 h-24">
+            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+            <AvatarFallback className="text-white text-xl">
+              {getInitials(peerMe.name)}
+            </AvatarFallback>
+          </Avatar>
         )}
 
         {/* Mic Status */}
@@ -67,7 +66,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className="bg-gray-700 px-3 py-2 text-white text-sm font-medium truncate">
+      <div className="bg-gray-800/70 px-3 py-2 text-white text-sm font-medium truncate">
         {peerMe.name}
       </div>
     </div>
