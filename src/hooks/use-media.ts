@@ -222,7 +222,7 @@ export const useMedia = () => {
         if (stream.getAudioTracks().length) createProducer('screenAudio');
       }
     },
-    [mediaService, roomAccess, createProducer]
+    [mediaService, roomAccess, createProducer, handleDisplayMediaOnEnded]
   );
 
   const getConsumer = useCallback(

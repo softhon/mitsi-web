@@ -4,7 +4,7 @@ import { PaginationControls } from './pagination-controls';
 import { useDimensions } from '@/hooks/use-dimensions';
 import { DEFAULT_GRID_CONFIG } from '@/lib/utils';
 import { useGridCalculator } from '@/hooks/use-grid-calculator';
-import ChatContainer from '../chat/chat-container';
+// import ChatContainer from '../chat/chat-container';
 import { usePeerOthersValues } from '@/store/conf/hooks';
 
 export const ConferenceGrid = () => {
@@ -102,7 +102,7 @@ export const ConferenceGrid = () => {
       {/* Grid Container */}
       <GridContainer peerData={currentPageParticipants} layout={layout} />
 
-      <ChatContainer showChat={false} />
+      {/* <ChatContainer showChat={false} /> */}
     </div>
   );
 };
