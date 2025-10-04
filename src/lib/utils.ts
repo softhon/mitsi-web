@@ -1,6 +1,14 @@
-import type { GridCalculatorConfig, Participant } from '@/types';
+import { types as mediasoupTypes } from 'mediasoup-client';
+
+import type {
+  GridCalculatorConfig,
+  Participant,
+  ProducerSource,
+} from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import config from '@/config';
+import { v4 as uuidv4 } from 'uuid';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,6 +34,11 @@ export const getInitials = (name: string): string => {
     .join('')
     .toUpperCase();
 };
+export const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
+};
 
 export const createParticipant = (name: string): Participant => {
   return {
@@ -34,6 +47,26 @@ export const createParticipant = (name: string): Participant => {
     isMuted: Math.random() > 0.5,
     hasVideo: Math.random() > 0.5,
   };
+};
+
+export const setPeerId = (peerId: string) => {
+  if (config.isDevMode) {
+    sessionStorage.setItem('peerId', peerId);
+    return;
+  }
+  localStorage.setItem('peerId', peerId);
+};
+
+export const getPeerId = () => {
+  let peerId = config.isDevMode
+    ? sessionStorage.getItem('peerId')
+    : localStorage.getItem('peerId');
+  if (!peerId) {
+    const newPeerId = uuidv4();
+    setPeerId(newPeerId);
+    peerId = newPeerId;
+  }
+  return peerId;
 };
 
 export const participantsName = [
@@ -112,3 +145,92 @@ export const generateSampleParticipants = (
     createParticipant(participantsName[i] || `User ${i + 1}`)
   );
 };
+
+export const getSimulcastEncoding = (source: ProducerSource) => {
+  // Simulcast encodings for camera, sharedVideo and screen sharing
+  const encodings: mediasoupTypes.RtpEncodingParameters[] =
+    source === 'screen'
+      ? [
+          {
+            rid: 'r0',
+            maxBitrate: 200000,
+            scaleResolutionDownBy: 8.0, // ~240x135 for 1080p, ~180x90 for 720p
+            maxFramerate: 10,
+            priority: 'low', // Explicitly use literal type
+            networkPriority: 'low',
+          },
+          {
+            rid: 'r1',
+            maxBitrate: 600000,
+            scaleResolutionDownBy: 2.0, // ~960x540 for 1080p, ~640x360 for 720p
+            maxFramerate: 20,
+            priority: 'medium',
+            networkPriority: 'medium',
+          },
+          {
+            rid: 'r2',
+            maxBitrate: 2000000,
+            scaleResolutionDownBy: 1.0, // 1920x1080 or 1280x720
+            maxFramerate: 30,
+            priority: 'high',
+            networkPriority: 'high',
+          },
+        ]
+      : [
+          {
+            rid: 'r0',
+            maxBitrate: 150000,
+            scaleResolutionDownBy: 4.0, // ~480x270 for 1080p, ~360x180 for 720p
+            maxFramerate: 15,
+            priority: 'low',
+            networkPriority: 'low',
+          },
+          {
+            rid: 'r1',
+            maxBitrate: 600000,
+            scaleResolutionDownBy: 2.0, // ~960x540 for 1080p, ~640x360 for 720p
+            maxFramerate: 24,
+            priority: 'medium',
+            networkPriority: 'medium',
+          },
+          {
+            rid: 'r2',
+            maxBitrate: 1800000,
+            scaleResolutionDownBy: 1.0, // 1920x1080 or 1280x720
+            maxFramerate: 30,
+            priority: 'high',
+            networkPriority: 'high',
+          },
+        ];
+
+  return encodings;
+};
+
+export const videoConstraints = (deviceId: string) => ({
+  video: {
+    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    height: {
+      ideal: 480, // Moderate resolution (480p)
+      max: 720, // Cap at 720p to limit data
+      min: 240, // Minimum fallback
+    },
+    width: {
+      ideal: 854, // Matches 480p aspect ratio (16:9)
+      max: 1280, // Cap at 720p width
+      min: 320, // Minimum fallback
+    },
+    frameRate: {
+      ideal: 24, // Smooth motion with lower data than 30fps
+      max: 30, // Reasonable upper limit
+      min: 15, // Minimum for basic fluidity
+    },
+  },
+});
+
+export const audioContraints = (deviceId: string) => ({
+  audio: {
+    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    echoCancellation: { ideal: true },
+    noiseSuppression: { ideal: true },
+  },
+});
