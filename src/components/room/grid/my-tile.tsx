@@ -32,11 +32,11 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   if (!peerMe) return null;
   return (
     <div
-      className=" bg-gray-900 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className=" bg-gradient-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative bg-gray-800/50 flex items-center justify-center">
+      <div className="flex-1 relative  flex items-center justify-center">
         {cameraOn ? (
           <video
             ref={videoRef}
@@ -66,7 +66,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className="bg-gray-800/70 px-3 py-2 text-white text-sm font-medium truncate">
+      <div className=" px-3 py-2 text-white text-sm font-medium truncate">
         {peerMe.name}
       </div>
     </div>

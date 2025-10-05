@@ -10,8 +10,8 @@ import Screen from './screen';
 
 const ControlBar = () => {
   return (
-    <div className="p-2 bg-gray-900/10 backdrop-blur-sm  ">
-      <div className="flex items-center justify-between max-w-4xl mx-auto">
+    <div className="p-2  backdrop-blur-sm  ">
+      <div className="flex items-center justify-center md:justify-between gap-2 max-w-4xl mx-auto">
         {/* Left Controls */}
         <div className="flex items-center gap-2">
           {/* Microphone */}
@@ -25,7 +25,7 @@ const ControlBar = () => {
         </div>
 
         {/* Center Controls */}
-        <div className="flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <Hand />
           <Emoji />
           {/* Leave Call */}
@@ -33,7 +33,7 @@ const ControlBar = () => {
         </div>
 
         {/* Right Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ">
           <Chat />
           <Users />
           <Menu />

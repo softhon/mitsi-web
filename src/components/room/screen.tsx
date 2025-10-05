@@ -15,7 +15,7 @@ const Screen = () => {
       variant="ghost"
       size="icon"
       className={cn(
-        'w-12 h-12 rounded-xl transition-all duration-200',
+        'w-12 h-12 rounded-xl transition-all duration-200  hidden md:flex',
         screenOn
           ? 'bg-blue-600 hover:bg-blue-700 text-white'
           : 'bg-gray-700 hover:bg-gray-600 text-white'
