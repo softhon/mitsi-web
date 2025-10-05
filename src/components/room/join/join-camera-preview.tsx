@@ -20,7 +20,7 @@ const CameraPreview = () => {
 
   return (
     <div className="relative">
-      <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl overflow-hidden border border-gray-600/50 shadow-2xl relative">
+      <div className="aspect-video bg-gradient-to-br from-white/5 to-white/2 rounded-2xl overflow-hidden border border-gray-600/50 shadow-2xl relative">
         {/* Ambient lighting effect */}
         <div className="absolute inset-0 bg-gradient-radial from-blue-500/5 via-transparent to-purple-500/3 animate-pulse delay-3000" />
 

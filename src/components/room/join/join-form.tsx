@@ -90,7 +90,7 @@ const JoinForm = () => {
                   type="text"
                   placeholder="Enter name"
                   // onKeyUp={handleKeyPress}
-                  className="w-full h-11 px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full h-11 px-4 py-3 bg-gray-800/50  border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 />
               </FormControl>
               <FormMessage />

@@ -10,7 +10,9 @@ const Chat = () => {
       onClick={modalActions.toggleChatOpen}
       variant="ghost"
       size="icon"
-      className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"
+      className="w-12 h-12 rounded-xl  text-white relative
+      bg-gradient-to-br from-white/15 to-white/1  backdrop-blur-xl
+      "
     >
       <MessageSquare className="w-5 h-5" />
       {/* Chat notification */}

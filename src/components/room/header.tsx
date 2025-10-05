@@ -3,7 +3,7 @@ import { Badge } from '../ui/badge';
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-gray-900/95 backdrop-blur-sm top-0 left-0 right-0 z-20">
+    <div className="flex items-center justify-between px-4 py-2  top-0 left-0 right-0 z-20">
       {/* Left side - Meeting info */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
