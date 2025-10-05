@@ -8,6 +8,7 @@ import Header from '@/components/room/join/join-header';
 import CameraPreview from '@/components/room/join/join-camera-preview';
 import Controls from '../../components/room/join/join-controls';
 import { useRoom } from '@/hooks/use-room';
+import DynamicBg from '@/components/dynamic-bg';
 
 const JoinRoom: React.FC = () => {
   const { signalingService } = useSignaling();
@@ -32,9 +33,10 @@ const JoinRoom: React.FC = () => {
   if (!roomData || !signalingService) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
+    <div className="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center p-4">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(120,119,198,0.1)_0%,transparent_50%)]" />
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(120,119,198,0.1)_0%,transparent_50%)]" /> */}
+      <DynamicBg />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto space-y-8">
         {/* Header */}
