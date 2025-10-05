@@ -13,12 +13,12 @@ const Users = () => {
       onClick={modalActions.toggleParticipantOpen}
       variant="ghost"
       size="icon"
-      className="w-12 h-12 rounded-xl bg-gray-700 hover:bg-gray-600 text-white relative"
+      className="w-12 h-12 rounded-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-xl text-white relative"
     >
       <UsersIcon className="w-5 h-5" />
       <Badge
         variant="secondary"
-        className="absolute -top-2 -right-2 w-6 h-6 text-xs bg-gray-600 text-white border-gray-500"
+        className="absolute -top-2 -right-2 w-6 h-6 text-xs  text-white border-gray-500"
       >
         {count}
       </Badge>

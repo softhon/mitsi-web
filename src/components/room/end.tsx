@@ -18,7 +18,7 @@ const End = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="w-8 h-8 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300"
+        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
       >
         <MoreVertical className="w-4 h-4" />
       </Button>

@@ -12,10 +12,10 @@ const Hand = () => {
       variant="ghost"
       size="icon"
       className={cn(
-        'w-12 h-12 rounded-xl transition-all duration-200',
+        'w-12 h-12 rounded-xl transition-all duration-200 bg-gradient-to-br text-white',
         isHandRaised
-          ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
-          : 'bg-gray-700 hover:bg-gray-600 text-white'
+          ? 'bg-yellow-600 hover:bg-yellow-700 '
+          : ' from-white/15 to-white/1  backdrop-blur-xl'
       )}
     >
       <HandIcon className="w-5 h-5" />
