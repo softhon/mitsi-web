@@ -25,18 +25,18 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        `bg-gray-800/50 w-0 shrink-0 transition-all duration-300 ease-in-out overflow-hidden  rounded-xl`,
+        `bg-gradient-to-br from-white/5  to-white/2  w-0 shrink-0 transition-all duration-300 ease-in-out overflow-hidden  rounded-xl`,
         (chatOpen || participantsOpen) && 'w-full max-w-[400px]'
       )}
     >
       <div className="flex flex-col gap-3  w-full h-full  p-3">
         <div className="flex flex-row items-center gap-x-3">
-          <div className=" flex flex-1 gap-1 rounded-xl bg-black/50 p-1 ">
+          <div className=" flex flex-1 gap-1 rounded-xl bg-black/70 p-1 ">
             <Button
               onClick={openChatTab}
               className={cn(
                 ' flex-1 text-white font-normal bg-transparent   hover:bg-gray-800 cursor-pointer',
-                chatOpen && ' bg-gray-800/80'
+                chatOpen && ' bg-gray-800/90'
               )}
             >
               Chat
@@ -45,7 +45,7 @@ const Sidebar = () => {
               onClick={openParticipantsTab}
               className={cn(
                 ' flex-1 text-white font-normal bg-transparent   hover:bg-gray-800 cursor-pointer',
-                participantsOpen && ' bg-gray-800/80'
+                participantsOpen && ' bg-gray-800/90'
               )}
             >
               Participants
