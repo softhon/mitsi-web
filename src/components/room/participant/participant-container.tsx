@@ -1,10 +1,15 @@
 import { cn } from '@/lib/utils';
-import { useModalParticipantsOpen } from '@/store/conf/hooks';
+import {
+  useModalParticipantsOpen,
+  usePeerOthersKeys,
+} from '@/store/conf/hooks';
 import { Search } from 'lucide-react';
 import ParticipantItem from './participant-item';
+import MyParticipantItem from './my-participant-item';
 
 const ParticipantContainer = () => {
   const participantsOpen = useModalParticipantsOpen();
+  const peerOtherIds = usePeerOthersKeys();
 
   return (
     <div
@@ -20,7 +25,12 @@ const ParticipantContainer = () => {
           placeholder="Search for a participant..."
         />
       </div>
-      <ParticipantItem />
+      <div className=" flex flex-col gap-3 overflow-y-auto h-full  ">
+        <MyParticipantItem />
+        {peerOtherIds.map(id => (
+          <ParticipantItem key={id} peerId={id} />
+        ))}
+      </div>
     </div>
   );
 };
