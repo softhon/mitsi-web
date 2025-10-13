@@ -49,14 +49,14 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
         ) : (
           <Avatar className=" w-24 h-24">
             {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="text-white text-xl">
+            <AvatarFallback className="text-white text-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-x">
               {getInitials(peerMe.name)}
             </AvatarFallback>
           </Avatar>
         )}
 
         {/* Mic Status */}
-        <div className="absolute top-2 right-2 p-1 rounded-full bg-black/50">
+        <div className="absolute top-2 right-2 z-10  p-1 rounded-full bg-black/50">
           {micOn ? (
             <Mic className="w-4 h-4 text-green-400" />
           ) : (
@@ -66,7 +66,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className=" px-3 py-2 text-white text-sm font-medium truncate">
+      <div className="absolute bottom-0 z-10 px-3 py-2 text-white text-sm font-medium truncate">
         {peerMe.name}
       </div>
     </div>

@@ -7,18 +7,18 @@ const Header = () => {
       {/* Left side - Meeting info */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center">
-            <Loader2 className="w-3 h-3 text-white animate-spin" />
-          </div>
-          <span className="text-white font-medium">Mitsi</span>
+          {/* <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center"> */}
+          <Loader2 className="w-3 h-3 text-white " />
+          {/* </div>  */}
+          {/* <span className="text-white font-medium">Mitsi</span> */}
         </div>
       </div>
 
       {/* Right side - Recording indicator */}
-      <div className="flex items-center gap-2">
-        <Badge variant="destructive" className="bg-red-600 hover:bg-red-700">
-          <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />
-          REC
+      <div className="flex items-center ">
+        <Badge className="bg-red-600 hover:bg-red-700 text-white ">
+          <div className="w-2 h-2 bg-white rounded-full mr-1 animate-pulse" />
+          <span className=" text-xs">REC</span>
         </Badge>
       </div>
     </div>
