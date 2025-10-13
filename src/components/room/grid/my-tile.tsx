@@ -49,7 +49,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
         ) : (
           <Avatar className=" w-24 h-24">
             {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="text-white text-xl">
+            <AvatarFallback className="text-white text-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-x">
               {getInitials(peerMe.name)}
             </AvatarFallback>
           </Avatar>
