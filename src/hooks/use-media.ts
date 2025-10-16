@@ -225,6 +225,20 @@ export const useMedia = () => {
     [mediaService, roomAccess, createProducer, handleDisplayMediaOnEnded]
   );
 
+  const switchDevice = useCallback(
+    async (source: ProducerSource, deviceId: string) => {
+      if (!mediaService) throw new Error('MediaService not initialized');
+      await mediaService.switchDevice(source, deviceId);
+
+      if (source === 'mic') {
+        micActions.setDeviceId(deviceId);
+      } else {
+        cameraActions.setDeviceId(deviceId);
+      }
+    },
+    [cameraActions, micActions, mediaService]
+  );
+
   const getConsumer = useCallback(
     (producerPeerId: string, source: ProducerSource) => {
       if (!mediaService) throw new Error('MediaService not initialized');
@@ -402,6 +416,7 @@ export const useMedia = () => {
     stopUserMedia,
     startDisplayMedia,
     stopDisplayMedia,
+    switchDevice,
     getConsumer,
     setTrack,
     getTrack,
