@@ -81,6 +81,7 @@ class MediaService {
     this.setTrack(stream.getTracks()[0], mediaSource);
     return;
   }
+
   async stopUserMedia(mediaSource: 'mic' | 'camera') {
     const mediaTrack = this.getTrack(mediaSource);
     if (!mediaTrack) return;
@@ -111,6 +112,24 @@ class MediaService {
     if (screenAudioTrack && screenAudioTrack.enabled) screenAudioTrack.stop();
     this.setTrack(null, 'screen');
     this.setTrack(null, 'screenAudio');
+  }
+
+  async switchDevice(source: ProducerSource, deviceId: string) {
+    const track = this.getTrack(source);
+
+    if (track && track.enabled) {
+      track.stop();
+    }
+    const constraints =
+      source === 'mic' ? audioContraints(deviceId) : videoConstraints(deviceId);
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    const newTrack = stream.getTracks()[0];
+    this.setTrack(newTrack, source);
+
+    if (this.hasProducer(source)) {
+      await this.replaceProducerTrack(newTrack, source);
+    }
   }
 
   async reloadDevice() {

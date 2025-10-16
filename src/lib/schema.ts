@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const producerSource = z.enum(['mic', 'camera', 'screen']);
+const producerSource = z.enum(['mic', 'camera', 'screen', 'screenAudio']);
 const mediaKind = z.enum(['audio', 'video']);
 
 export const ValidationSchema = {

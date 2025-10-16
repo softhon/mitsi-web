@@ -12,15 +12,11 @@ const CallToAction = () => {
         </h2>
 
         <p className="text-xl text-slate-400 mb-16 font-light max-w-2xl mx-auto leading-relaxed">
-          Join forward-thinking organizations using Mitsi to transform their
-          communication.
+          Get started with Mitsi today and transform the way your meetings
         </p>
 
         <div className="space-y-8">
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-16 py-8 text-xl font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
-          >
+          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-16 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300">
             Get Started
             <ArrowRight className="w-6 h-6 ml-4" />
           </Button>

@@ -13,7 +13,7 @@ import {
   DropdownMenuRadioItem,
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
-import { useCameraActions, useMicActions } from '@/store/conf/hooks';
+import { useMedia } from '@/hooks/use-media';
 
 const MediaDeviceDropdown = ({
   devices,
@@ -24,17 +24,13 @@ const MediaDeviceDropdown = ({
   selectedDeviceId: string | null;
   source: 'mic' | 'camera';
 }) => {
-  const micActions = useMicActions();
-  const cameraActions = useCameraActions();
+  const { switchDevice } = useMedia();
+
   const handleValueChange = React.useCallback(
     (value: string) => {
-      if (source === 'mic') {
-        micActions.setDeviceId(value);
-      } else {
-        cameraActions.setDeviceId(value);
-      }
+      switchDevice(source, value);
     },
-    [micActions, cameraActions, source]
+    [switchDevice, source]
   );
 
   return (

@@ -22,10 +22,10 @@ const Hero = () => {
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-400 max-w-4xl mx-auto leading-relaxed font-extralight tracking-wide">
-              An open source video conferencing that feels like being in the
-              same room.
+              An open source video conferencing platform for impactful
+              conversations.
               <br className="hidden md:block" />
-              Built for teams who demand perfection.
+              Built for teams that demand perfection.
             </p>
           </div>
 

@@ -18,10 +18,11 @@ const MediaControlButton: React.FC<MediaControlButtonProps> = ({
     variant="ghost"
     size="icon"
     className={cn(
-      'w-12 h-12 rounded-xl transition-all duration-200 cursor-pointer',
+      'w-12 h-12 rounded-xl transition-all duration-200 cursor-pointer text-white bg-gradient-to-br',
       isActive
-        ? 'bg-white/10 hover:bg-white/20 text-white'
-        : 'bg-red-500/90 hover:bg-red-500 text-white',
+        ? 'bg-red-500/90 hover:bg-red-500 '
+        : 'from-white/15 to-white/1  backdrop-blur-xl',
+
       className
     )}
   >
