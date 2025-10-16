@@ -29,7 +29,7 @@ const Navbar = () => {
               href="#features"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
-              Docs
+              Documentations
             </a>
             <a
               href="#technology"
