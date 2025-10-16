@@ -46,7 +46,11 @@ const ScreenView = () => {
 
   if (!peerId) return null;
   return (
-    <div className={cn('relative  bg-gray-800/50  rounded-2xl w-5/6 ')}>
+    <div
+      className={cn(
+        'relative  bg-gray-800/50  rounded-2xl w-5/6 overflow-hidden'
+      )}
+    >
       <div className=" cursor-pointer absolute h-fit bg-black/30 hover:bg-black/50 right-2 top-2 rounded-md p-2 ">
         <Maximize2 size={16} />
       </div>
@@ -68,7 +72,7 @@ const ScreenView = () => {
         {/* Mic Status */}
       </div>
 
-      <div className="bg-black/30 flex flex-row items-center gap-2 z-20 w-fit -mt-8 ml-2 rounded-md px-2 py-1 text-sm">
+      <div className="bg-black/30 absolute  flex flex-row items-center gap-2 z-20 w-fit -mt-8 ml-2 rounded-md px-2 py-1 text-sm">
         <MonitorUp size={16} /> <span> {`${peerMe?.name} is presenting`}</span>
       </div>
     </div>

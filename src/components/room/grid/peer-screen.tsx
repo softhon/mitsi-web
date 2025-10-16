@@ -25,7 +25,7 @@ const PeerScreen = () => {
   return (
     <div className=" bg-gray-700 rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out">
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative bg-gray-800 flex items-center justify-center">
+      <div className="flex-1 relative bg-gray-800 flex items-center justify-center rounded-lg">
         <video
           ref={videoRef}
           className="w-full h-full object-cover relative z-10"
