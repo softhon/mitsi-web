@@ -2,6 +2,8 @@
 
 Welcome to **Mitsi**, a modern, open-source video conferencing platform powered by [mediasoup](https://mediasoup.org). Inspired by Jitsi, Mitsi delivers low-latency, scalable video and audio calls, screen sharing, and real-time chat using WebRTC. Built with a microservices architecture, Mitsi is designed for extensibility, ease of deployment, and community contributions.
 
+![mitsi-ui](https://github.com/user-attachments/assets/24301c2b-4968-47c6-9256-ae7a0af4922f)
+
 ## Why Mitsi?
 
 - **Scalable**: Leverages mediasoup’s Selective Forwarding Unit (SFU) for efficient media routing.
