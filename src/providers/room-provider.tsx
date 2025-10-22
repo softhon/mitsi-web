@@ -15,6 +15,30 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { joinRoom, leaveRoom, actionHandlers } = useRoom();
 
   useEffect(() => {
+    if (!signalingService) return;
+    if (roomAccess !== Access.Allowed) return;
+
+    const connection = signalingService.getConnection();
+
+    connection.on('disconnect', () => {
+      console.log('Disconnected from signaling server');
+      if (connection.active) {
+        // Attempt to reconnect
+        console.log('Attempting to reconnect to signaling server...');
+      } else {
+        console.log('Connection is not active. Will not attempt to reconnect.');
+      }
+    });
+
+    connection.io.on('reconnect', () => {
+      console.log('Reconnected to signaling server');
+    });
+    return () => {
+      // Cleanup on unmount
+    };
+  }, [signalingService, roomAccess]);
+
+  useEffect(() => {
     if (!signalingService || !mediaService) return;
 
     signalingService
