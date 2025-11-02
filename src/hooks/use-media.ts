@@ -163,6 +163,21 @@ export const useMedia = () => {
     });
   }, [mediaService, signalingService]);
 
+  const closeAllProducers = useCallback(() => {
+    if (!mediaService) throw new Error('MediaService not initialized');
+    mediaService.closeAllProducers();
+  }, [mediaService]);
+
+  const closeAllConsumers = useCallback(() => {
+    if (!mediaService) throw new Error('MediaService not initialized');
+    mediaService.closeAllConsumers();
+  }, [mediaService]);
+
+  const closeAllTransports = useCallback(() => {
+    if (!mediaService) throw new Error('MediaService not initialized');
+    mediaService.closeAllTransports();
+  }, [mediaService]);
+
   const getUserMedia = useCallback(
     async (constraints: MediaStreamConstraints) => {
       if (!mediaService) throw new Error('MediaService not initialized');
@@ -410,6 +425,9 @@ export const useMedia = () => {
     resumeConsumer,
     closeConsumer,
     createWebRtcConnections,
+    closeAllProducers,
+    closeAllConsumers,
+    closeAllTransports,
     getUserMedia,
     getDisplayMedia,
     startUserMedia,

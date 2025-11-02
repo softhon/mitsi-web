@@ -5,12 +5,16 @@ import type { StateCreator } from 'zustand';
 export interface RoomSlice {
   data: RoomData | null;
   access: Access;
+  reconnecting: boolean;
+  disconnected: boolean;
   gridDimensions: Dimensions;
   maxPeerPerPage: number;
   setData: (data: RoomData) => void;
   setAccess: (access: Access) => void;
   setGridDimensions: (dimensions: Dimensions) => void;
   setMaxPeerPerPage: (num: number) => void;
+  setReconnecting: (reconnecting: boolean) => void;
+  setDisconnected: (disconnected: boolean) => void;
 }
 
 export const createRoomSlice: StateCreator<
@@ -21,6 +25,8 @@ export const createRoomSlice: StateCreator<
 > = set => ({
   data: null,
   access: Access.Visiting,
+  reconnecting: false,
+  disconnected: false,
   maxPeerPerPage: 12,
   gridDimensions: {
     width: 0,
@@ -44,6 +50,16 @@ export const createRoomSlice: StateCreator<
   setMaxPeerPerPage: num =>
     set(state => {
       state.room.maxPeerPerPage = num;
+      return state;
+    }),
+  setReconnecting: reconnecting =>
+    set(state => {
+      state.room.reconnecting = reconnecting;
+      return state;
+    }),
+  setDisconnected: disconnected =>
+    set(state => {
+      state.room.disconnected = disconnected;
       return state;
     }),
 });

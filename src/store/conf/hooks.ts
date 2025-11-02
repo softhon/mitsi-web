@@ -108,11 +108,19 @@ export const usePeerActions = () =>
 // ============================================================================
 export const useRoomData = () => useConfStore(state => state.room.data);
 export const useRoomAccess = () => useConfStore(state => state.room.access);
+export const useRoomReconnecting = () =>
+  useConfStore(state => state.room.reconnecting);
+export const useRoomDisconnected = () =>
+  useConfStore(state => state.room.disconnected);
 export const useRoomActions = () =>
   useMemo(
     () => ({
       setData: useConfStore.getState().room.setData,
       setAccess: useConfStore.getState().room.setAccess,
+      setReconnecting: useConfStore.getState().room.setReconnecting,
+      setDisconnected: useConfStore.getState().room.setDisconnected,
+      setGridDimensions: useConfStore.getState().room.setGridDimensions,
+      setMaxPeerPerPage: useConfStore.getState().room.setMaxPeerPerPage,
     }),
     []
   );
