@@ -2,41 +2,25 @@ import { useMedia } from '@/hooks/use-media';
 import { useRoom } from '@/hooks/use-room';
 import { useSignaling } from '@/hooks/use-signaling';
 import { HEARTBEAT_INTERVAL } from '@/lib/constants';
-import { useRoomAccess } from '@/store/conf/hooks';
+import { useRoomAccess, useRoomActions } from '@/store/conf/hooks';
 import { Access, type AckCallbackData, type MessageData } from '@/types';
 import { Actions } from '@/types/actions';
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { signalingService, sendHeartBeat } = useSignaling();
-  const { mediaService, createWebRtcConnections } = useMedia();
+  const {
+    mediaService,
+    createWebRtcConnections,
+    closeAllConsumers,
+    closeAllTransports,
+    closeAllProducers,
+  } = useMedia();
   const heartBeatIntervalRef = useRef<NodeJS.Timeout>(null);
   const roomAccess = useRoomAccess();
+  const roomActions = useRoomActions();
+  const [rejoining, setrejoining] = useState(false);
   const { joinRoom, leaveRoom, actionHandlers } = useRoom();
-
-  useEffect(() => {
-    if (!signalingService) return;
-    if (roomAccess !== Access.Allowed) return;
-
-    const connection = signalingService.getConnection();
-
-    connection.on('disconnect', () => {
-      console.log('Disconnected from signaling server');
-      if (connection.active) {
-        // Attempt to reconnect
-        console.log('Attempting to reconnect to signaling server...');
-      } else {
-        console.log('Connection is not active. Will not attempt to reconnect.');
-      }
-    });
-
-    connection.io.on('reconnect', () => {
-      console.log('Reconnected to signaling server');
-    });
-    return () => {
-      // Cleanup on unmount
-    };
-  }, [signalingService, roomAccess]);
 
   useEffect(() => {
     if (!signalingService || !mediaService) return;
@@ -82,6 +66,58 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
         clearInterval(heartBeatIntervalRef.current);
     };
   }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat, leaveRoom]);
+
+  useEffect(() => {
+    if (roomAccess !== Access.Allowed) return;
+    if (!rejoining) return;
+    (async () => {
+      closeAllProducers();
+      closeAllConsumers();
+      closeAllTransports();
+
+      await joinRoom(rejoining);
+      await createWebRtcConnections();
+
+      setrejoining(false);
+    })().catch(err => console.log(err));
+  }, [
+    rejoining,
+    roomAccess,
+    joinRoom,
+    leaveRoom,
+    createWebRtcConnections,
+    closeAllConsumers,
+    closeAllTransports,
+    closeAllProducers,
+  ]);
+
+  useEffect(() => {
+    if (!signalingService) return;
+    if (roomAccess !== Access.Allowed) return;
+
+    const connection = signalingService.getConnection();
+
+    connection.on('disconnect', () => {
+      console.log('Disconnected from signaling server');
+      if (connection.active) {
+        // Attempt to reconnect
+        console.log('Attempting to reconnect to signaling server...');
+        roomActions.setReconnecting(true);
+      } else {
+        console.log('Connection is not active. Will not attempt to reconnect.');
+        roomActions.setDisconnected(true);
+      }
+    });
+
+    connection.io.on('reconnect', () => {
+      console.log('Reconnected to signaling server');
+      roomActions.setReconnecting(false);
+      setrejoining(true);
+    });
+    return () => {
+      // Cleanup on unmount
+    };
+  }, [signalingService, roomAccess, roomActions]);
 
   return <div>{children}</div>;
 };

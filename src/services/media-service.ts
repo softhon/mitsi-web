@@ -302,7 +302,7 @@ class MediaService {
     });
   }
 
-  async closeAllProducers() {
+  closeAllProducers() {
     for (const producer of this.producers.values()) {
       producer.close();
     }
@@ -496,11 +496,15 @@ class MediaService {
     sendTransport.on('connectionstatechange', state => {
       switch (state) {
         case 'connecting':
+          console.log('sendTransport connecting connectionstatechange');
           break;
         case 'connected':
+          console.log('sendTransport connected connectionstatechange');
           break;
         case 'disconnected':
         case 'failed':
+          console.log(' sendTransport Ice disconneted/failed', state);
+
           this.restartICE(sendTransport);
           break;
         default:
@@ -530,8 +534,15 @@ class MediaService {
 
     recvTransport.on('connectionstatechange', state => {
       switch (state) {
+        case 'connecting':
+          console.log('recvTransport connecting connectionstatechange');
+          break;
+        case 'connected':
+          console.log('recvTransport connected connectionstatechange');
+          break;
         case 'disconnected':
         case 'failed':
+          console.log(' recvTransport Ice disconneted/failed', state);
           this.restartICE(recvTransport);
           break;
         default:
@@ -553,7 +564,7 @@ class MediaService {
     await transport.restartIce({ iceParameters: response.iceParameters });
   }
 
-  async closeAllTransports() {
+  closeAllTransports() {
     if (this.sendTransport) {
       this.sendTransport.close();
       this.sendTransport = null;
