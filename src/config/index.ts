@@ -1,10 +1,23 @@
 const env = import.meta.env;
+const isDevMode = env.DEV;
+
+const getConfigValue = (key: string, fallback?: string): string => {
+  // if (isDevMode) {
+  //   return env[`VITE_REACT_APP_${key}`] || fallback || '';
+  // }
+  console.log('window.APP_CONFIG => ', window.APP_CONFIG);
+
+  return (
+    env[`VITE_REACT_APP_${key}`] || window.APP_CONFIG?.[key] || fallback || ''
+  );
+  // return window.APP_CONFIG?.[key] || fallback || '';
+};
 
 const config = {
-  signalingServer: env.VITE_REACT_APP_SIGNALING_SERVER,
-  apiServer: env.VITE_REACT_APP_API_SERVER,
-  apiKey: env.VITE_REACT_APP_API_KEY,
-  isDevMode: env.DEV,
+  signalingServer: getConfigValue('SIGNALING_SERVER'),
+  apiServer: getConfigValue('API_SERVER'),
+  apiKey: getConfigValue('API_KEY'),
+  isDevMode,
   media: {
     simulcastEnabled: true,
     svcEnabled: false,
