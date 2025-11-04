@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 cat > /usr/share/nginx/html/config.js << EOF
 window.APP_CONFIG = {
@@ -8,5 +9,7 @@ window.APP_CONFIG = {
 };
 EOF
 
-nginx -g "daemon off;"
+echo "Config generated:"
+cat /usr/share/nginx/html/config.js
 
+exec nginx -g "daemon off;"
