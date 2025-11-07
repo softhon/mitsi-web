@@ -1,7 +1,14 @@
+import uniqid from 'uniqid';
 import { Github, Video } from 'lucide-react';
 import { Button } from '../ui/button';
-
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
+  const navigate = useNavigate();
+  const roomId = uniqid.time();
+  const openJoinPage = useCallback(() => {
+    navigate(roomId);
+  }, [roomId, navigate]);
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
@@ -55,7 +62,10 @@ const Navbar = () => {
                 Source
               </Button>
             </a>
-            <Button className="bg-gradient-to-r text-white from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-xl">
+            <Button
+              onClick={openJoinPage}
+              className="bg-linear-to-r text-white from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-xl"
+            >
               Get Started
             </Button>
           </div>

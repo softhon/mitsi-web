@@ -1,10 +1,17 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { Button } from '../ui/button';
 import { ArrowRight, Play } from 'lucide-react';
+import uniqid from 'uniqid';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
   const heroRef = useRef(null);
+  const navigate = useNavigate();
+  const roomId = uniqid.time();
 
+  const openJoinPage = useCallback(() => {
+    navigate(roomId);
+  }, [roomId, navigate]);
   return (
     <section
       ref={heroRef}
@@ -33,7 +40,8 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-12">
             <Button
               size="lg"
-              className="group bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-12 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+              className="group bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-12 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+              onClick={openJoinPage}
             >
               <Play className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
               Experience Mitsi

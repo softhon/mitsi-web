@@ -57,7 +57,7 @@ export interface User {
   color?: string;
 }
 export interface RoomData {
-  id: string;
+  // id: string;
   roomId: string;
   name: string;
 }
