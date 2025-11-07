@@ -1,8 +1,9 @@
 import uniqid from 'uniqid';
-import { Github, Video } from 'lucide-react';
+import { Github } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Assets } from '@/assets';
 const Navbar = () => {
   const navigate = useNavigate();
   const roomId = uniqid.time();
@@ -21,9 +22,8 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-xl rounded-xl flex items-center justify-center shadow-lg">
-                <Video className="w-6 h-6 text-white" />
-              </div>
+              <img src={Assets.logo} className="w-8 h-8" alt="Logo" />
+
               {/* <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse" /> */}
             </div>
             <div>
