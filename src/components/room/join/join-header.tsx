@@ -1,50 +1,53 @@
 import { usePeerOthersValues, useRoomData } from '@/store/conf/hooks';
-import { Info, Loader2 } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { Assets } from '@/assets';
+import { useCopyToClipboard } from '@/hooks/use-copy';
+import { BASE_URL } from '@/lib/constants';
 
 const Header = () => {
   const roomData = useRoomData();
   const peerOthersList = usePeerOthersValues();
+  const { copied, copy } = useCopyToClipboard();
 
   return (
     <div className="text-center space-y-4">
       {/* Enhanced Loading Spinner Icon */}
-      <div className="flex justify-center">
-        <div className="relative">
-          {/* Outer pulsing ring */}
-          <div className="absolute -inset-4 w-20 h-20 border border-blue-500/10 rounded-full animate-pulse delay-1000" />
-          <div className="absolute -inset-2 w-16 h-16 border border-blue-500/20 rounded-full animate-pulse delay-500" />
 
-          {/* Main spinner container */}
-          <div className="w-12 h-12 rounded-full border-2 border-blue-500/30 relative">
-            <div className="w-8 h-8 bg-blue-500 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center shadow-lg">
-              <Loader2 className="w-4 h-4 text-white animate-spin" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <img src={Assets.logo} className="w-14 h-14 mx-auto" alt="Logo" />
 
       <div className="space-y-2 relative">
-        <div className="flex justify-center">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white">
-            {roomData?.roomId}
-          </h1>
-          <Tooltip>
-            <TooltipTrigger>
-              <sup>
-                <Info size={18} />
-              </sup>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Meeting Id, Click to copy invitation</p>
-            </TooltipContent>
-          </Tooltip>
-        </div>
+        {roomData?.roomId && (
+          <div className="flex justify-center">
+            <h1
+              onClick={() => copy(`${BASE_URL}/${roomData.roomId}`)}
+              className="text-2xl md:text-3xl lg:text-4xl font-semibold text-white cursor-pointer"
+            >
+              {roomData.roomId}
+            </h1>
+            <Tooltip>
+              <TooltipTrigger>
+                <sup className=" cursor-pointer">
+                  {copied ? (
+                    <Badge className=" bg-green-700/30 text-white">
+                      Copied
+                    </Badge>
+                  ) : (
+                    <Info size={18} />
+                  )}
+                </sup>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Meeting Invite, Click to copy</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+        )}
         <div className="text-gray-400 md:text-lg relative">
           Setup your audio and video before joining
         </div>
