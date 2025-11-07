@@ -2,6 +2,7 @@ import { useMedia } from '@/hooks/use-media';
 import { useRoom } from '@/hooks/use-room';
 import { useSignaling } from '@/hooks/use-signaling';
 import { HEARTBEAT_INTERVAL } from '@/lib/constants';
+import { useToastActions } from '@/packages/toast';
 import { useRoomAccess, useRoomActions } from '@/store/conf/hooks';
 import { Access, type AckCallbackData, type MessageData } from '@/types';
 import { Actions } from '@/types/actions';
@@ -9,6 +10,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { signalingService, sendHeartBeat } = useSignaling();
+  const toastActions = useToastActions();
   const {
     mediaService,
     createWebRtcConnections,
@@ -96,11 +98,12 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     if (roomAccess !== Access.Allowed) return;
 
     const connection = signalingService.getConnection();
-
+    // TODO - NEXT LINE OF ACTIONS
     connection.on('disconnect', () => {
       console.log('Disconnected from signaling server');
       if (connection.active) {
         // Attempt to reconnect
+        toastActions.error('Reconnecting');
         console.log('Attempting to reconnect to signaling server...');
         roomActions.setReconnecting(true);
       } else {
