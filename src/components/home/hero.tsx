@@ -23,7 +23,7 @@ const Hero = () => {
           <div className="space-y-6">
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-extralight tracking-tighter leading-none">
               <span className="block text-white/90">The future of</span>
-              <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent font-light">
+              <span className="block bg-linear-to-r from-blue-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent font-light">
                 meetings
               </span>
             </h1>
@@ -40,7 +40,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-12">
             <Button
               size="lg"
-              className="group bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-12 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+              className=" cursor-pointer group bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-0 px-12 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
               onClick={openJoinPage}
             >
               <Play className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />

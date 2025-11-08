@@ -64,9 +64,9 @@ const Navbar = () => {
             </a>
             <Button
               onClick={openJoinPage}
-              className="bg-linear-to-r text-white from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-xl"
+              className=" cursor-pointer bg-linear-to-r text-white from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-0 shadow-xl"
             >
-              Get Started
+              Host a Meeting
             </Button>
           </div>
         </div>
