@@ -33,7 +33,10 @@ const ChatContainer = () => {
             <ChevronRightIcon size={12} />
           </div>
         </div>
-        <div className=" h-12 flex items-center gap-2  bg-gray-700/40  p-2 rounded-md ">
+        <div
+          className=" h-12 flex items-center gap-2  bg-gray-700/40  p-2 rounded-md "
+          title="Coming soon"
+        >
           <input
             className=" flex-1 bg-transparent focus:outline-none border-none focus:border-none placeholder:text-gray-500 text-sm"
             placeholder="Send a message..."

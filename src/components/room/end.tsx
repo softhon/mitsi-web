@@ -3,7 +3,7 @@ import { MoreVertical, PhoneOff } from 'lucide-react';
 
 const End = () => {
   const handleLeaveCall = () => {
-    console.log('Leaving call...');
+    window.location.reload();
   };
   return (
     <div className="flex items-center gap-1">

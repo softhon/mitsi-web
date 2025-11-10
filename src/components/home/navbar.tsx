@@ -33,26 +33,29 @@ const Navbar = () => {
 
           <div className="hidden lg:flex items-center space-x-12">
             <a
-              href="#features"
+              title="Coming soon"
+              href="#"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Documentations
             </a>
             <a
-              href="#technology"
+              title="Coming soon"
+              href="#"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Projects
             </a>
             <a
-              href="#enterprise"
+              title="Coming soon"
+              href="#"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Community
             </a>
             <div className="h-6 w-px bg-slate-700" />
 
-            <a href="https://github.com/softhon" target="_blank">
+            <a href="https://github.com/softhon/mitsi-web" target="_blank">
               <Button
                 variant="ghost"
                 size="sm"
@@ -64,9 +67,9 @@ const Navbar = () => {
             </a>
             <Button
               onClick={openJoinPage}
-              className="bg-linear-to-r text-white from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 shadow-xl"
+              className=" cursor-pointer bg-linear-to-r text-white from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 border-0 shadow-xl"
             >
-              Get Started
+              Host a Meeting
             </Button>
           </div>
         </div>

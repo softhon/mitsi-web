@@ -35,18 +35,9 @@ const CameraPreview = () => {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center relative z-10">
-            {/* Enhanced avatar container with animated background */}
             <div className="relative">
-              {/* Animated glow rings */}
-              <div className="absolute inset-0 w-24 h-24 bg-linear-to-br from-purple-500/20 to-blue-600/20 rounded-full animate-pulse delay-1000 blur-md" />
-              <div className="absolute inset-2 w-20 h-20 bg-linear-to-tr from-blue-500/30 to-purple-600/30 rounded-full animate-pulse delay-1500 blur-sm" />
-
-              {/* Main avatar */}
-              <div className="relative w-20 h-20 bg-linear-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="relative w-20 h-20 bg-linear-to-br from-white/15 to-white/1 rounded-full flex items-center justify-center shadow-lg">
                 <User className="w-8 h-8 text-white" />
-
-                {/* Floating particles around avatar */}
-                {/* <div className="absolute -top-2 -left-2 w-2 h-2 bg-blue-300/60 rounded-full animate-pulse delay-500" /> */}
               </div>
             </div>
           </div>
@@ -74,11 +65,6 @@ const CameraPreview = () => {
           </div>
         </div>
       </div>
-
-      {/* Floating elements around video container */}
-
-      {/* <div className="absolute top-1/2 -left-2 w-1 h-1 bg-indigo-300/50 rounded-full animate-pulse delay-900" /> */}
-      {/* <div className="absolute top-1/2 -right-2 w-1.5 h-1.5 bg-teal-400/35 rounded-full animate-pulse delay-1800" /> */}
     </div>
   );
 };

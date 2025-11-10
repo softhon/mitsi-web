@@ -224,10 +224,12 @@ class MediaService {
       throw new Error('Send transport not initialized');
     }
     let producer: mediasoupTypes.Producer;
-    const clonedTrack = this.getTrack(source);
+    const track = this.getTrack(source);
 
-    if (!clonedTrack)
+    if (!track)
       throw `${source} track was not found -- start ${source} before you create producer`;
+
+    const clonedTrack = track.clone();
 
     if (source === 'camera') {
       // Simulcast encoding settings

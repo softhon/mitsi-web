@@ -25,7 +25,7 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        `bg-gradient-to-br from-white/5  to-white/2  w-0 shrink-0 transition-all duration-300 ease-in-out overflow-hidden  rounded-xl`,
+        `bg-linear-to-br from-white/5  to-white/2  w-0 shrink-0 transition-all duration-300 ease-in-out overflow-hidden  rounded-xl`,
         (chatOpen || participantsOpen) && 'w-full max-w-[400px]'
       )}
     >

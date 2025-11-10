@@ -27,9 +27,9 @@ const CallToAction = () => {
         <div className="space-y-8">
           <Button
             onClick={openJoinPage}
-            className="bg-linear-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 px-16 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
+            className=" cursor-pointer bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-0 px-16 py-6 text-lg font-light shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
           >
-            Get Started
+            Host a Meeting
             <ArrowRight className="w-6 h-6 ml-4" />
           </Button>
         </div>
