@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
-import { getInitials } from '@/lib/utils';
+import { cn, getInitials } from '@/lib/utils';
 import {
   useCameraDeviceId,
   useCameraOn,
@@ -56,7 +56,14 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
         )}
 
         {/* Mic Status */}
-        <div className="absolute top-2 right-2 z-10  p-1 rounded-full bg-black/50">
+        <div
+          className={cn(
+            'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
+            micOn
+              ? 'bg-green-500/20 backdrop-blur-sm'
+              : 'bg-red-500/20 backdrop-blur-sm'
+          )}
+        >
           {micOn ? (
             <Mic className="w-4 h-4 text-green-400" />
           ) : (

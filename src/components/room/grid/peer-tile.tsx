@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
-import { getInitials } from '@/lib/utils';
+import { cn, getInitials } from '@/lib/utils';
 import { usePeerMediasById, usePeerOthersById } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -48,14 +48,21 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
         ) : (
           <Avatar className=" w-24 h-24 ">
             {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="text-white text-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-x ">
+            <AvatarFallback className="text-white text-xl bg-linear-to-bl from-white/15 to-white/1  backdrop-blur-x ">
               {getInitials(peerData.name)}
             </AvatarFallback>
           </Avatar>
         )}
 
         {/* Mic Status */}
-        <div className="absolute top-2 right-2 z-10 p-1 rounded-full bg-black/50">
+        <div
+          className={cn(
+            'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
+            media?.mic
+              ? 'bg-green-500/20 backdrop-blur-sm'
+              : 'bg-red-500/20 backdrop-blur-sm'
+          )}
+        >
           {media?.mic ? (
             <Mic className="w-4 h-4 text-green-400" />
           ) : (
