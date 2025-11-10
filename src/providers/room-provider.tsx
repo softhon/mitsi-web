@@ -2,26 +2,28 @@ import { useMedia } from '@/hooks/use-media';
 import { useRoom } from '@/hooks/use-room';
 import { useSignaling } from '@/hooks/use-signaling';
 import { HEARTBEAT_INTERVAL } from '@/lib/constants';
-import { useToastActions } from '@/packages/toast';
 import { useRoomAccess, useRoomActions } from '@/store/conf/hooks';
 import { Access, type AckCallbackData, type MessageData } from '@/types';
 import { Actions } from '@/types/actions';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { toast } from 'sonner';
 
 const RoomProvider = ({ children }: { children: ReactNode }) => {
   const { signalingService, sendHeartBeat } = useSignaling();
-  const toastActions = useToastActions();
   const {
     mediaService,
     createWebRtcConnections,
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
+    produceUserMedia,
   } = useMedia();
+  const reconnectionToastRef = useRef<string | number>(0);
+
   const heartBeatIntervalRef = useRef<NodeJS.Timeout>(null);
   const roomAccess = useRoomAccess();
   const roomActions = useRoomActions();
-  const [rejoining, setrejoining] = useState(false);
+  const [rejoining, setRejoining] = useState(false);
   const { joinRoom, leaveRoom, actionHandlers } = useRoom();
 
   useEffect(() => {
@@ -54,6 +56,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     (async () => {
       await joinRoom();
       await createWebRtcConnections();
+      await produceUserMedia();
       // register heartbeat interval
       heartBeatIntervalRef.current = setInterval(
         sendHeartBeat,
@@ -67,20 +70,35 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
       if (heartBeatIntervalRef.current)
         clearInterval(heartBeatIntervalRef.current);
     };
-  }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat, leaveRoom]);
+  }, [
+    roomAccess,
+    createWebRtcConnections,
+    produceUserMedia,
+    joinRoom,
+    sendHeartBeat,
+    leaveRoom,
+  ]);
 
   useEffect(() => {
     if (roomAccess !== Access.Allowed) return;
     if (!rejoining) return;
     (async () => {
-      closeAllProducers();
+      // closeAllProducers();
       closeAllConsumers();
       closeAllTransports();
 
       await joinRoom(rejoining);
       await createWebRtcConnections();
+      await produceUserMedia();
+      setRejoining(false);
 
-      setrejoining(false);
+      if (reconnectionToastRef.current)
+        toast.dismiss(reconnectionToastRef.current);
+
+      toast.success('You are reconnected', {
+        closeButton: true,
+        richColors: true,
+      });
     })().catch(err => console.log(err));
   }, [
     rejoining,
@@ -91,7 +109,14 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
+    produceUserMedia,
   ]);
+
+  // produce on join
+  useEffect(() => {
+    if (roomAccess !== Access.Allowed) return;
+    if (rejoining) return;
+  }, [roomAccess, rejoining]);
 
   useEffect(() => {
     if (!signalingService) return;
@@ -100,22 +125,24 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     const connection = signalingService.getConnection();
     // TODO - NEXT LINE OF ACTIONS
     connection.on('disconnect', () => {
-      console.log('Disconnected from signaling server');
       if (connection.active) {
+        reconnectionToastRef.current = toast.loading(
+          'You are disconnected, attempting to reconnect',
+          {
+            position: 'top-center',
+            richColors: true,
+          }
+        );
         // Attempt to reconnect
-        toastActions.error('Reconnecting');
-        console.log('Attempting to reconnect to signaling server...');
         roomActions.setReconnecting(true);
       } else {
-        console.log('Connection is not active. Will not attempt to reconnect.');
         roomActions.setDisconnected(true);
       }
     });
 
     connection.io.on('reconnect', () => {
-      console.log('Reconnected to signaling server');
       roomActions.setReconnecting(false);
-      setrejoining(true);
+      setRejoining(true);
     });
     return () => {
       // Cleanup on unmount

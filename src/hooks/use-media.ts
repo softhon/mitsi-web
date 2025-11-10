@@ -163,6 +163,16 @@ export const useMedia = () => {
     });
   }, [mediaService, signalingService]);
 
+  const produceUserMedia = useCallback(async () => {
+    if (roomAccess != Access.Allowed) return;
+    if (micOn) await createProducer('mic');
+    if (cameraOn) await createProducer('camera');
+    if (screenOn) {
+      await createProducer('screen');
+      await createProducer('screenAudio');
+    }
+  }, [roomAccess, micOn, cameraOn, screenOn, createProducer]);
+
   const closeAllProducers = useCallback(() => {
     if (!mediaService) throw new Error('MediaService not initialized');
     mediaService.closeAllProducers();
@@ -425,6 +435,7 @@ export const useMedia = () => {
     resumeConsumer,
     closeConsumer,
     createWebRtcConnections,
+    produceUserMedia,
     closeAllProducers,
     closeAllConsumers,
     closeAllTransports,
