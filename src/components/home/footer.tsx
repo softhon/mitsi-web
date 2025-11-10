@@ -14,16 +14,31 @@ const Footer = () => {
           </div>
 
           <div className="flex items-center space-x-8 text-sm text-slate-400">
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              title="Coming soon"
+              href="#"
+              className="hover:text-white transition-colors"
+            >
               Documentation
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              title="Coming soon"
+              href="#"
+              className="hover:text-white transition-colors"
+            >
               API
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              title="Coming soon"
+              href="#"
+              className="hover:text-white transition-colors"
+            >
               Support
             </a>
-            <a href="#" className="hover:text-white transition-colors">
+            <a
+              href="https://github.com/softhon/mitsi-web"
+              className="hover:text-white transition-colors"
+            >
               GitHub
             </a>
           </div>
