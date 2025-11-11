@@ -43,6 +43,7 @@ export const useMedia = () => {
   const createProducer = useCallback(
     async (source: ProducerSource, appData?: mediasoupTypes.AppData) => {
       if (!mediaService) throw new Error('MediaService not initialized');
+
       return await mediaService.createProducer(source, appData);
     },
     [mediaService]
@@ -165,6 +166,7 @@ export const useMedia = () => {
 
   const produceUserMedia = useCallback(async () => {
     if (roomAccess != Access.Allowed) return;
+
     if (micOn) await createProducer('mic');
     if (cameraOn) await createProducer('camera');
     if (screenOn) {
