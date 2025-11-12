@@ -16,7 +16,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
-    produceUserMedia,
+    // produceUserMedia,
   } = useMedia();
   const reconnectionToastRef = useRef<string | number>(0);
 
@@ -55,7 +55,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     (async () => {
       await joinRoom();
       await createWebRtcConnections();
-      await produceUserMedia();
+      // await produceUserMedia();
 
       // register heartbeat interval
       heartBeatIntervalRef.current = setInterval(
@@ -82,7 +82,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
 
       await joinRoom(rejoining);
       await createWebRtcConnections();
-      await produceUserMedia();
+      // await produceUserMedia();
       setRejoining(false);
 
       if (reconnectionToastRef.current)
