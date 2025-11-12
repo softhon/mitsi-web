@@ -27,27 +27,6 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // const cleanup = useCallback(() => {
-  //   try {
-  //     // Cleanup media service
-  //     if (mediaService) {
-  //       mediaService.closeAllTransports();
-  //       mediaService.closeAllProducers();
-  //       mediaService.closeAllConsumers();
-  //     }
-
-  //     // Cleanup signaling service
-  //     if (signalingService) {
-  //       const connection = signalingService.getConnection();
-  //       connection.off('reconnect_failed');
-  //       connection.off('connect_error');
-  //       signalingService.disconnect();
-  //     }
-  //   } catch (error) {
-  //     console.error('Cleanup error:', error);
-  //   }
-  // }, [mediaService, signalingService]);
-
   useEffect(() => {
     const initializeServices = async () => {
       setIsInitializing(true);
