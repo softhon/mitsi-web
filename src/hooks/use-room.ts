@@ -103,7 +103,6 @@ export const useRoom = () => {
       },
 
       [Actions.PeerLeft]: async args => {
-        console.log('Left room');
         const data = ValidationSchema.peerId.parse(args);
         peerActions.remove(data.id);
       },
@@ -112,24 +111,20 @@ export const useRoom = () => {
         const data = ValidationSchema.createConsumerData.parse(args);
         await createConsumer(data);
         callback({ status: 'success' });
-        console.log(Actions.ConsumerCreated, data);
         callback({ status: 'success' });
       },
 
       [Actions.ConsumerPaused]: async args => {
         const data = ValidationSchema.consumerStateData.parse(args);
         pauseConsumer(data);
-        console.log(Actions.ConsumerPaused, data);
       },
       [Actions.ConsumerResumed]: async args => {
         const data = ValidationSchema.consumerStateData.parse(args);
         resumeConsumer(data);
-        console.log(Actions.ConsumerResumed, data);
       },
       [Actions.ConsumerClosed]: async args => {
         const data = ValidationSchema.consumerStateData.parse(args);
         closeConsumer(data);
-        console.log(Actions.ConsumerPaused, data);
       },
     }),
     [closeConsumer, createConsumer, pauseConsumer, peerActions, resumeConsumer]

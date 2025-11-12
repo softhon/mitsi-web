@@ -225,7 +225,6 @@ export const useMedia = () => {
 
   const stopDisplayMedia = useCallback(async () => {
     if (!mediaService) throw new Error('MediaService not initialized');
-    console.log('stopDisplayMedia');
     await mediaService.stopDisplayMedia();
     if (roomAccess == Access.Allowed) {
       closeProducer('screen');
