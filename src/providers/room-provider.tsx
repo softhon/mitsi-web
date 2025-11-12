@@ -16,7 +16,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
-    // produceUserMedia,
+    produceUserMedia,
   } = useMedia();
   const reconnectionToastRef = useRef<string | number>(0);
 
@@ -24,6 +24,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   const roomAccess = useRoomAccess();
   const roomActions = useRoomActions();
   const [rejoining, setRejoining] = useState(false);
+  const [produceLocalMedia, setProduceLocalMedia] = useState(false);
   const { joinRoom, leaveRoom, actionHandlers } = useRoom();
 
   useEffect(() => {
@@ -55,9 +56,9 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     (async () => {
       await joinRoom();
       await createWebRtcConnections();
-      // await produceUserMedia();
 
-      // register heartbeat interval
+      setProduceLocalMedia(true);
+
       heartBeatIntervalRef.current = setInterval(
         sendHeartBeat,
         HEARTBEAT_INTERVAL
@@ -82,8 +83,8 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
 
       await joinRoom(rejoining);
       await createWebRtcConnections();
-      // await produceUserMedia();
       setRejoining(false);
+      setProduceLocalMedia(true);
 
       if (reconnectionToastRef.current)
         toast.dismiss(reconnectionToastRef.current);
@@ -107,8 +108,12 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   // produce on join
   useEffect(() => {
     if (roomAccess !== Access.Allowed) return;
-    if (rejoining) return;
-  }, [roomAccess, rejoining]);
+    if (!produceLocalMedia) return;
+    (async () => {
+      await produceUserMedia();
+      setProduceLocalMedia(false);
+    })();
+  }, [roomAccess, produceLocalMedia, produceUserMedia]);
 
   useEffect(() => {
     if (!signalingService) return;

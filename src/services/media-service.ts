@@ -414,7 +414,6 @@ class MediaService {
     }>({
       action: Actions.CreateWebrtcTransports,
     });
-    console.log('createWebRtcTransports', response);
     // console.log({ transportsParams })
     if (!response)
       throw 'Transport not created, - transport params were not recieved';
@@ -426,7 +425,6 @@ class MediaService {
     if (!this.device) {
       throw new Error('Device not intialised');
     }
-    console.log('createWebRtcSendTransport', transportParams);
     this.sendTransport = this.device.createSendTransport({
       id: transportParams.id,
       iceParameters: transportParams.iceParameters,
@@ -462,7 +460,6 @@ class MediaService {
               dtlsParameters,
             },
           });
-          console.log('connected webrtc transports');
           callback();
         } catch (error) {
           errback(error as Error);
@@ -485,7 +482,6 @@ class MediaService {
               appData,
             },
           });
-          console.log('Create Producer, producerId', response?.producerId);
           if (!response)
             return errback(new Error('ProducerId was not recieved'));
           callback({ id: response.producerId });
@@ -497,16 +493,8 @@ class MediaService {
 
     sendTransport.on('connectionstatechange', state => {
       switch (state) {
-        case 'connecting':
-          console.log('sendTransport connecting connectionstatechange');
-          break;
-        case 'connected':
-          console.log('sendTransport connected connectionstatechange');
-          break;
         case 'disconnected':
         case 'failed':
-          console.log(' sendTransport Ice disconneted/failed', state);
-
           this.restartICE(sendTransport);
           break;
         default:
@@ -536,15 +524,8 @@ class MediaService {
 
     recvTransport.on('connectionstatechange', state => {
       switch (state) {
-        case 'connecting':
-          console.log('recvTransport connecting connectionstatechange');
-          break;
-        case 'connected':
-          console.log('recvTransport connected connectionstatechange');
-          break;
         case 'disconnected':
         case 'failed':
-          console.log(' recvTransport Ice disconneted/failed', state);
           this.restartICE(recvTransport);
           break;
         default:
