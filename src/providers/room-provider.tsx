@@ -16,7 +16,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
-    produceUserMedia,
+    // produceUserMedia,
   } = useMedia();
   const reconnectionToastRef = useRef<string | number>(0);
 
@@ -39,7 +39,6 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
         ) => {
           try {
             const { action, args = {} } = data;
-            console.log(Actions.Message, args, 'callback', callback);
             const handler = actionHandlers[action as Actions];
             if (handler) handler(args, callback);
             else
@@ -56,7 +55,8 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     (async () => {
       await joinRoom();
       await createWebRtcConnections();
-      await produceUserMedia();
+      // await produceUserMedia();
+
       // register heartbeat interval
       heartBeatIntervalRef.current = setInterval(
         sendHeartBeat,
@@ -70,14 +70,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
       if (heartBeatIntervalRef.current)
         clearInterval(heartBeatIntervalRef.current);
     };
-  }, [
-    roomAccess,
-    createWebRtcConnections,
-    produceUserMedia,
-    joinRoom,
-    sendHeartBeat,
-    leaveRoom,
-  ]);
+  }, [roomAccess, createWebRtcConnections, joinRoom, sendHeartBeat, leaveRoom]);
 
   useEffect(() => {
     if (roomAccess !== Access.Allowed) return;
@@ -89,7 +82,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
 
       await joinRoom(rejoining);
       await createWebRtcConnections();
-      await produceUserMedia();
+      // await produceUserMedia();
       setRejoining(false);
 
       if (reconnectionToastRef.current)
@@ -109,7 +102,6 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     closeAllConsumers,
     closeAllTransports,
     closeAllProducers,
-    produceUserMedia,
   ]);
 
   // produce on join
@@ -136,7 +128,8 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
         // Attempt to reconnect
         roomActions.setReconnecting(true);
       } else {
-        roomActions.setDisconnected(true);
+        // roomActions.setDisconnected(true);
+        window.location.reload();
       }
     });
 
