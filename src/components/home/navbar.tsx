@@ -55,7 +55,7 @@ const Navbar = () => {
             </a>
             <div className="h-6 w-px bg-slate-700" />
 
-            <a href="https://github.com/softhon/mitsi-web" target="_blank">
+            <a href="https://github.com/softhon" target="_blank">
               <Button
                 variant="ghost"
                 size="sm"

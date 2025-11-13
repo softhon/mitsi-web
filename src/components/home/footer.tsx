@@ -36,7 +36,7 @@ const Footer = () => {
               Support
             </a>
             <a
-              href="https://github.com/softhon/mitsi-web"
+              href="https://github.com/softhon"
               className="hover:text-white transition-colors"
             >
               GitHub
