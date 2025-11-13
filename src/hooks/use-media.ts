@@ -210,7 +210,7 @@ export const useMedia = () => {
     async (mediaSource: 'mic' | 'camera', deviceId: string) => {
       if (!mediaService) throw new Error('MediaService not initialized');
       await mediaService.startUserMedia(mediaSource, deviceId);
-      if (roomAccess == Access.Allowed) createProducer(mediaSource);
+      if (roomAccess === Access.Allowed) createProducer(mediaSource);
     },
     [mediaService, roomAccess, createProducer]
   );
