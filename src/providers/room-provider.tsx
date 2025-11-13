@@ -91,6 +91,7 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
 
       toast.success('You are reconnected', {
         closeButton: true,
+        position: 'top-center',
         richColors: true,
       });
     })().catch(err => console.log(err));
@@ -123,6 +124,9 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
     // TODO - NEXT LINE OF ACTIONS
     connection.on('disconnect', () => {
       if (connection.active) {
+        if (reconnectionToastRef.current)
+          toast.dismiss(reconnectionToastRef.current);
+
         reconnectionToastRef.current = toast.loading(
           'You are disconnected, attempting to reconnect',
           {
@@ -133,7 +137,6 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
         // Attempt to reconnect
         roomActions.setReconnecting(true);
       } else {
-        // roomActions.setDisconnected(true);
         window.location.reload();
       }
     });

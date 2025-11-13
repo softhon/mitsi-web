@@ -26,13 +26,14 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
     if (!cameraOn || !videoRef.current) return;
     const track = getTrack('camera');
     if (!track) return;
+    console.log({ track });
     videoRef.current.srcObject = new MediaStream([track]);
   }, [cameraOn, cameraDeviceId, getTrack]);
 
   if (!peerMe) return null;
   return (
     <div
-      className=" bg-gradient-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className=" bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}

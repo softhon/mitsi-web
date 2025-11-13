@@ -21,7 +21,7 @@ const CallToAction = () => {
         </h2>
 
         <p className="text-xl text-slate-400 mb-16 font-light max-w-2xl mx-auto leading-relaxed">
-          Get started with Mitsi today and transform the way your meetings
+          Get started with Mitsi today and transform your meetings
         </p>
 
         <div className="space-y-8">

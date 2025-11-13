@@ -20,6 +20,8 @@ import { useSignaling } from '@/hooks/use-signaling';
 import { Actions } from '@/types/actions';
 import { Button } from '../../ui/button';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+// import { useEffect } from 'react';
 
 const FormValues = z.object({
   name: z
@@ -43,10 +45,12 @@ const JoinForm = () => {
   const form = useForm<FormType>({
     resolver: zodResolver(FormValues),
     defaultValues: {
-      name: '',
+      name: localStorage.getItem('name') || '',
     },
   });
+
   const name = form.watch('name');
+  form.setFocus('name');
 
   const onSubmit = async (data: FormType) => {
     try {
@@ -57,20 +61,22 @@ const JoinForm = () => {
 
       peerActions.addData(peerData, true);
 
-      const res = await signalingService?.sendMessage<{ roomData: RoomData }>({
+      await signalingService?.sendMessage<{ roomData: RoomData }>({
         action: Actions.GetRoomData,
         args: {
           roomId: roomData?.roomId,
         },
       });
-
-      console.log(Actions.GetRoomData, res);
+      localStorage.setItem('name', data.name);
       roomActions.setAccess(Access.Allowed);
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message, {
+          richColors: true,
+          position: 'top-right',
+        });
+      }
     }
-
-    console.log(data);
   };
 
   return (

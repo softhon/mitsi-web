@@ -42,7 +42,6 @@ export const useRoom = () => {
         peerId: getPeerId(),
       },
     });
-    console.log(Actions.JoinVisitors, res);
     for (const peer of res?.peers || []) {
       peerActions.addData(peer);
     }

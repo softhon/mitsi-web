@@ -70,8 +70,7 @@ class MediaService {
   async startUserMedia(mediaSource: 'mic' | 'camera', deviceId: string) {
     const mediaTrack = this.getTrack(mediaSource);
     if (mediaTrack && mediaTrack.enabled) {
-      if (mediaTrack.getSettings().deviceId === deviceId) return;
-      mediaTrack.stop();
+      if (mediaTrack.getSettings().deviceId === deviceId) mediaTrack.stop();
     }
     const stream = await navigator.mediaDevices.getUserMedia(
       mediaSource === 'mic'
