@@ -48,9 +48,9 @@ const Header = () => {
             </Tooltip>
           </div>
         )}
-        <div className="text-gray-400 md:text-lg relative">
+        {/* <div className="text-gray-400 md:text-lg relative">
           Setup your audio and video before joining
-        </div>
+        </div> */}
       </div>
 
       {/* Enhanced Status Badge */}

@@ -9,9 +9,9 @@ const End = () => {
     <div className="flex items-center gap-1">
       <Button
         onClick={handleLeaveCall}
-        variant="ghost"
+        // variant="def"
         size="icon"
-        className="w-12 h-12 rounded-xl bg-red-500 hover:bg-red-600 text-white ml-4"
+        className="w-12 h-12 rounded-xl bg-red-500 hover:bg-red-500/90 text-white ml-4 cursor-pointer"
       >
         <PhoneOff className="w-5 h-5" />
       </Button>
