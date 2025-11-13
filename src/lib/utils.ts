@@ -208,7 +208,7 @@ export const getSimulcastEncoding = (source: ProducerSource) => {
 
 export const videoConstraints = (deviceId: string) => ({
   video: {
-    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    deviceId: deviceId ? { exact: deviceId } : undefined,
     height: {
       ideal: 480,
       max: 720,
@@ -229,7 +229,7 @@ export const videoConstraints = (deviceId: string) => ({
 
 export const audioContraints = (deviceId: string) => ({
   audio: {
-    deviceId: deviceId ? { ideal: deviceId } : undefined,
+    deviceId: deviceId ? { exact: deviceId } : undefined,
     echoCancellation: { ideal: true },
     noiseSuppression: { ideal: true },
   },
