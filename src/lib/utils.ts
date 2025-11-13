@@ -210,19 +210,19 @@ export const videoConstraints = (deviceId: string) => ({
   video: {
     deviceId: deviceId ? { ideal: deviceId } : undefined,
     height: {
-      ideal: 480, // Moderate resolution (480p)
-      max: 720, // Cap at 720p to limit data
-      min: 240, // Minimum fallback
+      ideal: 480,
+      max: 720,
+      min: 240,
     },
     width: {
-      ideal: 854, // Matches 480p aspect ratio (16:9)
-      max: 1280, // Cap at 720p width
-      min: 320, // Minimum fallback
+      ideal: 854,
+      max: 1280,
+      min: 320,
     },
     frameRate: {
-      ideal: 24, // Smooth motion with lower data than 30fps
-      max: 30, // Reasonable upper limit
-      min: 15, // Minimum for basic fluidity
+      ideal: 24,
+      max: 30,
+      min: 15,
     },
   },
 });
