@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
-
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import { useSignaling } from '@/hooks/use-signaling';
 import { useRoomActions, useRoomData } from '@/store/conf/hooks';
 import JoinForm from '@/components/room/join/join-form';
-import Terms from '@/components/room/join/join-terms';
 import Header from '@/components/room/join/join-header';
 import CameraPreview from '@/components/room/join/join-camera-preview';
 import Controls from '../../components/room/join/join-controls';
 import { useRoom } from '@/hooks/use-room';
 import DynamicBg from '@/components/dynamic-bg';
-import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
+// import Terms from '@/components/room/join/join-terms';
 
 const JoinRoom: React.FC = () => {
   const { signalingService } = useSignaling();
@@ -48,7 +47,7 @@ const JoinRoom: React.FC = () => {
 
         <JoinForm />
 
-        <Terms />
+        {/* <Terms /> */}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import Screen from './screen';
 
 const ControlBar = () => {
   return (
-    <div className="p-2  backdrop-blur-sm flex  ">
+    <div className="p-2  backdrop-blur-sm flex">
       <div className="flex items-center justify-center md:justify-between gap-2 max-w-4xl mx-auto ">
         {/* Left Controls */}
         <div className="flex items-center gap-2">
