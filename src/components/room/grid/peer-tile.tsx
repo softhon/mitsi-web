@@ -31,7 +31,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
 
   return (
     <div
-      className=" bg-gradient-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className=" bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
@@ -39,7 +39,10 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
         {media?.camera ? (
           <video
             ref={videoRef}
-            className="w-full h-full object-cover relative z-10"
+            className={cn(
+              'w-full h-full relative z-10',
+              !peerData.isMobileDevice && 'object-cover'
+            )}
             autoPlay
             muted
             playsInline

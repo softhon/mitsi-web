@@ -1,5 +1,5 @@
 import { useMedia } from '@/hooks/use-media';
-import { cn } from '@/lib/utils';
+import { cn, isMobileDevice } from '@/lib/utils';
 import { useCameraDeviceId, useCameraOn, useMicOn } from '@/store/conf/hooks';
 import { Mic, MicOff, User } from 'lucide-react';
 import { useEffect, useRef } from 'react';
@@ -10,6 +10,7 @@ const CameraPreview = () => {
   const micOn = useMicOn();
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
+  const isAMobileDevice = isMobileDevice();
 
   useEffect(() => {
     if (!cameraOn || !videoRef.current) return;
@@ -27,7 +28,10 @@ const CameraPreview = () => {
         {cameraOn ? (
           <video
             ref={videoRef}
-            className="w-full h-full object-cover relative z-10"
+            className={cn(
+              'w-full h-full relative z-10',
+              !isAMobileDevice && 'object-cover'
+            )}
             autoPlay
             muted
             playsInline
@@ -44,7 +48,7 @@ const CameraPreview = () => {
         )}
 
         {/* Mic Status Indicator with enhanced animation */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-4 z-20">
           <div
             className={cn(
               'w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all relative',

@@ -90,6 +90,7 @@ export interface PeerData {
   userId?: string;
   email?: string;
   color?: string;
+  isMobileDevice?: boolean;
 }
 
 export interface PeerMedia {
