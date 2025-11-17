@@ -26,7 +26,6 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
     if (!cameraOn || !videoRef.current) return;
     const track = getTrack('camera');
     if (!track) return;
-    console.log({ track });
     videoRef.current.srcObject = new MediaStream([track]);
   }, [cameraOn, cameraDeviceId, getTrack]);
 
@@ -41,7 +40,10 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
         {cameraOn ? (
           <video
             ref={videoRef}
-            className="w-full h-full object-cover relative z-10"
+            className={cn(
+              'w-full h-full relative z-10 scale-x-[-1]',
+              !peerMe.isMobileDevice && 'object-cover'
+            )}
             autoPlay
             muted
             playsInline
@@ -49,8 +51,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
           />
         ) : (
           <Avatar className=" w-24 h-24">
-            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="text-white text-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-x">
+            <AvatarFallback className="text-white text-xl bg-linear-to-bl from-white/15 to-white/1  backdrop-blur-x">
               {getInitials(peerMe.name)}
             </AvatarFallback>
           </Avatar>

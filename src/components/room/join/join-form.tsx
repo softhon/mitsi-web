@@ -14,7 +14,7 @@ import {
   useRoomActions,
   useRoomData,
 } from '@/store/conf/hooks';
-import { getPeerId } from '@/lib/utils';
+import { getPeerId, isMobileDevice } from '@/lib/utils';
 import { Access, type PeerData, type RoomData } from '@/types';
 import { useSignaling } from '@/hooks/use-signaling';
 import { Actions } from '@/types/actions';
@@ -57,6 +57,7 @@ const JoinForm = () => {
       const peerData: PeerData = {
         id: getPeerId(),
         name: data.name,
+        isMobileDevice: isMobileDevice(),
       };
 
       peerActions.addData(peerData, true);
