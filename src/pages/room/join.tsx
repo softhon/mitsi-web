@@ -10,6 +10,7 @@ import Controls from '../../components/room/join/join-controls';
 import { useRoom } from '@/hooks/use-room';
 import DynamicBg from '@/components/dynamic-bg';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const JoinRoom: React.FC = () => {
   const { signalingService } = useSignaling();
@@ -21,7 +22,6 @@ const JoinRoom: React.FC = () => {
   useEffect(() => {
     const roomId = pathname['roomId'];
     roomActions.setData({
-      // id: crypto.randomUUID(),
       roomId: roomId!,
       name: `room-${roomId}`,
     });
@@ -30,33 +30,26 @@ const JoinRoom: React.FC = () => {
   useEffect(() => {
     if (!signalingService || !roomData) return;
 
-    joinVisitors().catch(err => console.log(err));
+    joinVisitors().catch(err => toast.error(err));
   }, [signalingService, roomData, joinVisitors]);
 
   if (!roomData || !signalingService) return null;
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center p-4">
-      {/* Background Pattern */}
       <DynamicBg />
 
       <div className="relative z-10 w-full max-w-2xl mx-auto space-y-8">
-        {/* Header */}
         <Header />
 
-        {/* Video Preview */}
         <CameraPreview />
 
-        {/* Media Controls */}
         <Controls />
-        {/* Name Input and Join Button */}
+
         <JoinForm />
-        {/* Additional Info */}
+
         <Terms />
       </div>
-
-      {/* Background Decorative Elements */}
-      {/* <Decoration /> */}
     </div>
   );
 };

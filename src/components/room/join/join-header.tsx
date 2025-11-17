@@ -17,8 +17,6 @@ const Header = () => {
 
   return (
     <div className="text-center space-y-4">
-      {/* Enhanced Loading Spinner Icon */}
-
       <img src={Assets.logo} className="w-14 h-14 mx-auto" alt="Logo" />
 
       <div className="space-y-2 relative">
@@ -48,12 +46,8 @@ const Header = () => {
             </Tooltip>
           </div>
         )}
-        {/* <div className="text-gray-400 md:text-lg relative">
-          Setup your audio and video before joining
-        </div> */}
       </div>
 
-      {/* Enhanced Status Badge */}
       <div className="relative">
         <Badge
           variant="outline"
