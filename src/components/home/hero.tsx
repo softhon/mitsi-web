@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { Button } from '../ui/button';
-import { ArrowRight, Play } from 'lucide-react';
+import { Play } from 'lucide-react';
 import uniqid from 'uniqid';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,14 +46,14 @@ const Hero = () => {
               <Play className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
               Experience Mitsi
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="lg"
               className="border-white/20 text-white hover:bg-white/5 hover:border-white/40 px-12 py-6 text-lg font-light backdrop-blur-sm"
             >
               Watch Demo
               <ArrowRight className="w-5 h-5 ml-3" />
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
