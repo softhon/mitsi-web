@@ -61,7 +61,7 @@ const Header = () => {
         >
           {peerOthersList.length
             ? `${peerOthersList.length} people have joined`
-            : 'You are the first to join'}
+            : 'You will be the first to join'}
         </Badge>
       </div>
     </div>
