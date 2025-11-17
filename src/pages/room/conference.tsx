@@ -8,15 +8,17 @@ import DynamicBg from '@/components/dynamic-bg';
 
 export const Conference: React.FC = () => {
   return (
-    <div className=" fixed h-screen w-full flex flex-col overflow-hidden justify-between">
-      <DynamicBg />
-      {/* Header */}
-      <Header />
+    <div className=" relative h-full w-screen overflow-hidden ">
+      <div className="fixed h-full w-full flex flex-col justify-between">
+        <DynamicBg />
+        {/* Header */}
+        <Header />
 
-      <Display />
-      {/* Bottom Controls */}
-      <ControlBar />
-      <PeerAudioList />
+        <Display />
+        {/* Bottom Controls */}
+        <ControlBar />
+        <PeerAudioList />
+      </div>
     </div>
   );
 };
