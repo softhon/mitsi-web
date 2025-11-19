@@ -48,7 +48,7 @@ const ScreenView = () => {
   return (
     <div
       className={cn(
-        'relative  bg-gray-800/50  rounded-2xl w-5/6 overflow-hidden'
+        'relative  bg-linear-to-br from-white/5 to-white/2  rounded-2xl h-1/2 lg:h-full w-full lg:w-5/6 overflow-hidden'
       )}
     >
       <div className=" cursor-pointer absolute h-fit bg-black/30 hover:bg-black/50 right-2 top-2 rounded-md p-2 ">
