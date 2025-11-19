@@ -89,7 +89,7 @@ const MainGrid = () => {
       ref={gridRef}
       className={cn(
         `w-full h-1/2 lg:h-full  flex flex-wrap items-center justify-center content-center gap-3 py-2 overflow-hidden lg:min-w-[400px] xl:min-w-[450px] 2xl:min-w-[500px]`,
-        (screenOn || peerScreens.length) && 'xl:w-2/6 2xl:w-3/12'
+        (screenOn || peerScreens.length) && 'lg:w-1/3 xl:w-2/6 2xl:w-3/12'
       )}
     >
       {layout ? (
