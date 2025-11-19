@@ -1,12 +1,33 @@
+import { ChevronRightIcon, SendHorizonal, Smile, Users } from 'lucide-react';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
 import { Assets } from '@/assets';
 import { Typography } from '@/components/typography';
+import { useSignaling } from '@/hooks/use-signaling';
 import { cn } from '@/lib/utils';
-import { useModalChatOpen } from '@/store/conf/hooks';
-
-import { ChevronRightIcon, SendHorizonal, Smile, Users } from 'lucide-react';
+import { useModalChatOpen, usePeerMe } from '@/store/conf/hooks';
+import { Actions } from '@/types/actions';
 
 const ChatContainer = () => {
   const chatOpen = useModalChatOpen();
+  const { signalingService } = useSignaling();
+  const peerMe = usePeerMe();
+  const [message, setMessage] = useState('');
+
+  const handleSendChat = async () => {
+    if (!signalingService) return;
+    signalingService.sendMessage({
+      action: Actions.SendChat,
+      args: {
+        id: uuidv4(),
+        text: message,
+        sender: peerMe,
+        createdAt: Date.now(),
+      },
+    });
+    console.log(message, 'sent');
+  };
   return (
     <div
       className={cn(
@@ -37,12 +58,14 @@ const ChatContainer = () => {
           className=" h-12 flex items-center gap-2  bg-gray-700/40  p-2 rounded-md "
           title="Coming soon"
         >
-          <input
+          <textarea
+            value={message}
+            onChange={event => setMessage(event.target.value)}
             className=" flex-1 bg-transparent focus:outline-none border-none focus:border-none placeholder:text-gray-500 text-sm"
             placeholder="Send a message..."
           />
           <Smile />
-          <SendHorizonal />
+          <SendHorizonal onClick={handleSendChat} />
         </div>
       </div>
     </div>

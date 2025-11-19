@@ -20,7 +20,7 @@ const DynamicBg = () => {
   const parallaxOffset = scrollY * 0.5;
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-black">
+    <div className="fixed inset-0 bg-linear-to-br from-slate-950 via-slate-900 to-black">
       <div
         className="absolute inset-0 opacity-30"
         style={{

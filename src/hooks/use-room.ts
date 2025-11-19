@@ -125,6 +125,10 @@ export const useRoom = () => {
         const data = ValidationSchema.consumerStateData.parse(args);
         closeConsumer(data);
       },
+      [Actions.SendChat]: async args => {
+        const data = ValidationSchema.sendChat.parse(args);
+        console.log(data);
+      },
     }),
     [closeConsumer, createConsumer, pauseConsumer, peerActions, resumeConsumer]
   );

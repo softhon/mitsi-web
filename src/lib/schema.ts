@@ -3,6 +3,15 @@ import z from 'zod';
 const producerSource = z.enum(['mic', 'camera', 'screen', 'screenAudio']);
 const mediaKind = z.enum(['audio', 'video']);
 
+const peerDataSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  userId: z.string().optional(),
+  email: z.string().optional(),
+  photo: z.string().optional(),
+  color: z.string().optional(),
+});
+
 export const ValidationSchema = {
   peerData: z.object({
     id: z.string(),
@@ -30,5 +39,13 @@ export const ValidationSchema = {
     producerPeerId: z.string(),
     producerSource: producerSource,
     fromProducer: z.boolean().optional(),
+  }),
+
+  sendChat: z.object({
+    id: z.string(),
+    text: z.string(),
+    sender: peerDataSchema,
+    receiver: peerDataSchema.optional(),
+    createdAt: z.number(),
   }),
 };

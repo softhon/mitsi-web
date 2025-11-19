@@ -11,7 +11,7 @@ const Chat = () => {
       variant="ghost"
       size="icon"
       className="w-12 h-12 rounded-xl  text-white relative
-      bg-gradient-to-br from-white/15 to-white/1  backdrop-blur-xl
+      bg-linear-to-br from-white/15 to-white/1  backdrop-blur-xl
       "
     >
       <MessageSquare className="w-5 h-5" />
