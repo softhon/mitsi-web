@@ -5,15 +5,17 @@ import ScreenView from './screen-view';
 const Display = () => {
   return (
     <div
-      className={`${'fixed h-full inset-0  pt-4 pb-18 px-3 flex  flex-row w-full justify-between overflow-hidden '}`}
+      className={`${'fixed inset-0  pt-4 pb-18 px-3 h-full w-full  overflow-hidden '}`}
     >
-      {/* change padding to pt-10 */}
-      {/* screen sharing */}
-      <ScreenView />
-      {/* peers grid */}
-      <MainGrid />
-      {/* chat and attendees */}
-      <Sidebar />
+      <div className="relative h-full w-full flex flex-row justify-between ">
+        {/* change padding to pt-10 */}
+        {/* screen sharing */}
+        <ScreenView />
+        {/* peers grid */}
+        <MainGrid />
+        {/* chat and attendees */}
+        <Sidebar />
+      </div>
     </div>
   );
 };
