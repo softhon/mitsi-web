@@ -234,3 +234,16 @@ export const audioContraints = (deviceId: string) => ({
     noiseSuppression: { ideal: true },
   },
 });
+
+export const convertTimestampTo12HourTime = (timestamp: number) => {
+  const date = new Date(timestamp);
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const period = hour >= 12 ? 'PM' : 'AM';
+
+  const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+  const paddedHours = formattedHour < 10 ? '0' + formattedHour : formattedHour;
+  const paddedMinute = minute < 10 ? '0' + minute : minute;
+
+  return paddedHours + ':' + paddedMinute + ' ' + period;
+};
