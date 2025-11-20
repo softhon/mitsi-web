@@ -1,5 +1,5 @@
 import { ChevronRightIcon, SendHorizonal, Smile, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Assets } from '@/assets';
@@ -26,6 +26,7 @@ const ChatContainer = () => {
 
   const handleSendChat = async () => {
     if (!signalingService || !peerMe || !message.length) return;
+    if (!message.trim()) return;
     const chatMessage: Chat = {
       id: uuidv4(),
       text: message,
@@ -36,9 +37,19 @@ const ChatContainer = () => {
       action: Actions.SendChat,
       args: { ...chatMessage },
     });
-    if (message) chatActions.addChat(chatMessage);
+    chatActions.addChat(chatMessage);
     setMessage('');
   };
+
+  const handleOnKeyPress = async (
+    event: KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSendChat();
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -75,18 +86,16 @@ const ChatContainer = () => {
             <ChevronRightIcon size={12} />
           </div>
         </div>
-        <div
-          className=" h-12 flex items-center gap-2  bg-gray-700/40  p-2 rounded-md "
-          title="Coming soon"
-        >
+        <div className=" h-12 flex items-center gap-2  bg-gray-700/40  p-2 rounded-md ">
           <textarea
             value={message}
             onChange={event => setMessage(event.target.value)}
-            className=" flex-1 bg-transparent focus:outline-none border-none focus:border-none placeholder:text-gray-500 text-sm"
+            className=" flex-1 bg-transparent focus:outline-none border-none focus:border-none placeholder:text-gray-500 text-sm resize-none "
             placeholder="Send a message..."
+            onKeyDown={handleOnKeyPress}
           />
           <Smile />
-          <SendHorizonal onClick={handleSendChat} />
+          <SendHorizonal className="cursor-pointer " onClick={handleSendChat} />
         </div>
       </div>
     </div>
