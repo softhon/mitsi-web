@@ -6,44 +6,65 @@ import { Assets } from '@/assets';
 import { Typography } from '@/components/typography';
 import { useSignaling } from '@/hooks/use-signaling';
 import { cn } from '@/lib/utils';
-import { useModalChatOpen, usePeerMe } from '@/store/conf/hooks';
+import {
+  useChatActions,
+  useChats,
+  useModalChatOpen,
+  usePeerMe,
+} from '@/store/conf/hooks';
 import { Actions } from '@/types/actions';
+import ChatItem from './chat-item';
+import type { Chat } from '@/types';
 
 const ChatContainer = () => {
   const chatOpen = useModalChatOpen();
   const { signalingService } = useSignaling();
   const peerMe = usePeerMe();
   const [message, setMessage] = useState('');
+  const chats = useChats();
+  const chatActions = useChatActions();
 
   const handleSendChat = async () => {
-    if (!signalingService) return;
+    if (!signalingService || !peerMe || !message.length) return;
+    const chatMessage: Chat = {
+      id: uuidv4(),
+      text: message,
+      sender: peerMe,
+      createdAt: Date.now(),
+    };
     signalingService.sendMessage({
       action: Actions.SendChat,
-      args: {
-        id: uuidv4(),
-        text: message,
-        sender: peerMe,
-        createdAt: Date.now(),
-      },
+      args: { ...chatMessage },
     });
-    console.log(message, 'sent');
+    if (message) chatActions.addChat(chatMessage);
+    setMessage('');
   };
   return (
     <div
       className={cn(
-        'hidden flex-col gap-3 w-full flex-1 overflow-hidden transition-all duration-300 ease-in-out ',
+        'hidden flex-col gap-3 w-full h-full flex-1 overflow-hidden transition-all duration-300 ease-in-out ',
         chatOpen && 'flex'
       )}
     >
       {/* content */}
-      <div className=" flex-1 flex justify-center items-center flex-col  gap-2 ">
-        <img src={Assets.emptyChat} alt="Emtpy Chat" className=" w-3/5 " />
-        <Typography variant="h5">Start Conversation</Typography>
-        <Typography variant="paragraph" className=" text-center">
-          There are no messages here yet. Start a conversation by sending a
-          message.
-        </Typography>
-      </div>
+      {!chats.length ? (
+        <div className=" flex-1 flex justify-center items-center flex-col  gap-2 ">
+          <img src={Assets.emptyChat} alt="Emtpy Chat" className=" w-3/5 " />
+          <Typography variant="h5">Start Conversation</Typography>
+          <Typography variant="paragraph" className=" text-center">
+            There are no messages here yet. Start a conversation by sending a
+            message.
+          </Typography>
+        </div>
+      ) : (
+        <div className=" flex-1 overflow-y-auto">
+          <div className=" flex flex-col justify-end gap-y-3">
+            {chats.map(chat => (
+              <ChatItem key={chat.id} chat={chat} />
+            ))}
+          </div>
+        </div>
+      )}
       {/* input */}
       <div className=" flex flex-col gap-2">
         <div className=" flex items-center text-xs gap-1 cursor-pointer">
