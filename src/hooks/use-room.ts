@@ -1,4 +1,5 @@
 import {
+  useChatActions,
   usePeerActions,
   usePeerMe,
   useRoomAccess,
@@ -30,6 +31,7 @@ export const useRoom = () => {
   const peerMe = usePeerMe();
   const roomData = useRoomData();
   const roomAccess = useRoomAccess();
+  const chatActions = useChatActions();
 
   const joinVisitors = useCallback(async () => {
     if (!signalingService || !roomData) return;
@@ -128,9 +130,17 @@ export const useRoom = () => {
       [Actions.SendChat]: async args => {
         const data = ValidationSchema.sendChat.parse(args);
         console.log(data);
+        chatActions.addChat(data);
       },
     }),
-    [closeConsumer, createConsumer, pauseConsumer, peerActions, resumeConsumer]
+    [
+      closeConsumer,
+      createConsumer,
+      pauseConsumer,
+      peerActions,
+      resumeConsumer,
+      chatActions,
+    ]
   );
 
   return { joinVisitors, joinRoom, leaveRoom, actionHandlers };
