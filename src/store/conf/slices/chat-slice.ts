@@ -1,9 +1,10 @@
 import type { StateCreator } from 'zustand';
 import type { ConfStoreState } from '../type';
+import type { Chat } from '@/types';
 
 export interface ChatSlice {
-  open: boolean;
-  toggle: () => void;
+  chats: Chat[];
+  add: (chat: Chat) => void;
 }
 
 export const createChatSlice: StateCreator<
@@ -12,10 +13,10 @@ export const createChatSlice: StateCreator<
   [['zustand/immer', ChatSlice]],
   ChatSlice
 > = set => ({
-  open: false,
-  toggle: () =>
+  chats: [],
+  add: chat =>
     set(state => {
-      state.chat.open = !state.chat.open;
+      state.chat.chats.push(chat);
       return state;
     }),
 });

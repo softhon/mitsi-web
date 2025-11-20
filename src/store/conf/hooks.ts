@@ -157,3 +157,15 @@ export const useModalActions = () =>
     }),
     []
   );
+
+// ============================================================================
+// CHAT SELECTORS
+// ============================================================================
+export const useChats = () => useConfStore(state => state.chat.chats);
+export const useChatActions = () =>
+  useMemo(
+    () => ({
+      addChat: useConfStore.getState().chat.add,
+    }),
+    []
+  );
