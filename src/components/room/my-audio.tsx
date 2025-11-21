@@ -1,38 +1,37 @@
 import { useMedia } from '@/hooks/use-media';
-import { usePeerActions, usePeerMediasById } from '@/store/conf/hooks';
+import { useMicOn, usePeerActions, usePeerMe } from '@/store/conf/hooks';
 import { useEffect, useRef } from 'react';
 import hark from 'hark';
 
-const PeerAudio = ({ peerId }: { peerId: string }) => {
-  const { getConsumer } = useMedia();
+const MyAudio = () => {
+  const { getTrack } = useMedia();
   const audioRef = useRef<HTMLAudioElement>(null);
   const screenAudioRef = useRef<HTMLAudioElement>(null);
-  const media = usePeerMediasById(peerId);
+  const peerMe = usePeerMe();
+  const micOn = useMicOn();
   const speechEventsRef = useRef<hark.Harker>(null);
   const peerActions = usePeerActions();
 
   // mic
   useEffect(() => {
-    if (!media?.mic || !audioRef.current) {
+    if (!micOn || !audioRef.current || !peerMe?.id) {
       if (speechEventsRef.current) {
         speechEventsRef.current.stop();
       }
       return;
     }
-
-    const consumer = getConsumer(peerId, 'mic');
-    if (!consumer) return;
-    const { track } = consumer;
+    const track = getTrack('mic');
+    if (!track) return;
     const stream = new MediaStream([track]);
 
     audioRef.current.srcObject = stream;
     speechEventsRef.current = hark(stream, {});
 
     speechEventsRef.current.on('speaking', () => {
-      peerActions.updateCondition(peerId, { isSpeaking: true });
+      peerActions.updateCondition(peerMe.id, { isSpeaking: true });
     });
     speechEventsRef.current.on('stopped_speaking', () => {
-      peerActions.updateCondition(peerId, { isSpeaking: false });
+      peerActions.updateCondition(peerMe.id, { isSpeaking: false });
     });
 
     return () => {
@@ -40,24 +39,23 @@ const PeerAudio = ({ peerId }: { peerId: string }) => {
         speechEventsRef.current.stop();
       }
     };
-  }, [media?.mic, getConsumer, peerActions, peerId]);
+  }, [micOn, getTrack, peerActions, peerMe?.id]);
 
   // screen audio
   useEffect(() => {
-    if (!media?.screenAudio || !screenAudioRef.current) return;
-    const consumer = getConsumer(peerId, 'mic');
-    if (!consumer) return;
-    const { track } = consumer;
+    if (!screenAudioRef.current) return;
+    const track = getTrack('screenAudio');
+    if (!track) return;
     const stream = new MediaStream([track]);
     screenAudioRef.current.srcObject = stream;
-  }, [media?.screenAudio, getConsumer, peerId]);
+  }, [getTrack]);
 
   return (
     <>
-      <audio ref={screenAudioRef} autoPlay />
-      <audio ref={audioRef} autoPlay />
+      <audio ref={screenAudioRef} autoPlay muted />
+      <audio ref={audioRef} autoPlay muted />
     </>
   );
 };
 
-export default PeerAudio;
+export default MyAudio;

@@ -161,6 +161,13 @@ export const createPeerSlice: StateCreator<
       state.peers.conditions = {};
       state.peers.positions = [];
       state.peers.screens = [];
+
+      const myPeerId = state.peers.me?.id;
+      if (myPeerId) {
+        state.peers.medias[myPeerId] = { id: myPeerId };
+        state.peers.conditions[myPeerId] = { id: myPeerId };
+      }
+
       return state;
     }),
 });

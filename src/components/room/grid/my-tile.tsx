@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
-import { cn, getInitials } from '@/lib/utils';
+import { cn, getInitials, getPeerId } from '@/lib/utils';
 import {
   useCameraDeviceId,
   useCameraOn,
   useMicOn,
+  usePeerConditionsById,
   usePeerMe,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
@@ -21,6 +22,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
   const peerMe = usePeerMe();
+  const peerMeCondition = usePeerConditionsById(peerMe?.id || getPeerId());
 
   useEffect(() => {
     if (!cameraOn || !videoRef.current) return;
@@ -32,7 +34,11 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   if (!peerMe) return null;
   return (
     <div
-      className=" bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className={cn(
+        `bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
+        rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out`,
+        peerMeCondition?.isSpeaking && ' border-blue-500'
+      )}
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}

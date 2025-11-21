@@ -2,7 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
 import { cn, getInitials } from '@/lib/utils';
-import { usePeerMediasById, usePeerOthersById } from '@/store/conf/hooks';
+import {
+  usePeerConditionsById,
+  usePeerMediasById,
+  usePeerOthersById,
+} from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
@@ -15,6 +19,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const peerData = usePeerOthersById(peerId);
   const media = usePeerMediasById(peerId);
+  const peerMeCondition = usePeerConditionsById(peerId);
 
   useEffect(() => {
     if (!media?.camera || !videoRef.current) return;
@@ -31,7 +36,11 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
 
   return (
     <div
-      className=" bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out"
+      className={cn(
+        `bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
+        rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out`,
+        peerMeCondition?.isSpeaking && ' border-blue-500'
+      )}
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
