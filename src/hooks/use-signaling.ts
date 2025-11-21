@@ -12,7 +12,6 @@ export const useSignaling = () => {
     signalingService.sendMessage({
       action: Actions.Heartbeat,
     });
-    console.log('Send heart beat');
   }, [signalingService]);
 
   const sendMessage = useCallback(

@@ -46,7 +46,6 @@ export const ServiceProvider = ({ children }: { children: ReactNode }) => {
         // Initialize media service
         const newMediaService = await MediaService.start(newSignalingService);
         setMediaService(newMediaService);
-        console.log('signaling and media service started');
         setError(null);
       } catch (error) {
         console.error('Service initialization error:', error);

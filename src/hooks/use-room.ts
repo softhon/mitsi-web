@@ -112,7 +112,6 @@ export const useRoom = () => {
         const data = ValidationSchema.createConsumerData.parse(args);
         await createConsumer(data);
         callback({ status: 'success' });
-        callback({ status: 'success' });
       },
 
       [Actions.ConsumerPaused]: async args => {
@@ -129,7 +128,6 @@ export const useRoom = () => {
       },
       [Actions.SendChat]: async args => {
         const data = ValidationSchema.sendChat.parse(args);
-        console.log(data);
         chatActions.addChat(data);
       },
     }),
