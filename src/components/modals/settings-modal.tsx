@@ -13,7 +13,23 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { useSettingsActions, useSettingsOpen } from '@/store/conf/hooks';
+import {
+  useCameraDeviceId,
+  useCameraDevices,
+  useMicDeviceId,
+  useMicDevices,
+  useSettingsActions,
+  useSettingsOpen,
+} from '@/store/conf/hooks';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { useMedia } from '@/hooks/use-media';
+import { Button } from '../ui/button';
 
 interface NotificationSettings {
   peerJoined: boolean;
@@ -61,70 +77,88 @@ const NotificationToggle: FC<NotificationItemProps> = ({
 const DeviceSettings: FC<{
   micVolume: number;
   onMicVolumeChange: (volume: number) => void;
-}> = ({ micVolume, onMicVolumeChange }) => (
-  <div>
-    <h3 className="text-white text-xl font-semibold mb-8">Device Settings</h3>
+}> = ({ micVolume, onMicVolumeChange }) => {
+  const cameraDeviceId = useCameraDeviceId();
+  const cameraDevices = useCameraDevices();
+  const micDeviceId = useMicDeviceId();
+  const micDevices = useMicDevices();
 
-    {/* Video */}
-    <div className="mb-8">
-      <label className="block text-slate-300 text-sm font-medium mb-3">
-        Video
-      </label>
-      <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between transition-colors">
+  return (
+    <div>
+      <h3 className="text-white text-xl font-semibold mb-8">Device Settings</h3>
+
+      {/* Video */}
+      <div className="mb-8">
+        <label className="block text-slate-300 text-sm font-medium mb-3">
+          Video
+        </label>
+
+        <MediaDeviceDropdown
+          devices={cameraDevices}
+          selectedDeviceId={cameraDeviceId}
+          source="camera"
+        />
+        {/* <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between transition-colors">
         <div className="flex items-center gap-3">
           <Video size={18} />
           <span>Facetime HD Camera</span>
         </div>
         <span className="text-slate-400">›</span>
-      </button>
-    </div>
-
-    {/* Microphone */}
-    <div className="mb-8">
-      <label className="block text-slate-300 text-sm font-medium mb-3">
-        Microphone
-      </label>
-      <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between mb-4 transition-colors">
-        <div className="flex items-center gap-3">
-          <Mic size={18} />
-          <span>Default - Macbook Pro Mic (Built-in)</span>
-        </div>
-        <span className="text-slate-400">›</span>
-      </button>
-
-      <div className="flex items-center gap-3">
-        <Mic size={18} className="text-slate-400" />
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={micVolume}
-          onChange={e => onMicVolumeChange(parseInt(e.target.value))}
-          className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-        />
+      </button> */}
       </div>
-    </div>
 
-    {/* Speakers */}
-    <div>
-      <label className="block text-slate-300 text-sm font-medium mb-3">
-        Speakers
-      </label>
-      <div className="flex gap-3">
-        <button className="flex-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between transition-colors">
+      {/* Microphone */}
+      <div className="mb-8">
+        <label className="block text-slate-300 text-sm font-medium mb-3">
+          Microphone
+        </label>
+        <MediaDeviceDropdown
+          devices={micDevices}
+          selectedDeviceId={micDeviceId}
+          source="mic"
+        />
+        {/* <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between mb-4 transition-colors">
           <div className="flex items-center gap-3">
-            <Volume2 size={18} />
-            <span>Default - Macbook Pro...</span>
+            <Mic size={18} />
+            <span>Default - Macbook Pro Mic (Built-in)</span>
           </div>
           <span className="text-slate-400">›</span>
-        </button>
-        <button className="bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-6 py-3 transition-colors">
-          Test
-        </button>
+        </button> */}
+
+        <div className=" items-center gap-3 hidden">
+          <Mic size={18} className="text-slate-400" />
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={micVolume}
+            onChange={e => onMicVolumeChange(parseInt(e.target.value))}
+            className="flex-1 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+          />
+        </div>
+      </div>
+
+      {/* Speakers */}
+      <div className=" hidden">
+        <label className="block text-slate-300 text-sm font-medium mb-3">
+          Speakers
+        </label>
+        <div className="flex gap-3">
+          <button className="flex-1 bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between transition-colors">
+            <div className="flex items-center gap-3">
+              <Volume2 size={18} />
+              <span>Default - Macbook Pro...</span>
+            </div>
+            <span className="text-slate-400">›</span>
+          </button>
+          <button className="bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-6 py-3 transition-colors">
+            Test
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const NotificationsSettings: FC<{
   notifications: NotificationSettings;
@@ -193,6 +227,62 @@ const TabButton: FC<TabButtonProps> = ({ isActive, onClick, icon, label }) => (
   </button>
 );
 
+const MediaDeviceDropdown = ({
+  devices,
+  selectedDeviceId,
+  source,
+}: {
+  devices: MediaDeviceInfo[];
+  selectedDeviceId: string | null;
+  source: 'mic' | 'camera';
+}) => {
+  const { switchDevice } = useMedia();
+
+  const handleValueChange = React.useCallback(
+    (value: string) => {
+      switchDevice(source, value);
+    },
+    [switchDevice, source]
+  );
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="w-full h-12 bg-slate-800 hover:bg-slate-700 text-white rounded-lg  flex items-center justify-between transition-colors">
+          <div className="flex items-center gap-3">
+            {source === 'camera' ? (
+              <Video size={18} />
+            ) : (
+              <Mic size={18} className="text-slate-400" />
+            )}
+            <span>
+              {devices
+                .find(device => device.deviceId === selectedDeviceId)
+                ?.label.toString()}
+            </span>
+          </div>
+          <span className="text-slate-400">›</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className=" w-full bg-linear-to-bl from-slate-900 to-slate-800 ">
+        <DropdownMenuRadioGroup
+          value={selectedDeviceId?.toString()}
+          onValueChange={handleValueChange}
+        >
+          {devices.map(device => (
+            <DropdownMenuRadioItem
+              key={device.deviceId}
+              value={device.deviceId}
+              className="focus:bg-white/8"
+            >
+              {device.label}
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 const SettingsModal: FC = () => {
   const settingsOpen = useSettingsOpen();
   const settingsAction = useSettingsActions();
@@ -219,7 +309,7 @@ const SettingsModal: FC = () => {
 
   return (
     <Dialog open={settingsOpen} onOpenChange={settingsAction.toggle}>
-      <DialogContent className="md:max-w-2xl lg:max-w-3xl p-0 gap-0 bg-slate-950 border-slate-800 max-h-[700px]">
+      <DialogContent className="md:max-w-2xl lg:max-w-3xl p-0 gap-0  border-slate-800 max-h-[90%] h-[600px] bg-linear-to-br from-slate-950 via-slate-900 to-black">
         <div className="flex h-full">
           {/* Left Sidebar */}
           <div className="w-64 border-r border-slate-800 p-6 flex flex-col">
