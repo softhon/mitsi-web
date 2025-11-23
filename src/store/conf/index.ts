@@ -10,6 +10,7 @@ import { createGridSlice } from './slices/grid-slice';
 import { createChatSlice } from './slices/chat-slice';
 import { createModalSlice } from './slices/modal-slice';
 import { createScreenSlice } from './slices/screen-slice';
+import { createSettingsSlice } from './slices/settings-slice';
 
 export const useConfStore = create<ConfStoreState>()(
   devtools(
@@ -22,6 +23,7 @@ export const useConfStore = create<ConfStoreState>()(
       chat: createChatSlice(set, get, api),
       modal: createModalSlice(set, get, api),
       screen: createScreenSlice(set, get, api),
+      settings: createSettingsSlice(set, get, api),
     })),
     { name: 'conf-store' }
   )

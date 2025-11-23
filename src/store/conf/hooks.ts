@@ -161,11 +161,25 @@ export const useModalActions = () =>
 // ============================================================================
 // CHAT SELECTORS
 // ============================================================================
+
 export const useChats = () => useConfStore(state => state.chat.chats);
 export const useChatActions = () =>
   useMemo(
     () => ({
       addChat: useConfStore.getState().chat.add,
+    }),
+    []
+  );
+
+// ============================================================================
+// SETTINGS SELECTORS
+// ============================================================================
+
+export const useSettingsOpen = () => useConfStore(state => state.settings.open);
+export const useSettingsActions = () =>
+  useMemo(
+    () => ({
+      toggle: useConfStore.getState().settings.toggle,
     }),
     []
   );
