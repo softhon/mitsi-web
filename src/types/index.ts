@@ -201,3 +201,11 @@ export interface Dimensions {
   width: number;
   height: number;
 }
+
+export interface NotificationSettings {
+  peerJoined: boolean;
+  peerLeave: boolean;
+  newMessage: boolean;
+  handRaise: boolean;
+  error: boolean;
+}

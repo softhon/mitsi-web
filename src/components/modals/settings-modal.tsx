@@ -19,6 +19,7 @@ import {
   useMicDeviceId,
   useMicDevices,
   useSettingsActions,
+  useSettingsNotification,
   useSettingsOpen,
 } from '@/store/conf/hooks';
 import {
@@ -30,14 +31,6 @@ import {
 } from '../ui/dropdown-menu';
 import { useMedia } from '@/hooks/use-media';
 import { Button } from '../ui/button';
-
-interface NotificationSettings {
-  peerJoined: boolean;
-  peerLeave: boolean;
-  newMessage: boolean;
-  handRaise: boolean;
-  error: boolean;
-}
 
 type TabType = 'device' | 'notifications';
 
@@ -98,13 +91,6 @@ const DeviceSettings: FC<{
           selectedDeviceId={cameraDeviceId}
           source="camera"
         />
-        {/* <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between transition-colors">
-        <div className="flex items-center gap-3">
-          <Video size={18} />
-          <span>Facetime HD Camera</span>
-        </div>
-        <span className="text-slate-400">›</span>
-      </button> */}
       </div>
 
       {/* Microphone */}
@@ -117,13 +103,6 @@ const DeviceSettings: FC<{
           selectedDeviceId={micDeviceId}
           source="mic"
         />
-        {/* <button className="w-full bg-slate-800 hover:bg-slate-700 text-white rounded-lg px-4 py-3 flex items-center justify-between mb-4 transition-colors">
-          <div className="flex items-center gap-3">
-            <Mic size={18} />
-            <span>Default - Macbook Pro Mic (Built-in)</span>
-          </div>
-          <span className="text-slate-400">›</span>
-        </button> */}
 
         <div className=" items-center gap-3 hidden">
           <Mic size={18} className="text-slate-400" />
@@ -160,51 +139,52 @@ const DeviceSettings: FC<{
   );
 };
 
-const NotificationsSettings: FC<{
-  notifications: NotificationSettings;
-  onNotificationToggle: (key: keyof NotificationSettings) => void;
-}> = ({ notifications, onNotificationToggle }) => (
-  <div>
-    <h3 className="text-white text-xl font-semibold mb-8">Notifications</h3>
+const NotificationsSettings = () => {
+  const settingsNotification = useSettingsNotification();
+  const settingsActions = useSettingsActions();
+  return (
+    <div>
+      <h3 className="text-white text-xl font-semibold mb-8">Notifications</h3>
 
-    <div className="space-y-4">
-      <NotificationToggle
-        label="Peer Joined"
-        icon={<Users size={20} className="text-slate-400" />}
-        isEnabled={notifications.peerJoined}
-        onChange={() => onNotificationToggle('peerJoined')}
-      />
+      <div className="space-y-4">
+        <NotificationToggle
+          label="Peer Joined"
+          icon={<Users size={20} className="text-slate-400" />}
+          isEnabled={settingsNotification.peerJoined}
+          onChange={() => settingsActions.toggleNotification('peerJoined')}
+        />
 
-      <NotificationToggle
-        label="Peer Leave"
-        icon={<LogOut size={20} className="text-slate-400" />}
-        isEnabled={notifications.peerLeave}
-        onChange={() => onNotificationToggle('peerLeave')}
-      />
+        <NotificationToggle
+          label="Peer Leave"
+          icon={<LogOut size={20} className="text-slate-400" />}
+          isEnabled={settingsNotification.peerLeave}
+          onChange={() => settingsActions.toggleNotification('peerLeave')}
+        />
 
-      <NotificationToggle
-        label="New Message"
-        icon={<MessageSquare size={20} className="text-slate-400" />}
-        isEnabled={notifications.newMessage}
-        onChange={() => onNotificationToggle('newMessage')}
-      />
+        <NotificationToggle
+          label="New Message"
+          icon={<MessageSquare size={20} className="text-slate-400" />}
+          isEnabled={settingsNotification.newMessage}
+          onChange={() => settingsActions.toggleNotification('newMessage')}
+        />
 
-      <NotificationToggle
-        label="Hand Raise"
-        icon={<Hand size={20} className="text-slate-400" />}
-        isEnabled={notifications.handRaise}
-        onChange={() => onNotificationToggle('handRaise')}
-      />
+        <NotificationToggle
+          label="Hand Raise"
+          icon={<Hand size={20} className="text-slate-400" />}
+          isEnabled={settingsNotification.handRaise}
+          onChange={() => settingsActions.toggleNotification('handRaise')}
+        />
 
-      <NotificationToggle
-        label="Error"
-        icon={<AlertCircle size={20} className="text-slate-400" />}
-        isEnabled={notifications.error}
-        onChange={() => onNotificationToggle('error')}
-      />
+        <NotificationToggle
+          label="Error"
+          icon={<AlertCircle size={20} className="text-slate-400" />}
+          isEnabled={settingsNotification.error}
+          onChange={() => settingsActions.toggleNotification('error')}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface TabButtonProps {
   isActive: boolean;
@@ -288,20 +268,6 @@ const SettingsModal: FC = () => {
   const settingsAction = useSettingsActions();
   const [activeTab, setActiveTab] = useState<TabType>('device');
   const [micVolume, setMicVolume] = useState<number>(65);
-  const [notifications, setNotifications] = useState<NotificationSettings>({
-    peerJoined: false,
-    peerLeave: false,
-    newMessage: true,
-    handRaise: true,
-    error: true,
-  });
-
-  const handleNotificationToggle = (key: keyof NotificationSettings): void => {
-    setNotifications(prev => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
 
   const handleMicVolumeChange = (volume: number): void => {
     setMicVolume(volume);
@@ -341,12 +307,7 @@ const SettingsModal: FC = () => {
               />
             )}
 
-            {activeTab === 'notifications' && (
-              <NotificationsSettings
-                notifications={notifications}
-                onNotificationToggle={handleNotificationToggle}
-              />
-            )}
+            {activeTab === 'notifications' && <NotificationsSettings />}
           </div>
         </div>
       </DialogContent>

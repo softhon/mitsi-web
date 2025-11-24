@@ -176,10 +176,14 @@ export const useChatActions = () =>
 // ============================================================================
 
 export const useSettingsOpen = () => useConfStore(state => state.settings.open);
+export const useSettingsNotification = () =>
+  useConfStore(state => state.settings.notifications);
+
 export const useSettingsActions = () =>
   useMemo(
     () => ({
       toggle: useConfStore.getState().settings.toggle,
+      toggleNotification: useConfStore.getState().settings.toggleNotification,
     }),
     []
   );
