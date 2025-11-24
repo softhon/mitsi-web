@@ -1,5 +1,12 @@
 import { Button } from '../ui/button';
-import { MoreVertical, PhoneOff } from 'lucide-react';
+import { DoorClosed, LogOut, MoreVertical, PhoneOff } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 const End = () => {
   const handleLeaveCall = () => {
@@ -15,13 +22,26 @@ const End = () => {
       >
         <PhoneOff className="w-5 h-5" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
-      >
-        <MoreVertical className="w-4 h-4" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
+          >
+            <MoreVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-linear-to-bl from-slate-900 to-slate-800">
+          <DropdownMenuItem>
+            <LogOut /> Leave Meeting
+          </DropdownMenuItem>
+          <DropdownMenuSeparator></DropdownMenuSeparator>
+          <DropdownMenuItem>
+            <DoorClosed /> End Meeting
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
