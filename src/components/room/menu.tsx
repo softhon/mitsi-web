@@ -1,7 +1,7 @@
 import { Button } from '../ui/button';
 import {
   Fullscreen,
-  Image,
+  // Image,
   Menu as MenuIcon,
   MessageSquareWarning,
   Settings,
@@ -13,8 +13,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { useSettingsActions } from '@/store/conf/hooks';
+import { useCallback, useState } from 'react';
 
 const Menu = () => {
+  const [fullScreen, setFullScreen] = useState(false);
+  const settingsAction = useSettingsActions();
+  const makeFullScreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+    setFullScreen(prev => !prev);
+  }, []);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,19 +42,27 @@ const Menu = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-linear-to-bl from-slate-900 to-slate-800">
-        <DropdownMenuItem>
-          <Fullscreen /> Go Fullscreen
+        <DropdownMenuItem onClick={makeFullScreen} className="focus:bg-white/8">
+          <Fullscreen /> {fullScreen ? 'Exit' : 'Go'} Fullscreen
         </DropdownMenuItem>
-
-        <DropdownMenuItem>
-          <Image /> Background Effect
-        </DropdownMenuItem>
-        <DropdownMenuSeparator></DropdownMenuSeparator>
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={settingsAction.toggle}
+          className="focus:bg-white/8"
+        >
           <Settings /> Settings
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <MessageSquareWarning /> Report/Feedback
+        {/* <DropdownMenuItem>
+          <Image /> Background Effect
+        </DropdownMenuItem> */}
+        <DropdownMenuSeparator></DropdownMenuSeparator>
+
+        <DropdownMenuItem
+          onClick={() =>
+            window.open('https://github.com/softhon/mitsi-web/issues', '_blank')
+          }
+          className="focus:bg-white/8"
+        >
+          <MessageSquareWarning /> Issue/Feedback
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

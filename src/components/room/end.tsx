@@ -1,5 +1,5 @@
 import { Button } from '../ui/button';
-import { DoorClosed, LogOut, MoreVertical, PhoneOff } from 'lucide-react';
+import { CircleStop, LogOut, MoreVertical, PhoneOff } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,14 +37,18 @@ const End = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-linear-to-bl from-slate-900 to-slate-800">
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => window.location.reload()}
+            className="focus:bg-white/8"
+          >
             <LogOut /> Leave
           </DropdownMenuItem>
           <DropdownMenuSeparator></DropdownMenuSeparator>
           <DropdownMenuItem
             onClick={() => cautionActions.set(CautionType.EndSession)}
+            className="focus:bg-white/8"
           >
-            <DoorClosed /> End For All
+            <CircleStop /> End For All
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
