@@ -7,6 +7,7 @@ import type { PeerSlice } from './slices/peer-slice';
 import type { RoomSlice } from './slices/room-slice';
 import type { ScreenSlice } from './slices/screen-slice';
 import type { SettingsSlice } from './slices/settings-slice';
+import type { ReactionSlice } from './slices/reaction-slice';
 
 export interface ConfStoreState {
   mic: MicSlice;
@@ -18,4 +19,5 @@ export interface ConfStoreState {
   modal: ModalSlice;
   screen: ScreenSlice;
   settings: SettingsSlice;
+  reactions: ReactionSlice;
 }

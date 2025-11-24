@@ -187,3 +187,19 @@ export const useSettingsActions = () =>
     }),
     []
   );
+
+// ============================================================================
+// EmojiReactions SELECTORS
+// ============================================================================
+
+export const useReactionsEmojis = () =>
+  useConfStore(state => state.reactions.emojis);
+
+export const useReactionsActions = () =>
+  useMemo(
+    () => ({
+      add: useConfStore.getState().reactions.add,
+      clear: useConfStore.getState().reactions.clear,
+    }),
+    []
+  );
