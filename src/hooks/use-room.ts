@@ -2,6 +2,7 @@ import {
   useChatActions,
   usePeerActions,
   usePeerMe,
+  useReactionsActions,
   useRoomAccess,
   useRoomData,
 } from '@/store/conf/hooks';
@@ -9,6 +10,7 @@ import { useCallback, useMemo } from 'react';
 import {
   Access,
   type AckCallbackData,
+  type EmojiReaction,
   type PeerData,
   type RoomData,
 } from '@/types';
@@ -32,6 +34,7 @@ export const useRoom = () => {
   const roomData = useRoomData();
   const roomAccess = useRoomAccess();
   const chatActions = useChatActions();
+  const reactionsActions = useReactionsActions();
 
   const joinVisitors = useCallback(async () => {
     if (!signalingService || !roomData) return;
@@ -130,6 +133,11 @@ export const useRoom = () => {
         const data = ValidationSchema.sendChat.parse(args);
         chatActions.addChat(data);
       },
+
+      [Actions.SendReaction]: async args => {
+        const data = ValidationSchema.sendReaction.parse(args);
+        reactionsActions.add(data as EmojiReaction);
+      },
     }),
     [
       closeConsumer,
@@ -138,6 +146,7 @@ export const useRoom = () => {
       peerActions,
       resumeConsumer,
       chatActions,
+      reactionsActions,
     ]
   );
 

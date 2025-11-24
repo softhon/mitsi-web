@@ -3,16 +3,16 @@ import { types as mediasoupTypes } from 'mediasoup-client';
 export type ProducerAudioSource = 'mic' | 'screenAudio';
 export type ProducerVideoSource = 'camera' | 'screen';
 export type ProducerSource = ProducerAudioSource | ProducerVideoSource;
-export type ReactionName =
+export type EmojiNames =
   | 'raisingHand'
   | 'thumbsUp'
-  | 'clap'
+  | 'clappingHand'
   | 'fire'
   | 'partyPopper'
-  | 'heartFace'
-  | 'hugFace'
-  | 'joy'
-  | 'cry'
+  | 'huggingFace'
+  | 'redHeart'
+  | 'tearsJoy'
+  | 'cryingFace'
   | 'thinkingFace';
 
 export enum Access {
@@ -208,4 +208,12 @@ export interface NotificationSettings {
   newMessage: boolean;
   handRaise: boolean;
   error: boolean;
+}
+
+export interface EmojiReaction {
+  id: string;
+  name: EmojiNames;
+  sender: PeerData;
+  position: `${number}%`;
+  timestamp: number;
 }

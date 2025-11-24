@@ -34,11 +34,11 @@ const End = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-linear-to-bl from-slate-900 to-slate-800">
           <DropdownMenuItem>
-            <LogOut /> Leave Meeting
+            <LogOut /> Leave
           </DropdownMenuItem>
           <DropdownMenuSeparator></DropdownMenuSeparator>
           <DropdownMenuItem>
-            <DoorClosed /> End Meeting
+            <DoorClosed /> End For All
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
