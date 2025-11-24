@@ -30,11 +30,10 @@ export type AckCallbackData<T = { [key: string]: unknown }> = {
   response?: T;
 };
 
-export enum ActionType {
+export enum CautionType {
   StartRecording = 'START_RECORDING',
   StopRecording = 'STOP_RECORDING',
-  LeaveMeeting = 'LEAVE_MEETING',
-  EndMeeting = 'END_MEETING',
+  EndSession = 'END_SESSION',
   RemovePeer = 'REMOVE_PEER',
   Hide = 'HIDE',
 }

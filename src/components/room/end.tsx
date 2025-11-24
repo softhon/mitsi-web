@@ -7,8 +7,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
+import { useCautionActions } from '@/store/conf/hooks';
+import { CautionType } from '@/types';
 
 const End = () => {
+  const cautionActions = useCautionActions();
+
   const handleLeaveCall = () => {
     window.location.reload();
   };
@@ -37,7 +41,9 @@ const End = () => {
             <LogOut /> Leave
           </DropdownMenuItem>
           <DropdownMenuSeparator></DropdownMenuSeparator>
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => cautionActions.set(CautionType.EndSession)}
+          >
             <DoorClosed /> End For All
           </DropdownMenuItem>
         </DropdownMenuContent>

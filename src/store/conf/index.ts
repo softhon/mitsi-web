@@ -13,6 +13,7 @@ import { createScreenSlice } from './slices/screen-slice';
 import { createSettingsSlice } from './slices/settings-slice';
 import { createReactionSlice } from './slices/reaction-slice';
 import { createHandSlice } from './slices/hand-slice';
+import { createCautionSlice } from './slices/caution-slice';
 
 export const useConfStore = create<ConfStoreState>()(
   devtools(
@@ -28,6 +29,7 @@ export const useConfStore = create<ConfStoreState>()(
       hand: createHandSlice(set, get, api),
       settings: createSettingsSlice(set, get, api),
       reactions: createReactionSlice(set, get, api),
+      caution: createCautionSlice(set, get, api),
     })),
     { name: 'conf-store' }
   )

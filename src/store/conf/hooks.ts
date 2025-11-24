@@ -216,3 +216,16 @@ export const useHandActions = () =>
     }),
     []
   );
+
+// ============================================================================
+// CAUTION SELECTORS
+// ============================================================================
+export const useCautionActive = () =>
+  useConfStore(state => state.caution.active);
+export const useCautionActions = () =>
+  useMemo(
+    () => ({
+      set: useConfStore.getState().caution.set,
+    }),
+    []
+  );

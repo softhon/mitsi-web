@@ -6,6 +6,7 @@ import { Access } from '@/types';
 import Conference from './conference';
 import { Helmet } from 'react-helmet';
 import SettingsModal from '@/components/modals/settings-modal';
+import CautionModal from '@/components/modals/caution-modal';
 
 const Room = () => {
   const roomAccess = useRoomAccess();
@@ -21,6 +22,7 @@ const Room = () => {
         <RoomProvider>
           {roomAccess === Access.Allowed ? <Conference /> : <JoinRoom />}
           <SettingsModal />
+          <CautionModal />
         </RoomProvider>
       </ServiceProvider>
     </>
