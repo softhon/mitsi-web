@@ -12,7 +12,7 @@ const Chat = () => {
       size="icon"
       className="w-12 h-12 rounded-xl  text-white relative
       bg-linear-to-br from-white/15 to-white/1  backdrop-blur-xl
-      "
+       cursor-pointer"
     >
       <MessageSquare className="w-5 h-5" />
       {/* Chat notification */}
