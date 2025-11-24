@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Mic, MicOff } from 'lucide-react';
+import { Hand, Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
 import { cn, getInitials } from '@/lib/utils';
 import {
@@ -19,7 +19,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const peerData = usePeerOthersById(peerId);
   const media = usePeerMediasById(peerId);
-  const peerMeCondition = usePeerConditionsById(peerId);
+  const peerCondition = usePeerConditionsById(peerId);
 
   useEffect(() => {
     if (!media?.camera || !videoRef.current) return;
@@ -39,7 +39,7 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
       className={cn(
         `bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
         rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out`,
-        peerMeCondition?.isSpeaking && ' border-blue-500'
+        peerCondition?.isSpeaking && ' border-blue-500'
       )}
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
@@ -84,8 +84,9 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className="absolute bottom-0 z-10 px-3 py-2 text-white text-sm font-medium truncate">
-        {peerData.name}
+      <div className="absolute  flex gap-x-2 items-center bottom-0 z-10 px-3 py-2 text-white text-sm font-medium ">
+        {peerCondition.hand?.raised && <Hand size={18} />}
+        <span className="truncate"> {peerData.name}</span>
       </div>
     </div>
   );

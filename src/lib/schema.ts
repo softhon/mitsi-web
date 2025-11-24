@@ -56,4 +56,12 @@ export const ValidationSchema = {
     position: z.string(),
     timestamp: z.number(),
   }),
+
+  raiseHand: z.object({
+    peer: peerDataSchema,
+    hand: z.object({
+      raised: z.boolean(),
+      timestamp: z.number().optional(),
+    }),
+  }),
 };

@@ -138,6 +138,11 @@ export const useRoom = () => {
         const data = ValidationSchema.sendReaction.parse(args);
         reactionsActions.add(data as EmojiReaction);
       },
+
+      [Actions.RaiseHand]: async args => {
+        const data = ValidationSchema.raiseHand.parse(args);
+        peerActions.updateCondition(data.peer.id, { hand: data.hand });
+      },
     }),
     [
       closeConsumer,

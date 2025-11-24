@@ -105,6 +105,10 @@ export interface PeerMedia {
 export interface PeerCondition {
   id: string;
   isSpeaking?: boolean;
+  hand?: {
+    raised: boolean;
+    timestamp?: number;
+  };
   isReconnectiing?: boolean;
 }
 
