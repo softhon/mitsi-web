@@ -39,12 +39,12 @@ const MediaDeviceDropdown = ({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
+          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 cursor-pointer"
         >
           <MoreVertical className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className=" w-56 bg-linear-to-bl from-slate-900 to-slate-800 ">
         <DropdownMenuLabel>
           Select {source === 'camera' ? source : 'microphone'}
         </DropdownMenuLabel>
@@ -57,6 +57,7 @@ const MediaDeviceDropdown = ({
             <DropdownMenuRadioItem
               key={device.deviceId}
               value={device.deviceId}
+              className="focus:bg-white/8"
             >
               {device.label}
             </DropdownMenuRadioItem>

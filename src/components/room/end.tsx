@@ -1,7 +1,18 @@
 import { Button } from '../ui/button';
-import { MoreVertical, PhoneOff } from 'lucide-react';
+import { CircleStop, LogOut, MoreVertical, PhoneOff } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { useCautionActions } from '@/store/conf/hooks';
+import { CautionType } from '@/types';
 
 const End = () => {
+  const cautionActions = useCautionActions();
+
   const handleLeaveCall = () => {
     window.location.reload();
   };
@@ -15,13 +26,32 @@ const End = () => {
       >
         <PhoneOff className="w-5 h-5" />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400"
-      >
-        <MoreVertical className="w-4 h-4" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 cursor-pointer"
+          >
+            <MoreVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-linear-to-bl from-slate-900 to-slate-800">
+          <DropdownMenuItem
+            onClick={() => window.location.reload()}
+            className="focus:bg-white/8"
+          >
+            <LogOut /> Leave
+          </DropdownMenuItem>
+          <DropdownMenuSeparator></DropdownMenuSeparator>
+          <DropdownMenuItem
+            onClick={() => cautionActions.set(CautionType.EndSession)}
+            className="focus:bg-white/8"
+          >
+            <CircleStop /> End For All
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import { Mic as MicOn, MicOff } from 'lucide-react';
 
 import { useMicDeviceId, useMicDevices, useMicOn } from '@/store/conf/hooks';
-import MediaDeviceDropdown from '../media-device-dropdown';
+import MediaDeviceDropdown from './media-device-dropdown';
 import { useMedia } from '@/hooks/use-media';
-import MediaControlButton from '../media-control-button';
+import MediaControlButton from './media-control-button';
 
 const Mic = () => {
   const { toggleMic } = useMedia();

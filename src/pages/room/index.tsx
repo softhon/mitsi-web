@@ -5,11 +5,12 @@ import { useRoomAccess } from '@/store/conf/hooks';
 import { Access } from '@/types';
 import Conference from './conference';
 import { Helmet } from 'react-helmet';
+import SettingsModal from '@/components/modals/settings-modal';
+import CautionModal from '@/components/modals/caution-modal';
 
 const Room = () => {
   const roomAccess = useRoomAccess();
-  const description =
-    'You are invited to meeting on Mitsi conferencing platform to connect and collaborate ';
+  const description = `You're invited to join meeting on Mitsi - conferencing platform to connect and collaborate`;
 
   return (
     <>
@@ -20,6 +21,8 @@ const Room = () => {
       <ServiceProvider>
         <RoomProvider>
           {roomAccess === Access.Allowed ? <Conference /> : <JoinRoom />}
+          <SettingsModal />
+          <CautionModal />
         </RoomProvider>
       </ServiceProvider>
     </>

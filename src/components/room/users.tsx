@@ -13,7 +13,7 @@ const Users = () => {
       onClick={modalActions.toggleParticipantOpen}
       variant="ghost"
       size="icon"
-      className="w-12 h-12 rounded-xl bg-gradient-to-bl from-white/15 to-white/1  backdrop-blur-xl text-white relative"
+      className="w-12 h-12 rounded-xl bg-linear-to-bl from-white/15 to-white/1  backdrop-blur-xl text-white relative cursor-pointer"
     >
       <UsersIcon className="w-5 h-5" />
       <Badge

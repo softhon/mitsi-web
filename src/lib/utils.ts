@@ -1,6 +1,7 @@
 import { types as mediasoupTypes } from 'mediasoup-client';
 
 import type {
+  EmojiNames,
   GridCalculatorConfig,
   Participant,
   ProducerSource,
@@ -9,6 +10,7 @@ import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import config from '@/config';
 import { v4 as uuidv4 } from 'uuid';
+import { Assets } from '@/assets';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -246,4 +248,17 @@ export const convertTimestampTo12HourTime = (timestamp: number) => {
   const paddedMinute = minute < 10 ? '0' + minute : minute;
 
   return paddedHours + ':' + paddedMinute + ' ' + period;
+};
+
+export const emojiIcons: Record<EmojiNames, string> = {
+  raisingHand: Assets.raisingHand,
+  thumbsUp: Assets.thumbsUp,
+  clappingHand: Assets.clappingHand,
+  fire: Assets.fire,
+  partyPopper: Assets.partyPopper,
+  huggingFace: Assets.huggingFace,
+  redHeart: Assets.redHeart,
+  cryingFace: Assets.cryingFace,
+  tearsJoy: Assets.tearsJoy,
+  thinkingFace: Assets.thinkingFace,
 };

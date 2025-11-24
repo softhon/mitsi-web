@@ -1,0 +1,31 @@
+.riseAndFade {
+  animation: riseAndFade 5s ease-in-out forwards;
+}
+
+/* Keyframe for rising and fading */
+@keyframes riseAndFade {
+  0% {
+    bottom: 0;
+    opacity: 1;
+  }
+
+  70% {
+    /* bottom: 70%;     */
+    opacity: 0.9;
+  }
+
+  80% {
+    /* bottom: 70%;     */
+    opacity: 0.6;
+  }
+
+  90% {
+    /* bottom: 70%;     */
+    opacity: 0.4;
+  }
+
+  100% {
+    bottom: 75%;
+    opacity: 0;
+  }
+}

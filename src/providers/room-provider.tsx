@@ -89,9 +89,9 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
       if (reconnectionToastRef.current)
         toast.dismiss(reconnectionToastRef.current);
 
-      toast.success('You are reconnected', {
+      toast.success(`Your connection is restored and  you're reconnected`, {
         closeButton: true,
-        position: 'top-center',
+        position: 'bottom-center',
         richColors: true,
       });
     })().catch(err => console.log(err));
@@ -128,9 +128,9 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
           toast.dismiss(reconnectionToastRef.current);
 
         reconnectionToastRef.current = toast.loading(
-          'You are disconnected, attempting to reconnect',
+          `You're disconnected. Attempting to reconnect`,
           {
-            position: 'top-center',
+            position: 'bottom-center',
             richColors: true,
           }
         );

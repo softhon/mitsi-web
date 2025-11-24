@@ -75,6 +75,7 @@ export const usePeerOthersValues = () => {
     return Object.values(peerOthers);
   }, [peerOthers]);
 };
+
 export const usePeerMedias = () => useConfStore(state => state.peers.medias);
 export const usePeerMediasById = (id: string) =>
   useConfStore(state => state.peers.medias[id]);
@@ -161,11 +162,70 @@ export const useModalActions = () =>
 // ============================================================================
 // CHAT SELECTORS
 // ============================================================================
+
 export const useChats = () => useConfStore(state => state.chat.chats);
 export const useChatActions = () =>
   useMemo(
     () => ({
       addChat: useConfStore.getState().chat.add,
+    }),
+    []
+  );
+
+// ============================================================================
+// SETTINGS SELECTORS
+// ============================================================================
+
+export const useSettingsOpen = () => useConfStore(state => state.settings.open);
+export const useSettingsNotification = () =>
+  useConfStore(state => state.settings.notifications);
+
+export const useSettingsActions = () =>
+  useMemo(
+    () => ({
+      toggle: useConfStore.getState().settings.toggle,
+      toggleNotification: useConfStore.getState().settings.toggleNotification,
+    }),
+    []
+  );
+
+// ============================================================================
+// EmojiReactions SELECTORS
+// ============================================================================
+
+export const useReactionsEmojis = () =>
+  useConfStore(state => state.reactions.emojis);
+
+export const useReactionsActions = () =>
+  useMemo(
+    () => ({
+      add: useConfStore.getState().reactions.add,
+      clear: useConfStore.getState().reactions.clear,
+    }),
+    []
+  );
+
+// ============================================================================
+// HAND SELECTORS
+// ============================================================================
+export const useHandRaised = () => useConfStore(state => state.hand.raised);
+export const useHandActions = () =>
+  useMemo(
+    () => ({
+      toggle: useConfStore.getState().hand.toggle,
+    }),
+    []
+  );
+
+// ============================================================================
+// CAUTION SELECTORS
+// ============================================================================
+export const useCautionActive = () =>
+  useConfStore(state => state.caution.active);
+export const useCautionActions = () =>
+  useMemo(
+    () => ({
+      set: useConfStore.getState().caution.set,
     }),
     []
   );

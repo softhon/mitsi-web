@@ -48,4 +48,20 @@ export const ValidationSchema = {
     receiver: peerDataSchema.optional(),
     createdAt: z.number(),
   }),
+
+  sendReaction: z.object({
+    id: z.string(),
+    name: z.string(),
+    sender: peerDataSchema,
+    position: z.string(),
+    timestamp: z.number(),
+  }),
+
+  raiseHand: z.object({
+    peer: peerDataSchema,
+    hand: z.object({
+      raised: z.boolean(),
+      timestamp: z.number().optional(),
+    }),
+  }),
 };

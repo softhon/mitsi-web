@@ -4,12 +4,15 @@ import { useEffect } from 'react';
 import { useMedia } from '@/hooks/use-media';
 import Mic from '../mic';
 import Camera from '../camera';
+import { useSettingsActions } from '@/store/conf/hooks';
 
 const Controls = () => {
   const { requestCameraAndMicPermissions } = useMedia();
   useEffect(() => {
     requestCameraAndMicPermissions();
   }, [requestCameraAndMicPermissions]);
+
+  const settingsAction = useSettingsActions();
 
   return (
     <div className="flex items-center justify-center gap-4">
@@ -29,9 +32,10 @@ const Controls = () => {
 
       {/* Settings */}
       <Button
+        onClick={settingsAction.toggle}
         variant="ghost"
         size="icon"
-        className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400"
+        className=" cursor-pointer w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400"
       >
         <Settings className="w-5 h-5" />
       </Button>

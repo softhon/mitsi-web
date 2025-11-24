@@ -5,6 +5,7 @@ import Header from '@/components/room/header';
 import PeerAudioList from '@/components/room/peer-audio-list';
 import Display from '@/components/room/display';
 import DynamicBg from '@/components/dynamic-bg';
+import ReactionDisplay from '@/components/room/reaction-display';
 
 export const Conference: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ export const Conference: React.FC = () => {
         {/* Bottom Controls */}
         <ControlBar />
         <PeerAudioList />
+        <ReactionDisplay />
       </div>
     </div>
   );

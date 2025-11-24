@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { Mic, MicOff } from 'lucide-react';
+import { Hand, Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
 import { cn, getInitials, getPeerId } from '@/lib/utils';
 import {
   useCameraDeviceId,
   useCameraOn,
+  useHandRaised,
   useMicOn,
   usePeerConditionsById,
   usePeerMe,
@@ -20,6 +21,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const micOn = useMicOn();
   const cameraOn = useCameraOn();
+  const handRaised = useHandRaised();
   const cameraDeviceId = useCameraDeviceId();
   const peerMe = usePeerMe();
   const peerMeCondition = usePeerConditionsById(peerMe?.id || getPeerId());
@@ -81,8 +83,9 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
       </div>
 
       {/* Name Bar */}
-      <div className="absolute bottom-0 z-10 px-3 py-2 text-white text-sm font-medium truncate">
-        {peerMe.name}
+      <div className="absolute flex gap-x-2 items-center  bottom-0 z-10 px-3 py-2 text-white text-sm font-medium  ">
+        {handRaised && <Hand size={18} />}
+        <span className="truncate">{peerMe.name}</span>
       </div>
     </div>
   );

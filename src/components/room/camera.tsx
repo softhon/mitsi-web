@@ -1,5 +1,5 @@
 import { Video, VideoOff } from 'lucide-react';
-import MediaDeviceDropdown from '../media-device-dropdown';
+import MediaDeviceDropdown from './media-device-dropdown';
 
 import {
   useCameraDeviceId,
@@ -7,7 +7,7 @@ import {
   useCameraOn,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
-import MediaControlButton from '../media-control-button';
+import MediaControlButton from './media-control-button';
 
 const Camera = () => {
   const { toggleCamera } = useMedia();
