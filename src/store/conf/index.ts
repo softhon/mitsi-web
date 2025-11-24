@@ -12,6 +12,7 @@ import { createModalSlice } from './slices/modal-slice';
 import { createScreenSlice } from './slices/screen-slice';
 import { createSettingsSlice } from './slices/settings-slice';
 import { createReactionSlice } from './slices/reaction-slice';
+import { createHandSlice } from './slices/hand-slice';
 
 export const useConfStore = create<ConfStoreState>()(
   devtools(
@@ -24,6 +25,7 @@ export const useConfStore = create<ConfStoreState>()(
       chat: createChatSlice(set, get, api),
       modal: createModalSlice(set, get, api),
       screen: createScreenSlice(set, get, api),
+      hand: createHandSlice(set, get, api),
       settings: createSettingsSlice(set, get, api),
       reactions: createReactionSlice(set, get, api),
     })),
