@@ -9,12 +9,17 @@ import {
 } from '../ui/dropdown-menu';
 import { useCautionActions } from '@/store/conf/hooks';
 import { CautionType } from '@/types';
+import { useSignaling } from '@/hooks/use-signaling';
+import { Actions } from '@/types/actions';
 
 const End = () => {
   const cautionActions = useCautionActions();
+  const { signalingService } = useSignaling();
 
   const handleLeaveCall = () => {
-    window.location.reload();
+    signalingService?.sendMessage({
+      action: Actions.EndRoom,
+    });
   };
   return (
     <div className="flex items-center gap-1">
