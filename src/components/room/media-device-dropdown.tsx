@@ -39,7 +39,7 @@ const MediaDeviceDropdown = ({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 cursor-pointer"
+          className="w-8 h-8 hidden md:flex  rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 cursor-pointer"
         >
           <MoreVertical className="w-4 h-4" />
         </Button>
