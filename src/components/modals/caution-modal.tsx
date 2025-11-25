@@ -3,8 +3,11 @@ import { Dialog, DialogContent } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { CautionType } from '@/types';
 import { useCautionActions, useCautionActive } from '@/store/conf/hooks';
+import { useSignaling } from '@/hooks/use-signaling';
+import { Actions } from '@/types/actions';
 
 const CautionModal = () => {
+  const { signalingService } = useSignaling();
   const cautionActive = useCautionActive();
   const cautionActions = useCautionActions();
 
@@ -36,7 +39,9 @@ const CautionModal = () => {
     START_RECORDING: () => {},
     STOP_RECORDING: () => {},
     END_SESSION: () => {
-      window.location.reload();
+      signalingService?.sendMessage({
+        action: Actions.EndRoom,
+      });
     },
     REMOVE_PEER: () => {},
     HIDE: () => {

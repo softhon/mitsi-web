@@ -50,7 +50,7 @@ const NotificationToggle: FC<NotificationItemProps> = ({
   <div className="flex items-center justify-between p-4 bg-slate-800/30 rounded-lg hover:bg-slate-800/50 transition-colors">
     <div className="flex items-center gap-3">
       {icon}
-      <span className="text-white">{label}</span>
+      <span className="text-white text-sm md:text-base ">{label}</span>
     </div>
     <button
       onClick={onChange}
@@ -78,7 +78,9 @@ const DeviceSettings: FC<{
 
   return (
     <div>
-      <h3 className="text-white text-xl font-semibold mb-8">Device Settings</h3>
+      <h3 className="text-white  md:text-xl font-semibold mb-8">
+        Device Settings
+      </h3>
 
       {/* Video */}
       <div className="mb-8">
@@ -144,7 +146,9 @@ const NotificationsSettings = () => {
   const settingsActions = useSettingsActions();
   return (
     <div>
-      <h3 className="text-white text-xl font-semibold mb-8">Notifications</h3>
+      <h3 className="text-white md:text-xl font-semibold mb-8">
+        Notifications
+      </h3>
 
       <div className="space-y-4">
         <NotificationToggle
@@ -196,14 +200,14 @@ interface TabButtonProps {
 const TabButton: FC<TabButtonProps> = ({ isActive, onClick, icon, label }) => (
   <button
     onClick={onClick}
-    className={`w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+    className={`w-full flex items-center justify-center md:justify-start gap-3  md:px-4 py-2 rounded-lg transition-colors ${
       isActive
         ? 'bg-slate-800 text-white'
         : 'text-slate-400 hover:text-slate-300'
     }`}
   >
     {icon}
-    <span>{label}</span>
+    <span className=" hidden md:inline">{label}</span>
   </button>
 );
 
@@ -235,7 +239,7 @@ const MediaDeviceDropdown = ({
             ) : (
               <Mic size={18} className="text-slate-400" />
             )}
-            <span>
+            <span className="text-xs sm:text-sm md:text-base">
               {devices
                 .find(device => device.deviceId === selectedDeviceId)
                 ?.label.toString()}
@@ -275,11 +279,13 @@ const SettingsModal: FC = () => {
 
   return (
     <Dialog open={settingsOpen} onOpenChange={settingsAction.toggle}>
-      <DialogContent className="md:max-w-2xl lg:max-w-3xl p-0 gap-0  border-slate-800 max-h-[90%] h-[600px] bg-linear-to-br from-slate-950 via-slate-900 to-black">
+      <DialogContent className="w-full overflow-y-auto md:max-w-3xl  p-0 gap-0  border-slate-800 max-h-[90%] h-[600px] bg-linear-to-br from-slate-950 via-slate-900 to-black">
         <div className="flex h-full">
           {/* Left Sidebar */}
-          <div className="w-64 border-r border-slate-800 p-6 flex flex-col">
-            <h2 className="text-white text-2xl font-semibold mb-8">Settings</h2>
+          <div className="w-16 md:w-64 border-r border-slate-800 p-3 md:p-6 flex flex-col">
+            <h2 className="text-white text-2xl font-semibold mb-8 ">
+              <span className="hidden md:flex"> Settings</span>
+            </h2>
 
             <nav className="space-y-3 flex-1">
               <TabButton
@@ -299,7 +305,7 @@ const SettingsModal: FC = () => {
           </div>
 
           {/* Right Content Area */}
-          <div className="flex-1 p-8 overflow-y-auto relative">
+          <div className="flex-1 px-4 py-8 md:p-8 overflow-y-auto relative">
             {activeTab === 'device' && (
               <DeviceSettings
                 micVolume={micVolume}
