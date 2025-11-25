@@ -34,6 +34,9 @@ const ControlBar = () => {
 
         {/* Right Controls */}
         <div className="flex items-center gap-2 ">
+          <span className=" md:hidden">
+            <End />
+          </span>
           <Chat />
           <Users />
           <Menu />
