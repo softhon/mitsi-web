@@ -1,14 +1,23 @@
 import { cn } from '@/lib/utils';
-import { usePeerMe, usePeerScreens, useScreenOn } from '@/store/conf/hooks';
+import {
+  useFullscreenActions,
+  usePeerActions,
+  usePeerMe,
+  usePeerScreens,
+  useScreenOn,
+} from '@/store/conf/hooks';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMedia } from '@/hooks/use-media';
 import { Maximize2, MonitorUp } from 'lucide-react';
+import { FullscreenType } from '@/types';
 
 const ScreenView = () => {
   const { getTrack, getConsumer } = useMedia();
   const [aspectRatio, setAspectRatio] = useState(0);
+  const fullscreenActions = useFullscreenActions();
 
+  const peerActions = usePeerActions();
   const peerScreens = usePeerScreens();
   const screenOn = useScreenOn();
   const peerMe = usePeerMe();
@@ -44,6 +53,12 @@ const ScreenView = () => {
     videoRef.current.srcObject = stream;
   }, [peerId, getConsumer, getTrack, screenOn]);
 
+  const openFullscreen = () => {
+    if (!peerId) return;
+    peerActions.setSelectedId(peerId);
+    fullscreenActions.set(FullscreenType.SCREEN);
+  };
+
   if (!peerId) return null;
   return (
     <div
@@ -51,7 +66,10 @@ const ScreenView = () => {
         'relative  bg-linear-to-br from-white/5 to-white/2  rounded-2xl h-1/2 lg:h-full w-full overflow-hidden'
       )}
     >
-      <div className=" cursor-pointer absolute h-fit bg-black/30 hover:bg-black/50 right-2 top-2 rounded-md p-2 ">
+      <div
+        onClick={openFullscreen}
+        className=" cursor-pointer absolute h-fit bg-black/30 hover:bg-black/50 right-2 top-2 rounded-md p-2 "
+      >
         <Maximize2 size={16} />
       </div>
       <div

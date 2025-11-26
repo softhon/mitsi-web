@@ -17,7 +17,7 @@ const PeerScreen = () => {
     if (!consumer) return;
 
     const { track } = consumer;
-    console.log('track- size =>', track.getSettings().aspectRatio);
+    // console.log('track- size =>', track.getSettings().aspectRatio);
     const stream = new MediaStream([track]);
     videoRef.current.srcObject = stream;
   }, [peerId, getConsumer]);

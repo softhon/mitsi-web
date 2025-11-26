@@ -16,7 +16,7 @@ const MyScreen = () => {
     if (!track) return;
     const ratio =
       Math.round((track.getSettings().aspectRatio || 1 / 1) * 10) / 10;
-    console.log('track- size =>', ratio, '=>', track.getSettings().aspectRatio);
+    // console.log('track- size =>', ratio, '=>', track.getSettings().aspectRatio);
     setAspectRatio(ratio);
     const stream = new MediaStream([track]);
     videoRef.current.srcObject = stream;
