@@ -11,7 +11,7 @@ export interface PeerSlice {
     id: string;
     lastActiveSpeechTimestamp: number;
   }[]; // id and array position;
-
+  selectedId: string | null;
   screens: string[]; // ids of peers sharing screen -> for optimization
   //Actions
   addData: (data: PeerData, isMe?: boolean) => void;
@@ -21,6 +21,7 @@ export interface PeerSlice {
   updateCondition: (id: string, condition: Partial<PeerCondition>) => void;
   updateLastActiveSpeechTimestamp: (id: string, timeStamp: number) => void;
   swapPositions: (activeIndex: number, passiveIndex: number) => void;
+  setSelectedId: (id: string | null) => void;
   addScreen: (id: string) => void;
   removeScreen: (id: string) => void;
   remove: (id: string) => void;
@@ -38,6 +39,7 @@ export const createPeerSlice: StateCreator<
   medias: {},
   conditions: {},
   positions: [],
+  selectedId: null,
   screens: [],
   addData: (data, isYou = false) =>
     set(state => {
@@ -134,6 +136,11 @@ export const createPeerSlice: StateCreator<
       if (index >= 0) {
         state.peers.screens.splice(index, 1);
       }
+      return state;
+    }),
+  setSelectedId: id =>
+    set(state => {
+      state.peers.selectedId = id;
       return state;
     }),
   remove: id =>
