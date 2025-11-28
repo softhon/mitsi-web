@@ -84,7 +84,7 @@ We welcome contributions! To get started:
 
 ## License
 
-Mitsi is licensed under the [MIT License](LICENSE). Each repository includes its own `LICENSE` file.
+Mitsi is licensed under the [Apache 2.0](LICENSE). Each repository includes its own `LICENSE` file.
 
 ## Contact
 
