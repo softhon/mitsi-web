@@ -1,23 +1,16 @@
 import { cn } from '@/lib/utils';
-import {
-  useFullscreenActions,
-  usePeerActions,
-  usePeerMe,
-  usePeerScreens,
-  useScreenOn,
-} from '@/store/conf/hooks';
+import { usePeerMe, usePeerScreens, useScreenOn } from '@/store/conf/hooks';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMedia } from '@/hooks/use-media';
 import { Maximize2, MonitorUp } from 'lucide-react';
-import { FullscreenType } from '@/types';
 
 const ScreenView = () => {
   const { getTrack, getConsumer } = useMedia();
   const [aspectRatio, setAspectRatio] = useState(0);
-  const fullscreenActions = useFullscreenActions();
+  // const fullscreenActions = useFullscreenActions();
 
-  const peerActions = usePeerActions();
+  // const peerActions = usePeerActions();
   const peerScreens = usePeerScreens();
   const screenOn = useScreenOn();
   const peerMe = usePeerMe();
@@ -55,8 +48,8 @@ const ScreenView = () => {
 
   const openFullscreen = () => {
     if (!peerId) return;
-    peerActions.setSelectedId(peerId);
-    fullscreenActions.set(FullscreenType.SCREEN);
+    // peerActions.setSelectedId(peerId);
+    // fullscreenActions.set(FullscreenType.Screen);
   };
 
   if (!peerId) return null;

@@ -39,7 +39,7 @@ export enum CautionType {
 }
 export enum FullscreenType {
   Camera = 'CAMERA',
-  SCREEN = 'SCREEN',
+  Screen = 'SCREEN',
   Hide = 'HIDE',
 }
 
