@@ -34,6 +34,10 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
 
   if (!peerData) return null;
 
+  // const openFullscreen = () => {
+  //   videoRef.current?.requestFullscreen().catch(error => console.log(error));
+  // };
+
   return (
     <div
       className={cn(

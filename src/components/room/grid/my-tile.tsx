@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Hand, Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
-import { cn, getInitials, getPeerId } from '@/lib/utils';
+import { cn, getInitials, getPeerId, isMobileDevice } from '@/lib/utils';
 import {
   useCameraDeviceId,
   useCameraOn,
@@ -25,6 +25,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   const cameraDeviceId = useCameraDeviceId();
   const peerMe = usePeerMe();
   const peerMeCondition = usePeerConditionsById(peerMe?.id || getPeerId());
+  const isAMobileDevice = isMobileDevice();
 
   useEffect(() => {
     if (!cameraOn || !videoRef.current) return;
@@ -50,7 +51,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
             ref={videoRef}
             className={cn(
               'w-full h-full relative z-10 scale-x-[-1]',
-              !peerMe.isMobileDevice && 'object-cover'
+              !isAMobileDevice && 'object-cover'
             )}
             autoPlay
             muted

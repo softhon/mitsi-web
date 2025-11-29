@@ -29,3 +29,30 @@
     opacity: 0;
   }
 }
+
+/* Chrome / Edge */
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+:fullscreen video::-webkit-media-controls {
+  display: none !important;
+}
+
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+/* Safari / iOS */
+video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+:-webkit-full-screen video::-webkit-media-controls {
+  display: none !important;
+}
+
+/* Firefox */
+video::-moz-media-controls {
+  display: none !important;
+}

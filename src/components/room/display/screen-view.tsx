@@ -47,9 +47,7 @@ const ScreenView = () => {
   }, [peerId, getConsumer, getTrack, screenOn]);
 
   const openFullscreen = () => {
-    if (!peerId) return;
-    // peerActions.setSelectedId(peerId);
-    // fullscreenActions.set(FullscreenType.Screen);
+    videoRef.current?.requestFullscreen();
   };
 
   if (!peerId) return null;
@@ -61,7 +59,7 @@ const ScreenView = () => {
     >
       <div
         onClick={openFullscreen}
-        className=" cursor-pointer absolute h-fit bg-black/30 hover:bg-black/50 right-2 top-2 rounded-md p-2 "
+        className=" cursor-pointer absolute z-10 h-fit bg-black/50 hover:bg-black/60 right-2 top-2 rounded-md p-2 "
       >
         <Maximize2 size={16} />
       </div>
@@ -73,10 +71,11 @@ const ScreenView = () => {
       >
         <video
           ref={videoRef}
-          className=" object-cover "
+          // className=" object-cover "
           autoPlay
           muted
           playsInline
+          controls={false}
           webkit-playsinline="true"
         />
 
