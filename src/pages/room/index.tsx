@@ -7,6 +7,7 @@ import Conference from './conference';
 import { Helmet } from 'react-helmet';
 import SettingsModal from '@/components/modals/settings-modal';
 import CautionModal from '@/components/modals/caution-modal';
+import FullScreenModal from '@/components/modals/fullscreen-modal';
 
 const Room = () => {
   const roomAccess = useRoomAccess();
@@ -23,6 +24,7 @@ const Room = () => {
           {roomAccess === Access.Allowed ? <Conference /> : <JoinRoom />}
           <SettingsModal />
           <CautionModal />
+          <FullScreenModal />
         </RoomProvider>
       </ServiceProvider>
     </>

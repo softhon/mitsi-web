@@ -37,6 +37,11 @@ export enum CautionType {
   RemovePeer = 'REMOVE_PEER',
   Hide = 'HIDE',
 }
+export enum FullscreenType {
+  Camera = 'CAMERA',
+  Screen = 'SCREEN',
+  Hide = 'HIDE',
+}
 
 export type AppData = {
   [key: string]: unknown;

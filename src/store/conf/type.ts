@@ -10,6 +10,7 @@ import type { SettingsSlice } from './slices/settings-slice';
 import type { ReactionSlice } from './slices/reaction-slice';
 import type { HandSlice } from './slices/hand-slice';
 import type { CautionSlice } from './slices/caution-slice';
+import type { FullscreenSlice } from './slices/fullscreen-slice';
 
 export interface ConfStoreState {
   mic: MicSlice;
@@ -24,4 +25,5 @@ export interface ConfStoreState {
   settings: SettingsSlice;
   reactions: ReactionSlice;
   caution: CautionSlice;
+  fullscreen: FullscreenSlice;
 }

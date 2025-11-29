@@ -34,6 +34,10 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
 
   if (!peerData) return null;
 
+  // const openFullscreen = () => {
+  //   videoRef.current?.requestFullscreen().catch(error => console.log(error));
+  // };
+
   return (
     <div
       className={cn(
@@ -49,8 +53,9 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
           <video
             ref={videoRef}
             className={cn(
-              'w-full h-full relative z-10',
-              !peerData.isMobileDevice && 'object-cover'
+              peerData?.isMobileDevice
+                ? 'object-contain'
+                : ' h-full w-full object-cover'
             )}
             autoPlay
             muted

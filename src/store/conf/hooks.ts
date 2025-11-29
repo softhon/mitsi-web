@@ -55,6 +55,8 @@ export const useScreenActions = () =>
 export const usePeerMe = () => useConfStore(state => state.peers.me);
 export const usePeerOthers = () => useConfStore(state => state.peers.others);
 export const usePeerScreens = () => useConfStore(state => state.peers.screens);
+export const usePeerSelectedId = () =>
+  useConfStore(state => state.peers.selectedId);
 export const usePeerOthersById = (id: string) =>
   useConfStore(state => state.peers.others[id]);
 export const usePeerOthersKeys = () => {
@@ -98,6 +100,7 @@ export const usePeerActions = () =>
       swapPositions: useConfStore.getState().peers.swapPositions,
       addScreen: useConfStore.getState().peers.addScreen,
       removeScreen: useConfStore.getState().peers.removeScreen,
+      setSelectedId: useConfStore.getState().peers.setSelectedId,
       remove: useConfStore.getState().peers.remove,
       clear: useConfStore.getState().peers.clear,
     }),
@@ -226,6 +229,19 @@ export const useCautionActions = () =>
   useMemo(
     () => ({
       set: useConfStore.getState().caution.set,
+    }),
+    []
+  );
+
+// ============================================================================
+// FULLSCREEN SELECTORS
+// ============================================================================
+export const useFullscreenActive = () =>
+  useConfStore(state => state.fullscreen.active);
+export const useFullscreenActions = () =>
+  useMemo(
+    () => ({
+      set: useConfStore.getState().fullscreen.set,
     }),
     []
   );
