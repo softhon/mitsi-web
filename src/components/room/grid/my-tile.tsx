@@ -11,7 +11,6 @@ import {
   usePeerMe,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface PeerTileProps {
   layout: Layout;
@@ -38,48 +37,42 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   return (
     <div
       className={cn(
-        `bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
-        rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out`,
+        ` bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
+        rounded-lg overflow-hidden relative flex items-center transition-all duration-300 ease-in-out`,
         peerMeCondition?.isSpeaking && ' border-blue-500'
       )}
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative  flex items-center justify-center">
-        {cameraOn ? (
-          <video
-            ref={videoRef}
-            className={cn(
-              isAMobileDevice ? 'object-contain' : ' h-full w-full object-cover'
-            )}
-            autoPlay
-            muted
-            playsInline
-            webkit-playsinline="true"
-          />
-        ) : (
-          <Avatar className=" w-24 h-24">
-            <AvatarFallback className="text-white text-xl bg-linear-to-bl from-white/15 to-white/1  backdrop-blur-x">
-              {getInitials(peerMe.name)}
-            </AvatarFallback>
-          </Avatar>
-        )}
-
-        {/* Mic Status */}
-        <div
-          className={cn(
-            'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
-            micOn
-              ? 'bg-green-500/20 backdrop-blur-sm'
-              : 'bg-red-500/20 backdrop-blur-sm'
-          )}
-        >
-          {micOn ? (
-            <Mic className="w-4 h-4 text-green-400" />
-          ) : (
-            <MicOff className="w-4 h-4 text-red-400" />
-          )}
+      {cameraOn ? (
+        <video
+          ref={videoRef}
+          className={cn('h-full w-full', !isAMobileDevice && ' object-cover')}
+          autoPlay
+          muted
+          playsInline
+          webkit-playsinline="true"
+        />
+      ) : (
+        <div className="w-24 h-24 bg-linear-to-br from-white/15 to-white/1 rounded-full flex items-center justify-center shadow-lg mx-auto">
+          {getInitials(peerMe.name)}
         </div>
+      )}
+
+      {/* Mic Status */}
+      <div
+        className={cn(
+          'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
+          micOn
+            ? 'bg-green-500/20 backdrop-blur-sm'
+            : 'bg-red-500/20 backdrop-blur-sm'
+        )}
+      >
+        {micOn ? (
+          <Mic className="w-4 h-4 text-green-400" />
+        ) : (
+          <MicOff className="w-4 h-4 text-red-400" />
+        )}
       </div>
 
       {/* Name Bar */}

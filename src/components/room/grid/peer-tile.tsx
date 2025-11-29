@@ -8,7 +8,6 @@ import {
   usePeerOthersById,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface PeerTileProps {
   peerId: string;
@@ -42,54 +41,48 @@ export const PeerTile: React.FC<PeerTileProps> = ({ peerId, layout }) => {
     <div
       className={cn(
         `bg-linear-to-br from-white/5 to-white/2 border  border-white/10 backdrop-blur-xl 
-        rounded-lg overflow-hidden flex flex-col relative transition-all duration-300 ease-in-out`,
+        rounded-lg overflow-hidden flex items-center relative transition-all duration-300 ease-in-out`,
         peerCondition?.isSpeaking && ' border-blue-500'
       )}
       style={{ width: `${layout.width}px`, height: `${layout.height}px` }}
     >
       {/* Video/Avatar Area */}
-      <div className="flex-1 relative flex items-center justify-center">
-        {media?.camera ? (
-          <video
-            ref={videoRef}
-            className={cn(
-              peerData?.isMobileDevice
-                ? 'object-contain'
-                : ' h-full w-full object-cover'
-            )}
-            autoPlay
-            muted
-            playsInline
-            webkit-playsinline="true"
-          />
-        ) : (
-          <Avatar className=" w-24 h-24 ">
-            {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-            <AvatarFallback className="text-white text-xl bg-linear-to-bl from-white/15 to-white/1  backdrop-blur-x ">
-              {getInitials(peerData.name)}
-            </AvatarFallback>
-          </Avatar>
-        )}
-
-        {/* Mic Status */}
-        <div
+      {media?.camera ? (
+        <video
+          ref={videoRef}
           className={cn(
-            'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
-            media?.mic
-              ? 'bg-green-500/20 backdrop-blur-sm'
-              : 'bg-red-500/20 backdrop-blur-sm'
+            'h-full w-full',
+            !peerData?.isMobileDevice && ' object-cover'
           )}
-        >
-          {media?.mic ? (
-            <Mic className="w-4 h-4 text-green-400" />
-          ) : (
-            <MicOff className="w-4 h-4 text-red-400" />
-          )}
+          autoPlay
+          muted
+          playsInline
+          webkit-playsinline="true"
+        />
+      ) : (
+        <div className="w-24 h-24 bg-linear-to-br from-white/15 to-white/1 rounded-full flex items-center justify-center shadow-lg mx-auto">
+          {getInitials(peerData.name)}
         </div>
+      )}
+
+      {/* Mic Status */}
+      <div
+        className={cn(
+          'absolute top-2 right-2 z-10 p-1.5 rounded-full ',
+          media?.mic
+            ? 'bg-green-500/20 backdrop-blur-sm'
+            : 'bg-red-500/20 backdrop-blur-sm'
+        )}
+      >
+        {media?.mic ? (
+          <Mic className="w-4 h-4 text-green-400" />
+        ) : (
+          <MicOff className="w-4 h-4 text-red-400" />
+        )}
       </div>
 
       {/* Name Bar */}
-      <div className="absolute  flex gap-x-2 items-center bottom-0 z-10 px-3 py-2 text-white text-sm font-medium ">
+      <div className="absolute flex gap-x-2 items-center bottom-0 z-10 px-3 py-2 text-white text-sm font-medium ">
         {peerCondition.hand?.raised && <Hand size={18} />}
         <span className="truncate"> {peerData.name}</span>
       </div>
