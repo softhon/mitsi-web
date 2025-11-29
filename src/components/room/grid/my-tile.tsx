@@ -50,8 +50,7 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
           <video
             ref={videoRef}
             className={cn(
-              'w-full h-full relative z-10 scale-x-[-1]',
-              !isAMobileDevice && 'object-cover'
+              isAMobileDevice ? 'object-contain' : ' h-full w-full object-cover'
             )}
             autoPlay
             muted

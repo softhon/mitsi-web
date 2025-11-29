@@ -10,13 +10,11 @@ const peerDataSchema = z.object({
   email: z.string().optional(),
   photo: z.string().optional(),
   color: z.string().optional(),
+  isMobileDevice: z.boolean().optional(),
 });
 
 export const ValidationSchema = {
-  peerData: z.object({
-    id: z.string(),
-    name: z.string(),
-  }),
+  peerData: peerDataSchema,
   peerId: z.object({
     id: z.string(),
   }),

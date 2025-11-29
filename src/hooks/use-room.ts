@@ -74,6 +74,7 @@ export const useRoom = () => {
       const peers = result?.peers;
       peerActions.clear();
       if (peers) {
+        console.log(peers);
         peerActions.addOthersData(peers);
       }
     },
@@ -103,6 +104,7 @@ export const useRoom = () => {
     () => ({
       [Actions.PeerAdded]: async args => {
         const data = ValidationSchema.peerData.parse(args);
+
         peerActions.addData(data);
       },
 
