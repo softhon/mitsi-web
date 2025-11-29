@@ -6,7 +6,9 @@ import { Monitor } from 'lucide-react';
 
 const Screen = () => {
   const { toggleScreen } = useMedia();
-
+  const canShare = !!(
+    navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia
+  );
   const screenOn = useScreenOn();
 
   return (
@@ -16,6 +18,7 @@ const Screen = () => {
       size="icon"
       className={cn(
         'w-12 h-12 rounded-xl transition-all duration-200  hidden md:flex bg-linear-to-tl text-white cursor-pointer',
+        !canShare && 'hidden',
         screenOn
           ? 'bg-blue-600 hover:bg-blue-700 '
           : ' from-white/15 to-white/1  backdrop-blur-xl'
