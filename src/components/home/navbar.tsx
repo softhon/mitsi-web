@@ -39,7 +39,7 @@ const Navbar = () => {
             >
               Documentations
             </a>
-            <a
+            {/* <a
               title="Coming soon"
               href="#"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
@@ -52,7 +52,7 @@ const Navbar = () => {
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Community
-            </a>
+            </a> */}
             <div className="h-6 w-px bg-slate-700" />
 
             <a href="https://github.com/softhon" target="_blank">

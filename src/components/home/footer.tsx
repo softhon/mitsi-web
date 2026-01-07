@@ -21,7 +21,7 @@ const Footer = () => {
             >
               Documentation
             </a>
-            <a
+            {/* <a
               title="Coming soon"
               href="#"
               className="hover:text-white transition-colors"
@@ -34,7 +34,7 @@ const Footer = () => {
               className="hover:text-white transition-colors"
             >
               Support
-            </a>
+            </a> */}
             <a
               href="https://github.com/softhon"
               className="hover:text-white transition-colors"
@@ -45,7 +45,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-slate-500 text-sm">
-          © 2025 Mitsi. Redefining communication.
+          © {new Date().getFullYear()} Mitsi. Redefining communication.
         </div>
       </div>
     </footer>
