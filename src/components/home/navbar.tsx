@@ -34,12 +34,13 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-12">
             <a
               title="Coming soon"
-              href="#"
+              href="https://softhon.github.io/mitsi-docs/"
+              target="_blank"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Documentations
             </a>
-            <a
+            {/* <a
               title="Coming soon"
               href="#"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
@@ -52,7 +53,7 @@ const Navbar = () => {
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Community
-            </a>
+            </a> */}
             <div className="h-6 w-px bg-slate-700" />
 
             <a href="https://github.com/softhon" target="_blank">

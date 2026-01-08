@@ -16,12 +16,13 @@ const Footer = () => {
           <div className="flex items-center space-x-8 text-sm text-slate-400">
             <a
               title="Coming soon"
-              href="#"
+              href="https://softhon.github.io/mitsi-docs/"
+              target="_blank"
               className="hover:text-white transition-colors"
             >
               Documentation
             </a>
-            <a
+            {/* <a
               title="Coming soon"
               href="#"
               className="hover:text-white transition-colors"
@@ -34,9 +35,10 @@ const Footer = () => {
               className="hover:text-white transition-colors"
             >
               Support
-            </a>
+            </a> */}
             <a
               href="https://github.com/softhon"
+              target="_blank"
               className="hover:text-white transition-colors"
             >
               GitHub
@@ -45,7 +47,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 text-center text-slate-500 text-sm">
-          © 2025 Mitsi. Redefining communication.
+          © {new Date().getFullYear()} Mitsi. Redefining communication.
         </div>
       </div>
     </footer>
