@@ -34,7 +34,8 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-12">
             <a
               title="Coming soon"
-              href="#"
+              href="https://softhon.github.io/mitsi-docs/"
+              target="_blank"
               className="text-slate-300 hover:text-white transition-all duration-300 text-sm font-light tracking-wide"
             >
               Documentations

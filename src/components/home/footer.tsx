@@ -16,7 +16,8 @@ const Footer = () => {
           <div className="flex items-center space-x-8 text-sm text-slate-400">
             <a
               title="Coming soon"
-              href="#"
+              href="https://softhon.github.io/mitsi-docs/"
+              target="_blank"
               className="hover:text-white transition-colors"
             >
               Documentation
@@ -37,6 +38,7 @@ const Footer = () => {
             </a> */}
             <a
               href="https://github.com/softhon"
+              target="_blank"
               className="hover:text-white transition-colors"
             >
               GitHub
