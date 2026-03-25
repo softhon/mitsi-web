@@ -7,6 +7,8 @@ export interface RoomSlice {
   access: Access;
   reconnecting: boolean;
   disconnected: boolean;
+  recording: boolean;
+  locked: boolean;
   gridDimensions: Dimensions;
   maxPeerPerPage: number;
   setData: (data: RoomData) => void;
@@ -15,6 +17,8 @@ export interface RoomSlice {
   setMaxPeerPerPage: (num: number) => void;
   setReconnecting: (reconnecting: boolean) => void;
   setDisconnected: (disconnected: boolean) => void;
+  setRecording: (recording: boolean) => void;
+  setLocked: (locked: boolean) => void;
 }
 
 export const createRoomSlice: StateCreator<
@@ -27,6 +31,8 @@ export const createRoomSlice: StateCreator<
   access: Access.Visiting,
   reconnecting: false,
   disconnected: false,
+  recording: false,
+  locked: false,
   maxPeerPerPage: 12,
   gridDimensions: {
     width: 0,
@@ -60,6 +66,16 @@ export const createRoomSlice: StateCreator<
   setDisconnected: disconnected =>
     set(state => {
       state.room.disconnected = disconnected;
+      return state;
+    }),
+  setRecording: recording =>
+    set(state => {
+      state.room.recording = recording;
+      return state;
+    }),
+  setLocked: locked =>
+    set(state => {
+      state.room.locked = locked;
       return state;
     }),
 });

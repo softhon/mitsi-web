@@ -327,10 +327,14 @@ class MediaService {
     this.setTrack(null, source);
   }
 
-  async replaceProducerTrack(track: MediaStreamTrack, source: ProducerSource) {
+  async replaceProducerTrack(
+    track: MediaStreamTrack,
+    source: ProducerSource,
+    updateStoredTrack = true
+  ) {
     const producer = this.producers.get(source);
     if (!producer) return;
-    this.setTrack(track, source);
+    if (updateStoredTrack) this.setTrack(track, source);
     await producer.replaceTrack({ track: track.clone() });
   }
 
@@ -404,6 +408,58 @@ class MediaService {
     });
 
     this.consumers.clear();
+  }
+
+  // Consumer layer selection for bandwidth optimization
+  // This sends a message to the server to set preferred layers
+  // todo in server
+  async setConsumerPreferredLayers(
+    producerPeerId: string,
+    producerSource: ProducerSource,
+    spatialLayer: number,
+    temporalLayer?: number
+  ) {
+    const consumer = this.getConsumer(producerPeerId, producerSource);
+    if (!consumer) return;
+
+    try {
+      await this.signalingService.sendMessage({
+        action: Actions.SetConsumerPreferredLayers,
+        args: {
+          consumerId: consumer.id,
+          producerPeerId,
+          producerSource,
+          spatialLayer,
+          temporalLayer: temporalLayer ?? spatialLayer,
+        },
+      });
+    } catch (error) {
+      console.error('Failed to set preferred layers:', error);
+    }
+  }
+
+  async getConsumerStats(
+    producerPeerId: string,
+    producerSource: ProducerSource
+  ) {
+    const consumer = this.getConsumer(producerPeerId, producerSource);
+    if (!consumer) return null;
+    return await consumer.getStats();
+  }
+
+  getConsumerLayers(producerPeerId: string, producerSource: ProducerSource) {
+    const consumer = this.getConsumer(producerPeerId, producerSource);
+    if (!consumer) return null;
+
+    // These properties exist on mediasoup-client Consumer but not in types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const consumerAny = consumer as any;
+    return {
+      currentSpatialLayer: consumerAny.currentSpatialLayer ?? null,
+      currentTemporalLayer: consumerAny.currentTemporalLayer ?? null,
+      preferredSpatialLayer: consumerAny.preferredSpatialLayer ?? null,
+      preferredTemporalLayer: consumerAny.preferredTemporalLayer ?? null,
+    };
   }
 
   async createWebRtcTransports() {

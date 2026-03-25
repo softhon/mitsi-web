@@ -7,8 +7,11 @@ import { useGridCalculator } from '@/hooks/use-grid-calculator';
 // import ChatContainer from '../chat/chat-container';
 import { usePeerOthersValues } from '@/store/conf/hooks';
 
+const MAX_PARTICIPANTS_PER_PAGE = 25; // Hard limit to prevent overloading
+
 export const ConferenceGrid = () => {
   const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const peers = usePeerOthersValues();
 
   const dimensions = useDimensions(true, false);
@@ -26,17 +29,20 @@ export const ConferenceGrid = () => {
       };
     }
 
-    // Find maximum participants that can fit on one page
-    let maxParticipantsPerPage = totalParticipants;
+    // Find maximum participants that can fit on one page (capped at MAX_PARTICIPANTS_PER_PAGE)
+    let maxParticipantsPerPage = Math.min(
+      totalParticipants,
+      MAX_PARTICIPANTS_PER_PAGE
+    );
     let optimalLayout = calculateOptimalLayout(
       dimensions.width,
       dimensions.height,
-      totalParticipants
+      maxParticipantsPerPage
     );
 
-    // If no layout fits all participants, reduce the count
+    // If no layout fits the target count, reduce the count
     if (!optimalLayout) {
-      for (let count = totalParticipants - 1; count >= 1; count--) {
+      for (let count = maxParticipantsPerPage - 1; count >= 1; count--) {
         optimalLayout = calculateOptimalLayout(
           dimensions.width,
           dimensions.height,
@@ -72,16 +78,22 @@ export const ConferenceGrid = () => {
     }
   }, [currentPage, totalPages]);
 
-  // Pagination handlers
+  // Pagination handlers with loading state
   const handlePrevious = useCallback(() => {
     if (currentPage > 0) {
+      setIsLoading(true);
       setCurrentPage(currentPage - 1);
+      // Allow render cycle to complete
+      setTimeout(() => setIsLoading(false), 100);
     }
   }, [currentPage]);
 
   const handleNext = useCallback(() => {
     if (currentPage < totalPages - 1) {
+      setIsLoading(true);
       setCurrentPage(currentPage + 1);
+      // Allow render cycle to complete
+      setTimeout(() => setIsLoading(false), 100);
     }
   }, [currentPage, totalPages]);
 
@@ -99,8 +111,18 @@ export const ConferenceGrid = () => {
         show={totalPages > 1}
       />
 
-      {/* Grid Container */}
-      <GridContainer peerData={currentPageParticipants} layout={layout} />
+      {/* Grid Container with Loading Overlay */}
+      <div className="relative flex-1">
+        {isLoading && (
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] z-10 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <p className="text-white text-sm">Loading...</p>
+            </div>
+          </div>
+        )}
+        <GridContainer peerData={currentPageParticipants} layout={layout} />
+      </div>
 
       {/* <ChatContainer showChat={false} /> */}
     </div>

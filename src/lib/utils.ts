@@ -262,3 +262,39 @@ export const emojiIcons: Record<EmojiNames, string> = {
   tearsJoy: Assets.tearsJoy,
   thinkingFace: Assets.thinkingFace,
 };
+
+/**
+ * Throttle function - limits function calls to once per delay period
+ * @param func - Function to throttle
+ * @param delay - Delay in milliseconds
+ * @returns Throttled function
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throttle<T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let lastCall = 0;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return (...args: Parameters<T>) => {
+    const now = Date.now();
+
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      func(...args);
+    } else {
+      // Schedule a call at the end of the delay period
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(
+        () => {
+          lastCall = Date.now();
+          func(...args);
+        },
+        delay - (now - lastCall)
+      );
+    }
+  };
+}

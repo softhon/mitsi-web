@@ -20,11 +20,11 @@ const End = () => {
     <div className="flex items-center gap-1">
       <Button
         onClick={handleLeaveCall}
-        // variant="def"
         size="icon"
-        className="w-12 h-12 rounded-xl bg-red-500 hover:bg-red-500/90 text-white ml-4 cursor-pointer"
+        className="w-14 h-14 rounded-xl bg-red-500 hover:bg-red-500/90 text-white ml-4 cursor-pointer flex flex-col gap-0.5"
       >
         <PhoneOff className="w-5 h-5" />
+        <span className="text-[10px] font-medium leading-none">Leave</span>
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

@@ -5,6 +5,7 @@ import type { ConfStoreState } from '../type';
 export interface PeerSlice {
   me: PeerData | null;
   others: Record<string, PeerData>;
+  peerIds: Set<string>; // Fast O(1) ID lookup
   medias: Record<string, PeerMedia>;
   conditions: Record<string, PeerCondition>;
   positions: {
@@ -36,6 +37,7 @@ export const createPeerSlice: StateCreator<
 > = set => ({
   me: null,
   others: {},
+  peerIds: new Set<string>(),
   medias: {},
   conditions: {},
   positions: [],
@@ -52,6 +54,7 @@ export const createPeerSlice: StateCreator<
             lastActiveSpeechTimestamp: 0,
           });
         state.peers.others[data.id] = data;
+        state.peers.peerIds.add(data.id);
       }
       state.peers.medias[data.id] = {
         id: data.id,
@@ -66,6 +69,7 @@ export const createPeerSlice: StateCreator<
     set(state => {
       data.forEach(peerData => {
         state.peers.others[peerData.id] = peerData;
+        state.peers.peerIds.add(peerData.id);
         state.peers.positions.push({
           id: peerData.id,
           lastActiveSpeechTimestamp: 0,
@@ -146,6 +150,7 @@ export const createPeerSlice: StateCreator<
   remove: id =>
     set(state => {
       delete state.peers.others[id];
+      state.peers.peerIds.delete(id);
       delete state.peers.medias[id];
       delete state.peers.conditions[id];
 
@@ -164,6 +169,7 @@ export const createPeerSlice: StateCreator<
   clear: () =>
     set(state => {
       state.peers.others = {};
+      state.peers.peerIds.clear();
       state.peers.medias = {};
       state.peers.conditions = {};
       state.peers.positions = [];

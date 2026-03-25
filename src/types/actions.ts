@@ -18,6 +18,7 @@ export enum Actions {
   ResumeProducer = 'resume_producer',
   ResumeConsumer = 'resume_consumer',
   PauseConsumer = 'pause_consumer',
+  SetConsumerPreferredLayers = 'set_consumer_preferred_layers',
   // consumed by client
   ConsumerCreated = 'consumer_created',
   ConsumerPaused = 'consumer_paused',
@@ -39,7 +40,13 @@ export enum Actions {
   GetWaiters = 'get_waiters',
   AdmitWaiters = 'admit_waiters',
   DeclineWaiters = 'decline_waiters',
+  Admitted = 'admitted',
+  Declined = 'declined',
+  WaiterAdded = 'waiter_added',
   Record = 'Record',
+  RecordingChanged = 'recording_changed',
+  LockRoom = 'lock_room',
+  RoomLockChanged = 'room_lock_changed',
 
   RemovePeer = 'remove_peer',
   AddRole = 'add_role',

@@ -18,7 +18,11 @@ const Camera = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <MediaControlButton isActive={cameraOn} onClick={toggleCamera}>
+      <MediaControlButton
+        isActive={cameraOn}
+        onClick={toggleCamera}
+        label={cameraOn ? 'Stop' : 'Start'}
+      >
         {cameraOn ? (
           <Video className="w-5 h-5" />
         ) : (

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { enableMapSet } from 'immer';
 import type { ConfStoreState } from './type';
 import { createMicSlice } from './slices/mic-slice';
 import { createCameraSlice } from './slices/camera-slice';
@@ -15,6 +16,12 @@ import { createReactionSlice } from './slices/reaction-slice';
 import { createHandSlice } from './slices/hand-slice';
 import { createCautionSlice } from './slices/caution-slice';
 import { createFullscreenSlice } from './slices/fullscreen-slice';
+import { createSpeakingSlice } from './slices/speaking-slice';
+import { createLayoutSlice } from './slices/layout-slice';
+import { createWaitersSlice } from './slices/waiters-slice';
+
+// Enable Immer plugin for Map and Set support
+enableMapSet();
 
 export const useConfStore = create<ConfStoreState>()(
   devtools(
@@ -32,6 +39,9 @@ export const useConfStore = create<ConfStoreState>()(
       reactions: createReactionSlice(set, get, api),
       caution: createCautionSlice(set, get, api),
       fullscreen: createFullscreenSlice(set, get, api),
+      speaking: createSpeakingSlice(set, get, api),
+      layout: createLayoutSlice(set, get, api),
+      waiters: createWaitersSlice(set, get, api),
     })),
     { name: 'conf-store' }
   )

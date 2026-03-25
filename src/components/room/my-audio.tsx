@@ -1,7 +1,8 @@
 import { useMedia } from '@/hooks/use-media';
-import { useMicOn, usePeerActions, usePeerMe } from '@/store/conf/hooks';
-import { useEffect, useRef } from 'react';
+import { useMicOn, usePeerMe, useSpeakingActions } from '@/store/conf/hooks';
+import { useEffect, useRef, useMemo } from 'react';
 import hark from 'hark';
+import { throttle } from '@/lib/utils';
 
 const MyAudio = () => {
   const { getTrack } = useMedia();
@@ -10,7 +11,18 @@ const MyAudio = () => {
   const peerMe = usePeerMe();
   const micOn = useMicOn();
   const speechEventsRef = useRef<hark.Harker>(null);
-  const peerActions = usePeerActions();
+  const speakingActions = useSpeakingActions();
+
+  // Throttle speaking updates to max 10 per second
+  const updateSpeaking = useMemo(
+    () =>
+      throttle((speaking: boolean) => {
+        if (peerMe?.id && speakingActions.setSpeaking) {
+          speakingActions.setSpeaking(peerMe.id, speaking);
+        }
+      }, 100),
+    [speakingActions, peerMe?.id]
+  );
 
   // mic
   useEffect(() => {
@@ -27,19 +39,15 @@ const MyAudio = () => {
     audioRef.current.srcObject = stream;
     speechEventsRef.current = hark(stream, {});
 
-    speechEventsRef.current.on('speaking', () => {
-      peerActions.updateCondition(peerMe.id, { isSpeaking: true });
-    });
-    speechEventsRef.current.on('stopped_speaking', () => {
-      peerActions.updateCondition(peerMe.id, { isSpeaking: false });
-    });
+    speechEventsRef.current.on('speaking', () => updateSpeaking(true));
+    speechEventsRef.current.on('stopped_speaking', () => updateSpeaking(false));
 
     return () => {
       if (speechEventsRef.current) {
         speechEventsRef.current.stop();
       }
     };
-  }, [micOn, getTrack, peerActions, peerMe?.id]);
+  }, [micOn, getTrack, peerMe?.id, updateSpeaking]);
 
   // screen audio
   useEffect(() => {

@@ -13,7 +13,7 @@ const Mic = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <MediaControlButton isActive={micOn} onClick={toggleMic}>
+      <MediaControlButton isActive={micOn} onClick={toggleMic} label={micOn ? 'Mute' : 'Unmute'}>
         {micOn ? <MicOn className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
       </MediaControlButton>
       <MediaDeviceDropdown

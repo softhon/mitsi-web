@@ -18,7 +18,7 @@ const Users = () => {
       <UsersIcon className="w-5 h-5" />
       <Badge
         variant="secondary"
-        className="absolute -top-2 -right-2 w-6 h-6 text-xs  text-white border-gray-500"
+        className="absolute -top-2 -right-2 w-6 h-6 text-xs  text-white border-gray-500 bg-neutral-700"
       >
         {count}
       </Badge>

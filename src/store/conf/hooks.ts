@@ -59,6 +59,18 @@ export const usePeerSelectedId = () =>
   useConfStore(state => state.peers.selectedId);
 export const usePeerOthersById = (id: string) =>
   useConfStore(state => state.peers.others[id]);
+
+// Optimized: Direct access to peerIds Set (O(1))
+export const usePeerIds = () => {
+  const peerIds = useConfStore(state => state.peers.peerIds);
+  return useMemo(() => Array.from(peerIds), [peerIds]);
+};
+
+// Optimized: Direct count from Set size
+export const usePeerCount = () =>
+  useConfStore(state => state.peers.peerIds.size + 1); // +1 for me
+
+// Legacy hooks (kept for backward compatibility, but prefer usePeerIds)
 export const usePeerOthersKeys = () => {
   const peerOthers = usePeerOthers();
   return useMemo(() => {
@@ -116,6 +128,10 @@ export const useRoomReconnecting = () =>
   useConfStore(state => state.room.reconnecting);
 export const useRoomDisconnected = () =>
   useConfStore(state => state.room.disconnected);
+export const useRoomRecording = () =>
+  useConfStore(state => state.room.recording);
+export const useRoomLocked = () =>
+  useConfStore(state => state.room.locked);
 export const useRoomActions = () =>
   useMemo(
     () => ({
@@ -125,6 +141,8 @@ export const useRoomActions = () =>
       setDisconnected: useConfStore.getState().room.setDisconnected,
       setGridDimensions: useConfStore.getState().room.setGridDimensions,
       setMaxPeerPerPage: useConfStore.getState().room.setMaxPeerPerPage,
+      setRecording: useConfStore.getState().room.setRecording,
+      setLocked: useConfStore.getState().room.setLocked,
     }),
     []
   );
@@ -167,10 +185,14 @@ export const useModalActions = () =>
 // ============================================================================
 
 export const useChats = () => useConfStore(state => state.chat.chats);
+export const useDmChats = () => useConfStore(state => state.chat.dmChats);
+export const useUnreadDm = () => useConfStore(state => state.chat.unreadDm);
 export const useChatActions = () =>
   useMemo(
     () => ({
       addChat: useConfStore.getState().chat.add,
+      addDmChat: useConfStore.getState().chat.addDmChat,
+      clearUnread: useConfStore.getState().chat.clearUnread,
     }),
     []
   );
@@ -182,12 +204,23 @@ export const useChatActions = () =>
 export const useSettingsOpen = () => useConfStore(state => state.settings.open);
 export const useSettingsNotification = () =>
   useConfStore(state => state.settings.notifications);
-
+export const useSettingsNoiseSuppression = () =>
+  useConfStore(state => state.settings.noiseSuppression);
+export const useSettingsBackgroundMode = () =>
+  useConfStore(state => state.settings.backgroundMode);
+export const useSettingsBackgroundImage = () =>
+  useConfStore(state => state.settings.backgroundImage);
+export const useBackgroundTrackVersion = () =>
+  useConfStore(state => state.settings.backgroundTrackVersion);
 export const useSettingsActions = () =>
   useMemo(
     () => ({
       toggle: useConfStore.getState().settings.toggle,
       toggleNotification: useConfStore.getState().settings.toggleNotification,
+      toggleNoiseSuppression: useConfStore.getState().settings.toggleNoiseSuppression,
+      setBackgroundMode: useConfStore.getState().settings.setBackgroundMode,
+      setBackgroundImage: useConfStore.getState().settings.setBackgroundImage,
+      bumpBackgroundTrackVersion: useConfStore.getState().settings.bumpBackgroundTrackVersion,
     }),
     []
   );
@@ -242,6 +275,53 @@ export const useFullscreenActions = () =>
   useMemo(
     () => ({
       set: useConfStore.getState().fullscreen.set,
+    }),
+    []
+  );
+
+// ============================================================================
+// SPEAKING SELECTORS
+// ============================================================================
+export const useSpeakingState = () =>
+  useConfStore(state => state.speaking?.speaking ?? {});
+export const useIsSpeaking = (peerId: string) =>
+  useConfStore(state => state.speaking?.speaking?.[peerId] ?? false);
+export const useSpeakingActions = () =>
+  useMemo(
+    () => ({
+      setSpeaking: useConfStore.getState().speaking?.setSpeaking,
+      clearSpeaking: useConfStore.getState().speaking?.clearSpeaking,
+      clearAllSpeaking: useConfStore.getState().speaking?.clearAllSpeaking,
+    }),
+    []
+  );
+
+// ============================================================================
+// LAYOUT SELECTORS
+// ============================================================================
+export const useLayoutMode = () => useConfStore(state => state.layout.mode);
+export const useLayoutActions = () =>
+  useMemo(
+    () => ({
+      setMode: useConfStore.getState().layout.setMode,
+      toggleMode: useConfStore.getState().layout.toggleMode,
+    }),
+    []
+  );
+
+// ============================================================================
+// WAITERS SELECTORS
+// ============================================================================
+export const useWaiters = () => useConfStore(state => state.waiters.waiters);
+export const useWaiterCount = () =>
+  useConfStore(state => state.waiters.waiters.length);
+export const useWaitersActions = () =>
+  useMemo(
+    () => ({
+      setWaiters: useConfStore.getState().waiters.setWaiters,
+      addWaiter: useConfStore.getState().waiters.addWaiter,
+      removeWaiter: useConfStore.getState().waiters.removeWaiter,
+      clearWaiters: useConfStore.getState().waiters.clearWaiters,
     }),
     []
   );

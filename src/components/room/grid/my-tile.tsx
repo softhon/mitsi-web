@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Hand, Mic, MicOff } from 'lucide-react';
 import type { Layout } from '@/types';
 import { cn, getInitials, getPeerId, isMobileDevice } from '@/lib/utils';
@@ -9,8 +9,10 @@ import {
   useMicOn,
   usePeerConditionsById,
   usePeerMe,
+  useBackgroundTrackVersion,
 } from '@/store/conf/hooks';
 import { useMedia } from '@/hooks/use-media';
+import { getActiveOutputTrack } from '@/services/background-service';
 
 interface PeerTileProps {
   layout: Layout;
@@ -19,19 +21,48 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
   const { getTrack } = useMedia();
   const videoRef = useRef<HTMLVideoElement>(null);
   const micOn = useMicOn();
+  const [audioLevel, setAudioLevel] = useState(0);
   const cameraOn = useCameraOn();
   const handRaised = useHandRaised();
   const cameraDeviceId = useCameraDeviceId();
+  const backgroundTrackVersion = useBackgroundTrackVersion();
   const peerMe = usePeerMe();
   const peerMeCondition = usePeerConditionsById(peerMe?.id || getPeerId());
   const isAMobileDevice = isMobileDevice();
 
   useEffect(() => {
     if (!cameraOn || !videoRef.current) return;
-    const track = getTrack('camera');
+    const track = getActiveOutputTrack() ?? getTrack('camera');
     if (!track) return;
     videoRef.current.srcObject = new MediaStream([track]);
-  }, [cameraOn, cameraDeviceId, getTrack]);
+    videoRef.current.play().catch(() => {});
+  }, [cameraOn, cameraDeviceId, getTrack, backgroundTrackVersion]);
+
+  useEffect(() => {
+    if (!micOn) {
+      setAudioLevel(0);
+      return;
+    }
+    const track = getTrack('mic');
+    if (!track) return;
+    const ctx = new AudioContext();
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 256;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    ctx.createMediaStreamSource(new MediaStream([track])).connect(analyser);
+    let rafId: number;
+    const tick = () => {
+      analyser.getByteFrequencyData(data);
+      setAudioLevel(data.reduce((s, v) => s + v, 0) / data.length / 255);
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafId);
+      ctx.close();
+      setAudioLevel(0);
+    };
+  }, [micOn, getTrack]);
 
   if (!peerMe) return null;
   return (
@@ -80,6 +111,16 @@ const MyTile: React.FC<PeerTileProps> = ({ layout }) => {
         {handRaised && <Hand size={18} />}
         <span className="truncate">{peerMe.name}</span>
       </div>
+
+      {/* Audio level bar */}
+      {audioLevel > 0.02 && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 z-20 bg-black/20">
+          <div
+            className="h-full bg-green-400 transition-all duration-75"
+            style={{ width: `${Math.min(audioLevel * 100 * 3, 100)}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 };

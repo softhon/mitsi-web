@@ -36,8 +36,14 @@ const CautionModal = () => {
   };
 
   const okAction: Record<CautionType, () => void> = {
-    START_RECORDING: () => {},
-    STOP_RECORDING: () => {},
+    START_RECORDING: () => {
+      signalingService?.sendMessage({ action: Actions.Record, args: { recording: true } });
+      cautionActions.set(CautionType.Hide);
+    },
+    STOP_RECORDING: () => {
+      signalingService?.sendMessage({ action: Actions.Record, args: { recording: false } });
+      cautionActions.set(CautionType.Hide);
+    },
     END_SESSION: () => {
       signalingService?.sendMessage({
         action: Actions.EndRoom,

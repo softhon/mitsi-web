@@ -29,7 +29,10 @@ const JoinRoom: React.FC = () => {
   useEffect(() => {
     if (!signalingService || !roomData) return;
 
-    joinVisitors().catch(err => toast.error(err));
+    joinVisitors().catch(err => {
+      const message = err instanceof Error ? err.message : String(err);
+      toast.error(message);
+    });
   }, [signalingService, roomData, joinVisitors]);
 
   if (!roomData || !signalingService) return null;

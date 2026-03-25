@@ -1,7 +1,8 @@
 import { useMedia } from '@/hooks/use-media';
-import { usePeerActions, usePeerMediasById } from '@/store/conf/hooks';
-import { useEffect, useRef } from 'react';
+import { usePeerMediasById, useSpeakingActions } from '@/store/conf/hooks';
+import { useEffect, useRef, useMemo, memo } from 'react';
 import hark from 'hark';
+import { throttle } from '@/lib/utils';
 
 const PeerAudio = ({ peerId }: { peerId: string }) => {
   const { getConsumer } = useMedia();
@@ -9,7 +10,18 @@ const PeerAudio = ({ peerId }: { peerId: string }) => {
   const screenAudioRef = useRef<HTMLAudioElement>(null);
   const media = usePeerMediasById(peerId);
   const speechEventsRef = useRef<hark.Harker>(null);
-  const peerActions = usePeerActions();
+  const speakingActions = useSpeakingActions();
+
+  // Throttle speaking updates to max 10 per second
+  const updateSpeaking = useMemo(
+    () =>
+      throttle((speaking: boolean) => {
+        if (speakingActions.setSpeaking) {
+          speakingActions.setSpeaking(peerId, speaking);
+        }
+      }, 100),
+    [speakingActions, peerId]
+  );
 
   // mic
   useEffect(() => {
@@ -28,19 +40,15 @@ const PeerAudio = ({ peerId }: { peerId: string }) => {
     audioRef.current.srcObject = stream;
     speechEventsRef.current = hark(stream, {});
 
-    speechEventsRef.current.on('speaking', () => {
-      peerActions.updateCondition(peerId, { isSpeaking: true });
-    });
-    speechEventsRef.current.on('stopped_speaking', () => {
-      peerActions.updateCondition(peerId, { isSpeaking: false });
-    });
+    speechEventsRef.current.on('speaking', () => updateSpeaking(true));
+    speechEventsRef.current.on('stopped_speaking', () => updateSpeaking(false));
 
     return () => {
       if (speechEventsRef.current) {
         speechEventsRef.current.stop();
       }
     };
-  }, [media?.mic, getConsumer, peerActions, peerId]);
+  }, [media?.mic, getConsumer, peerId, updateSpeaking]);
 
   // screen audio
   useEffect(() => {
@@ -60,4 +68,7 @@ const PeerAudio = ({ peerId }: { peerId: string }) => {
   );
 };
 
-export default PeerAudio;
+// Memoize to prevent unnecessary re-renders
+export default memo(PeerAudio, (prevProps, nextProps) => {
+  return prevProps.peerId === nextProps.peerId;
+});

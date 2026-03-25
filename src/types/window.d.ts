@@ -8,6 +8,8 @@ declare global {
       [key: string]: string;
     };
   }
+
+
 }
 
 export {};

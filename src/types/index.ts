@@ -22,6 +22,21 @@ export enum Access {
   Visiting = 'Visiting', // have click join button
 }
 
+export enum Role {
+  Moderator = 'Moderator',
+  Speaker = 'Speaker',
+  Participant = 'Participant',
+}
+
+export enum Tag {
+  Host = 'Host',
+  Cohost = 'Co-host',
+  Moderator = 'Moderator',
+  Speaker = 'Speaker',
+  Pinned = 'Pinned',
+  Participant = 'Participant',
+}
+
 export type MediaDeviceType = 'microphone' | 'camera';
 
 export type AckCallbackData<T = { [key: string]: unknown }> = {
@@ -95,6 +110,8 @@ export interface PeerData {
   email?: string;
   color?: string;
   isMobileDevice?: boolean;
+  tag?: Tag;
+  roles?: Role[];
 }
 
 export interface PeerMedia {

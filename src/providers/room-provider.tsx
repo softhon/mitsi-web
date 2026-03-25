@@ -30,25 +30,28 @@ const RoomProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!signalingService || !mediaService) return;
 
-    signalingService
-      .getConnection()
-      .on(
-        Actions.Message,
-        async (
-          data: MessageData,
-          callback: (data: AckCallbackData) => void
-        ) => {
-          try {
-            const { action, args = {} } = data;
-            const handler = actionHandlers[action as Actions];
-            if (handler) handler(args, callback);
-            else
-              console.log(`no handler for for action ${action} args =>`, args);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      );
+    const connection = signalingService.getConnection();
+
+    const handleMessage = async (
+      data: MessageData,
+      callback: (data: AckCallbackData) => void
+    ) => {
+      try {
+        const { action, args = {} } = data;
+        const handler = actionHandlers[action as Actions];
+        if (handler) await handler(args, callback);
+        else console.log(`no handler for for action ${action} args =>`, args);
+      } catch (error) {
+        console.log(error);
+        if (typeof callback === 'function')
+          callback({ status: 'error', error });
+      }
+    };
+
+    connection.on(Actions.Message, handleMessage);
+    return () => {
+      connection.off(Actions.Message, handleMessage);
+    };
   }, [signalingService, mediaService, actionHandlers]);
 
   useEffect(() => {

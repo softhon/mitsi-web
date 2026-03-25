@@ -44,6 +44,7 @@ export const ValidationSchema = {
     text: z.string(),
     sender: peerDataSchema,
     receiver: peerDataSchema.optional(),
+    isPrivate: z.boolean().optional(),
     createdAt: z.number(),
   }),
 
