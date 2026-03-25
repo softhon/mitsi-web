@@ -1,5 +1,5 @@
 import { types as mediasoupTypes } from 'mediasoup-client';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Access,
   type ConsumerStateData,
@@ -25,6 +25,7 @@ import {
 } from '@/store/conf/hooks';
 import { Actions } from '@/types/actions';
 import { requestMediaPermissions, type MediaPermissionsError } from 'mic-check';
+import { toast } from 'sonner';
 import { DEVICE_ERRORS } from '@/lib/constants';
 
 // Hook for media operations
@@ -388,7 +389,11 @@ export const useMedia = () => {
     [mediaService]
   );
 
+  const [micPending, setMicPending] = useState(false);
+  const [cameraPending, setCameraPending] = useState(false);
+
   const requestMicPermission = useCallback(() => {
+    setMicPending(true);
     requestMediaPermissions({ audio: true, video: false })
       .then(async () => {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -401,31 +406,40 @@ export const useMedia = () => {
       })
       .catch((err: MediaPermissionsError) => {
         const type = err?.type || 'DeviceNotFound';
-        return alert(DEVICE_ERRORS[type]('microphone'));
-      });
+        const { title, body } = DEVICE_ERRORS[type]('microphone');
+        toast.error(title, { description: body });
+      })
+      .finally(() => setMicPending(false));
   }, [micActions]);
 
   const requestCameraPermission = useCallback(() => {
+    setCameraPending(true);
     requestMediaPermissions({ audio: false, video: true })
       .then(async () => {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const audioInputDevices = devices.filter(
-          device => device.kind === 'audioinput'
+        const videoInputDevices = devices.filter(
+          device => device.kind === 'videoinput'
         );
-        if (!audioInputDevices.length) throw 'Device not found';
-        cameraActions.setDeviceId(audioInputDevices[0].deviceId);
-        cameraActions.setDevices(audioInputDevices);
+        if (!videoInputDevices.length) throw 'Device not found';
+        cameraActions.setDeviceId(videoInputDevices[0].deviceId);
+        cameraActions.setDevices(videoInputDevices);
       })
       .catch((err: MediaPermissionsError) => {
         const type = err?.type || 'DeviceNotFound';
-        return alert(DEVICE_ERRORS[type]('camera'));
-      });
+        const { title, body } = DEVICE_ERRORS[type]('camera');
+        toast.error(title, { description: body });
+      })
+      .finally(() => setCameraPending(false));
   }, [cameraActions]);
 
   const requestCameraAndMicPermissions = useCallback(() => {
+    setMicPending(true);
+    setCameraPending(true);
     requestMediaPermissions()
       .catch((err: MediaPermissionsError) => {
-        console.log(err);
+        const type = err?.type || 'Generic';
+        const { title, body } = DEVICE_ERRORS[type]('camera');
+        toast.error(title, { description: body });
       })
       .finally(async () => {
         try {
@@ -436,25 +450,19 @@ export const useMedia = () => {
           const videoInputDevices = devices.filter(
             device => device.kind === 'videoinput'
           );
-          // const audioOutputDevices = devices.filter(
-          //   device => device.kind === 'audiooutput'
-          // );
-
-          // soundActions.setDeviceId(
-          //   audioOutputDevices.length ? audioOutputDevices[0].deviceId : null
-          // );
           cameraActions.setDeviceId(
             videoInputDevices.length ? videoInputDevices[0].deviceId : null
           );
           micActions.setDeviceId(
             audioInputDevices.length ? audioInputDevices[0].deviceId : null
           );
-
-          // soundActions.setDevices(audioOutputDevices);
           cameraActions.setDevices(videoInputDevices);
           micActions.setDevices(audioInputDevices);
         } catch (error) {
           console.log(error);
+        } finally {
+          setMicPending(false);
+          setCameraPending(false);
         }
       });
   }, [micActions, cameraActions]);
@@ -462,6 +470,7 @@ export const useMedia = () => {
   const toggleCamera = useCallback(async () => {
     if (!mediaService) return console.log('Media service not intialised');
     if (!cameraDeviceId) return requestCameraPermission();
+    setCameraPending(true);
     try {
       if (cameraOn) {
         await stopUserMedia('camera');
@@ -471,6 +480,8 @@ export const useMedia = () => {
       cameraActions.toggle();
     } catch (error) {
       console.log(error);
+    } finally {
+      setCameraPending(false);
     }
   }, [
     cameraActions,
@@ -481,9 +492,11 @@ export const useMedia = () => {
     startUserMedia,
     stopUserMedia,
   ]);
+
   const toggleMic = useCallback(async () => {
     if (!mediaService) return console.log('Media service not intialised');
-    if (!micDeviceId) return requestCameraPermission();
+    if (!micDeviceId) return requestMicPermission();
+    setMicPending(true);
     try {
       if (micOn) {
         await stopUserMedia('mic');
@@ -493,13 +506,15 @@ export const useMedia = () => {
       micActions.toggle();
     } catch (error) {
       console.log(error);
+    } finally {
+      setMicPending(false);
     }
   }, [
     micActions,
     micDeviceId,
     micOn,
     mediaService,
-    requestCameraPermission,
+    requestMicPermission,
     startUserMedia,
     stopUserMedia,
   ]);
@@ -557,6 +572,8 @@ export const useMedia = () => {
     toggleCamera,
     toggleMic,
     toggleScreen,
+    micPending,
+    cameraPending,
     qualityManager,
     setConsumerQuality: qualityManager?.setConsumerQuality.bind(qualityManager),
   };

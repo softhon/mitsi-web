@@ -1,4 +1,4 @@
-import { Video, VideoOff } from 'lucide-react';
+import { Loader2, Video, VideoOff } from 'lucide-react';
 import MediaDeviceDropdown from './media-device-dropdown';
 
 import {
@@ -10,7 +10,7 @@ import { useMedia } from '@/hooks/use-media';
 import MediaControlButton from './media-control-button';
 
 const Camera = () => {
-  const { toggleCamera } = useMedia();
+  const { toggleCamera, cameraPending } = useMedia();
 
   const cameraOn = useCameraOn();
   const cameraDeviceId = useCameraDeviceId();
@@ -22,8 +22,11 @@ const Camera = () => {
         isActive={cameraOn}
         onClick={toggleCamera}
         label={cameraOn ? 'Stop' : 'Start'}
+        disabled={cameraPending}
       >
-        {cameraOn ? (
+        {cameraPending ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : cameraOn ? (
           <Video className="w-5 h-5" />
         ) : (
           <VideoOff className="w-5 h-5" />

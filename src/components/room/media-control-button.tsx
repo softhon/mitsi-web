@@ -7,6 +7,7 @@ interface MediaControlButtonProps {
   children: React.ReactNode;
   className?: string;
   label?: string;
+  disabled?: boolean;
 }
 const MediaControlButton: React.FC<MediaControlButtonProps> = ({
   isActive,
@@ -14,11 +15,13 @@ const MediaControlButton: React.FC<MediaControlButtonProps> = ({
   children,
   className,
   label,
+  disabled,
 }) => (
   <Button
     onClick={onClick}
     variant={isActive ? 'default' : 'ghost'}
     size="icon"
+    disabled={disabled}
     className={cn(
       'rounded-xl transition-all duration-200 cursor-pointer text-white bg-linear-to-br',
       label ? 'w-14 h-14 flex-col gap-0.5' : 'w-12 h-12',

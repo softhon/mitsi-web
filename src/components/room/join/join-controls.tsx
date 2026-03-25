@@ -5,11 +5,33 @@ import { useMedia } from '@/hooks/use-media';
 import Mic from '../mic';
 import Camera from '../camera';
 import { useSettingsActions } from '@/store/conf/hooks';
+import { toast } from 'sonner';
 
 const Controls = () => {
   const { requestCameraAndMicPermissions } = useMedia();
   useEffect(() => {
-    requestCameraAndMicPermissions();
+    const checkPermissions = async () => {
+      try {
+        const [cam, mic] = await Promise.all([
+          navigator.permissions.query({ name: 'camera' as PermissionName }),
+          navigator.permissions.query({ name: 'microphone' as PermissionName }),
+        ]);
+        if (cam.state === 'denied' || mic.state === 'denied') {
+          const which = cam.state === 'denied' && mic.state === 'denied'
+            ? 'camera and microphone'
+            : cam.state === 'denied' ? 'camera' : 'microphone';
+          toast.error(`${which.charAt(0).toUpperCase() + which.slice(1)} access blocked`, {
+            description: `Allow access to your ${which} in your browser's site settings, then reload.`,
+            duration: 10000,
+          });
+          return;
+        }
+      } catch {
+        // permissions API not supported — fall through to getUserMedia
+      }
+      requestCameraAndMicPermissions();
+    };
+    checkPermissions();
   }, [requestCameraAndMicPermissions]);
 
   const settingsAction = useSettingsActions();
