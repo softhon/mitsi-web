@@ -14,7 +14,7 @@ import { useMedia } from '@/hooks/use-media';
 import { PeerTile } from '../grid/peer-tile';
 import MyTile from '../grid/my-tile';
 
-const STRIP_TILE = { width: 160, height: 120 };
+const STRIP_TILE = { width: 160, height: 120, rows: 1, cols: 1, aspectRatio: '4:3' };
 
 const PinnedLarge = ({ peerId }: { peerId: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);

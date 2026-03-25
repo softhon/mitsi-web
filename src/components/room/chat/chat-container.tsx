@@ -61,7 +61,6 @@ const DmThread = ({
   const { signalingService } = useSignaling();
   const peerMe = usePeerMe();
   const dmChats = useDmChats();
-  const chatActions = useChatActions();
   const [message, setMessage] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const thread = dmChats[peer.id] ?? [];
